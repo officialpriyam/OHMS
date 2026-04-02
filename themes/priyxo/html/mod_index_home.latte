@@ -1,0 +1,9 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_public.latte'}
+
+{block meta_title}{='Home'|trans}{/block}
+
+{var $side_menu = hidden}
+
+{block content}
+    {include 'Index/_landing.latte'}
+{/block}

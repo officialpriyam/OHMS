@@ -1,0 +1,37 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{block subject}[{$guest->system_company()->name}] Please confirm your email address {/block}
+{block content}
+{block|markdown}
+Hello {$c->first_name} {$c->last_name},
+
+Please verify your email by clicking on the link below:
+
+{$email_confirmation_link}
+
+To login, visit {=login|link:[email => $c->email]}
+Edit your profile at {='client/me'|link}
+
+{$guest->system_company()->signature}
+
+{/block}
+{/block}

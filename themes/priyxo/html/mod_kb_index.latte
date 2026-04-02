@@ -1,0 +1,52 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{block meta_title}{='Knowledge base'|trans}{/block}
+
+{if $request->q}
+    {var $kbcategories = $guest->kb_category_get_list(['q' => $request->q])}
+{else}
+    {var $kbcategories = $guest->kb_category_get_list()}
+{/if}
+
+{block content_before}
+    <div class="gm-page-heading">
+        <h1>{='Knowledgebase'|trans}</h1>
+    </div>
+    {if $client}
+        <div class="gm-client-tabs">
+            <a class="active" href="{=kb|link}">{='General'|trans}</a>
+            <a href="{=support|link}">{='Support Tickets'|trans}</a>
+        </div>
+    {/if}
+
+    <div class="gm-landing">
+        <section class="gm-hero">
+            <h3>{='How can we help you?'|trans}</h3>
+            <form method="get" action="{=kb|link}">
+                <div class="input-group gm-kb-search">
+                    <input name="q" type="text" class="form-control" value="{$request->q}" placeholder="{='Search articles'|trans}">
+                    <button class="btn btn-primary" type="submit">{='Search'|trans}</button>
+                </div>
+            </form>
+        </section>
+    </div>
+{/block}
+
+{block content}
+    {if (($kbcategories['list'] ?? [])|length) > 0}
+        <div class="gm-feature-grid gm-kb-grid">
+            {foreach ($kbcategories['list'] ?? []) as $i => $category}
+                <a class="gm-feature-card" href="{=kb|link}/{$category['slug']}">
+                    <i class="fa fa-book"></i>
+                    <h4>{$category['title']}</h4>
+                    <p>{$category['description'] ?? ('Browse articles in this category.'|trans)}</p>
+                </a>
+            {/foreach}
+        </div>
+    {else}
+        <div class="gm-glass-panel text-center p-4">
+            <h4 class="mb-2">{='No results'|trans}</h4>
+            <p class="text-secondary mb-0">{='Try using another keyword.'|trans}</p>
+        </div>
+    {/if}
+{/block}

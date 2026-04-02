@@ -1,0 +1,81 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{import 'macro_functions.latte'}
+
+{block meta_title}{=Queues|trans}{/block}
+
+{var $active_menu = system}
+
+{block breadcrumbs}
+<ul>
+    <li class="firstB"><a href="{='/'|alink}">{=Home|trans}</a></li>
+    <li><a href="{=system|alink}">{=Settings|trans}</a></li>
+    <li class="lastB">{=Queues|trans}</li>
+</ul>
+{/block}
+
+{block content}
+<div class="widget">
+    <div class="head">
+        <h5 class="iCog">{=Queues|trans}</h5>
+    </div>
+
+    {include table_search}
+    <table class="tableStatic wide">
+        <thead>
+            <tr>
+                <td style="width: 40%">{=Name|trans}</td>
+                <td>{=Extension|trans}</td>
+                <td>{=Messages|trans}</td>
+                <td>{=Created|trans}</td>
+                <td width="13%">&nbsp;</td>
+            </tr>
+        </thead>
+
+        <tbody>
+        {var $queues = $admin->queue_get_list(array_merge(['per_page' => 100, 'page' => $request->page], $request->getArrayCopy()))}
+        {foreach $queues->list as $i => $queue}
+        <tr>
+            <td>{$queue->name}</td>
+            <td>{$queue->mod}</td>
+            <td>{$queue->messages_count}</td>
+            <td>{$queue->created_at|bb_date}</td>
+            <td class="actions">
+                <a class="bb-button btn14 api-link" href="{='api/admin/queue/execute'|link:[queue => $queue->name]}" data-api-confirm="Are you sure?" data-api-reload="1"><img src="{$theme->url}images/icons/dark/airplane.png" alt=""></a>
+                {*<a class="btn14 bb-rm-tr api-link" href="{{ 'api/admin/queue/queue_delete'|link({ 'id': queue.name }) }}" data-api-confirm="Are you sure?" data-api-reload="1"><img src="{$theme->url}images/icons/dark/trash.png" alt=""></a>*}
+            </td>
+
+        </tr>
+
+        {else}
+        <tr>
+            <td colspan="5">
+                {='The list is empty.'|trans}
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+</div>
+{/block}

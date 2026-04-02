@@ -1,0 +1,13 @@
+{
+  "id":           "servicepterodactyl",
+	"type":         "mod",
+  "name":         "Pterodactyl Service",
+  "description":  "Allow customers to purchase pterodactyl servers",
+  "icon_url":     "icon.png",
+  "homepage_url": "https://github.com/Dot-Rar/ptero-OHMS",
+  "author":       "DotRar",
+  "author_url":   "https://github.com/Dot-Rar/",
+  "license":      "GPLv3",
+  "version":      "1.0.0"
+}
+

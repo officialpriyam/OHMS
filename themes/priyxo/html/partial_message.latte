@@ -1,0 +1,26 @@
+{foreach ($flashes ?? []) as $label => $messages}
+    {foreach $messages as $msg}
+        {var $normalized = strtolower((string) $label)}
+        {if in_array($normalized, ['error', 'danger'], true)}
+            {var $alert_class = 'alert-danger'}
+            {var $alert_icon = 'fa-times-circle'}
+        {elseif in_array($normalized, ['success', 'ok'], true)}
+            {var $alert_class = 'alert-success'}
+            {var $alert_icon = 'fa-check-circle'}
+        {elseif in_array($normalized, ['warning', 'warn'], true)}
+            {var $alert_class = 'alert-warning'}
+            {var $alert_icon = 'fa-exclamation-triangle'}
+        {else}
+            {var $alert_class = 'alert-info'}
+            {var $alert_icon = 'fa-info-circle'}
+        {/if}
+
+        <div class="alert {$alert_class} gm-system-alert d-flex align-items-start gap-3 mb-3" role="alert">
+            <i class="fa {$alert_icon} mt-1"></i>
+            <div class="flex-grow-1">
+                <div class="gm-system-alert-title">{$label|capitalize}</div>
+                <div>{$msg}</div>
+            </div>
+        </div>
+    {/foreach}
+{/foreach}

@@ -1,0 +1,42 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends 'layout_login.latte'}
+
+{block meta_title}{=Error|trans} {$exception->getCode()}{/block}
+{var $help_query = $exception->getMessage()}
+
+{block content}
+<!-- Error info area -->
+<div class="wrapper">
+    <div class="errorPage">
+        <h2 class="red errorTitle"><span>{='Something went wrong here'|trans}</span></h2>
+        <h1>{if ($exception->getCode() == 0)}500{else} {$exception->getCode()} {/if}</h1>
+        <span class="bubbles"></span>
+        <p>{$exception->getMessage()}!</p>
+        {if ($exception->getCode() == 403)}
+        <div class="backToDash"><a href="{='/staff/login'|alink}" title="" class="seaBtn button">{=Login|trans}</a></div>
+        {else}
+        <div class="backToDash"><a href="{='/index'|alink}" title="" class="seaBtn button">{='Back to Dashboard'|trans}</a></div>
+        {/if}
+    </div>
+</div>
+{/block}

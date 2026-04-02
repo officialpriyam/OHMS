@@ -1,0 +1,67 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{import 'macro_functions.latte'}
+
+{block meta_title}{='Servers'|trans}{/block}
+
+{block content_before}
+    <div class="gm-page-heading">
+        <h1>{='Servers'|trans}</h1>
+        <div class="gm-page-actions">
+            <label class="d-flex align-items-center gap-2">
+                <input type="checkbox" class="form-check-input">
+                <span>{='Show inactive servers'|trans}</span>
+            </label>
+        </div>
+    </div>
+    <div class="gm-client-tabs">
+        <a class="active" href="{='order/service'|link}">{='Servers'|trans}</a>
+        <a href="{=invoice|link}">{='Invoices'|trans}</a>
+        <a href="{='/client/balance'|link}">{='Credits'|trans}</a>
+    </div>
+{/block}
+
+{block content}
+    {var $orders = $client->order_get_list(['per_page' => 10, 'page' => $request->page, 'hide_addons' => 1])}
+    <div class="glass-table">
+        <div class="table-responsive">
+            <table class="table table-borderless table-glass gm-data-table">
+            <thead>
+                <tr>
+                    <th>{='Product / Services'|trans}</th>
+                    <th>{='Price'|trans}</th>
+                    <th>{='Order Date'|trans}</th>
+                    <th>{='Next Due Date'|trans}</th>
+                    <th>{='Status'|trans}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {foreach ($orders['list'] ?? []) as $i => $order}
+                    <tr>
+                        <td>
+                            <a href="{='order/service/manage'|link}/{$order['id']}">{$order['title']}</a>
+                        </td>
+                        <td>{$order['total']|money:$order['currency']} {if $order['period']}{$order['period']|period_title}{/if}</td>
+                        <td>{$order['created_at']|date:'Y-m-d'}</td>
+                        <td>{if $order['expires_at']}{$order['expires_at']|date:'Y-m-d'}{else}-{/if}</td>
+                        <td>
+                            <span class="status-badge {if ($order['status'] == 'active')}status-active{elseif ($order['status'] == 'pending_setup')}status-pending{else}status-unpaid{/if}">
+                                {include status_name, $order['status']}
+                            </span>
+                        </td>
+                    </tr>
+                {else}
+                    <tr>
+                        <td colspan="5" class="text-center text-secondary">{='The list is empty'|trans}</td>
+                    </tr>
+                {/foreach}
+            </tbody>
+            </table>
+        </div>
+    </div>
+    {include '_pagination.latte', list: $orders}
+
+    <div class="text-center">
+        <a class="btn btn-success" href="{=order|link}"><i class="fa fa-shopping-cart me-2"></i>{='Order a New Server'|trans}</a>
+    </div>
+{/block}

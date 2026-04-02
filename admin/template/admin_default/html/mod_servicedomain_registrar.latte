@@ -1,0 +1,75 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+{import 'macro_functions.latte'}
+{block meta_title}{=Registrar|trans} {$registrar->title}{/block}
+{var $active_menu = system}
+
+{block breadcrumbs}
+<ul>
+    <li class="firstB"><a href="{='/'|alink}">{=Home|trans}</a></li>
+    <li><a href="{=servicedomain|alink}">{='Domain management'|trans}</a></li>
+    <li><a href="{=servicedomain|alink}#tab-registrars">{=Registrars|trans}</a></li>
+    <li class="lastB">{$registrar->title}</li>
+</ul>
+{/block}
+
+{block content}
+<div class="widget">
+    <div class="head">
+        <h5>{='Registrar configuration'|trans}</h5>
+    </div>
+
+    <div class="help">
+        <h5>{$registrar->title}</h5>
+        <p>{$registrar->label}</p>
+    </div>
+
+    <form method="post" action="{='api/admin/servicedomain/registrar_update'|link}" class="mainForm save api-form" data-api-msg="Registrar updated">
+    <fieldset>
+        <div class="rowElem noborder">
+            <label>{='Enable test mode'|trans}:</label>
+            <div class="formRight">
+                <input type="radio" name="test_mode" value="1"{if $registrar->test_mode} checked="checked"{/if}/><label>Yes</label>
+                <input type="radio" name="test_mode" value="0"{if !$registrar->test_mode} checked="checked"{/if} /><label>No</label>
+            </div>
+            <div class="fix"></div>
+        </div>
+
+        <div class="rowElem">
+            <label>{='Registrar title'|trans}:</label>
+            <div class="formRight">
+                <input type="text" name="title" value="{$registrar->title}" />
+            </div>
+            <div class="fix"></div>
+        </div>
+
+        {* Build form elements from registrar configuration array *}
+        {include build_form, $registrar->form, $registrar->config}
+
+        <input type="submit" value="{=Update|trans}" class="greyishBtn submitForm" />
+        <input type="hidden" name="id" value="{$registrar->id}" />
+    </fieldset>
+    </form>
+</div>
+
+{/block}

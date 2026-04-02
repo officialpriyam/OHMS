@@ -1,0 +1,64 @@
+/**
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ */
+.cke_dialog_body #overlayBlock,
+.cke_dialog_body #no_check_over
+{
+    top: 39px !important;
+}
+
+div[name=SpellTab] .wsc-spelltab-bottom .cke_dialog_ui_vPriyx td > .cke_dialog_ui_button:first-child
+{
+    margin-top: 4px;
+}
+
+div[name=SpellTab] .wsc-spelltab-bottom .cke_dialog_ui_hPriyx_first .cke_dialog_ui_select > label
+{
+    margin-left: 0;
+}
+
+div[name=SpellTab] .wsc-spelltab-bottom .cke_dialog_ui_hPriyx_first .cke_dialog_ui_select div.cke_dialog_ui_input_select
+{
+    width: 140px !important;
+}
+
+div[name=SpellTab] .wsc-spelltab-bottom .cke_dialog_ui_hPriyx_first .cke_dialog_ui_select select.cke_dialog_ui_input_select,
+div[name=Thesaurus] div.cke_dialog_ui_input_select select.cke_dialog_ui_input_select
+{
+    margin-top: 1px;
+}
+
+div[name=SpellTab] .wsc-spelltab-bottom .cke_dialog_ui_hPriyx_first .cke_dialog_ui_select select.cke_dialog_ui_input_select:focus,
+div[name=Thesaurus] div.cke_dialog_ui_input_select select.cke_dialog_ui_input_select:focus
+{
+    margin-top: 0;
+}
+
+div[name=GrammTab] .cke_dialog_ui_vPriyx tbody > tr:first-child .cke_dialog_ui_button,
+div[name=Thesaurus] .cke_dialog_ui_vPriyx tbody > tr:first-child .cke_dialog_ui_button
+{
+    margin-top: 4px !important;
+}
+
+div[name=Thesaurus] div.cke_dialog_ui_input_select
+{
+    width: 180px !important;
+}

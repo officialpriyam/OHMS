@@ -1,0 +1,94 @@
+{var $is_client_layout = ($shell_layout ?? '') == 'client'}
+
+{define sidebar_links}
+    <a href="{='/'|link}" title="{=Home|trans}" class="list-group-item list-group-item-action py-3 {if $request->_url === null}active{/if}">
+        <i class="fa fa-home me-3 text-secondary"></i> {=Home|trans}</a>
+
+    {if $settings->side_menu_order}
+    <a href="{='/order'|link}" title="{=Order|trans}" class="list-group-item list-group-item-action py-3 {if str_starts_with($request->_url ?? '', '/order') && !str_starts_with($request->_url ?? '', '/order/service')}active{/if}">
+        <i class="fa fa-shopping-cart me-3 text-secondary"></i>{=Order|trans}</a>
+    {/if}
+
+    {if $client}
+        <a href="{='/client'|link}" title="{='Client area'|trans}" class="list-group-item list-group-item-action py-3 {if str_starts_with($request->_url ?? '', '/client')}active{/if}">
+            <i class="fa fa-columns me-3 text-secondary"></i>{='Client area'|trans}
+        </a>
+        {if $settings->side_menu_services}
+        <a href="{='order/service'|link}" title="{=Services|trans}" class="list-group-item list-group-item-action py-3 {if str_starts_with($request->_url ?? '', '/order/service')}active{/if}">
+            <i class="fa fa-cog me-3 text-secondary"></i>{=Services|trans}
+            {var $suspendedServicesList = $client->order_get_list(['status' => 'suspended'])}
+            {var $suspendedServices = is_array($suspendedServicesList) ? ($suspendedServicesList['total'] ?? 0) : ($suspendedServicesList->total ?? 0)}
+            {if ($suspendedServices > 0)}
+                <span class="badge bg-danger rounded-pill float-end">{$suspendedServices}</span>
+            {/if}
+        </a>
+        {/if}
+
+        {if $settings->side_menu_invoices}
+        <a href="{=invoice|link}" title="{=Invoices|trans}" class="list-group-item list-group-item-action py-3 {if str_starts_with($request->_url ?? '', '/invoice')}active{/if}">
+            <i class="fa fa-credit-card me-3 text-secondary"></i>{=Invoices|trans}
+            {var $unpaidList = $client->invoice_get_list(['status' => 'unpaid'])}
+            {var $unpaidCount = is_array($unpaidList) ? ($unpaidList['total'] ?? 0) : ($unpaidList->total ?? 0)}
+            {if ($unpaidCount > 0)}
+                <span class="badge bg-danger rounded-pill float-end">{$unpaidCount}</span>
+            {/if}
+        </a>
+        {/if}
+
+        {if $settings->side_menu_support}
+        <a href="{=support|link}" title="{=Tickets|trans}" class="list-group-item list-group-item-action py-3 {if ($request->_url == '/support')}active{/if}">
+            <i class="fa fa-life-ring me-3 text-secondary"></i>{=Support|trans}
+            {var $openedList = $client->support_ticket_get_list(['status' => 'open'])}
+            {var $openedTickets = is_array($openedList) ? (($openedList['list'] ?? [])|length) : (($openedList->list ?? [])|length)}
+            {if ($openedTickets > 0)}
+                <span class="badge bg-danger rounded-pill float-end">{$openedTickets}</span>
+            {/if}
+        </a>
+        {/if}
+    {/if}
+
+    {if ($settings->side_menu_blog && $guest->extension_is_on(['mod' => 'news']))}
+    <a href="{='/news'|link}" title="{=Blog|trans}" class="list-group-item list-group-item-action py-3 {if str_starts_with($request->_url ?? '', '/news')}active{/if}">
+        <i class="fa fa-bullhorn me-3 text-secondary"></i>{=Blog|trans}</a>
+    {/if}
+
+    {if ($settings->side_menu_forum && $guest->extension_is_on(['mod' => 'forum']))}
+    <a href="{='/forum'|link}" class="list-group-item list-group-item-action py-3 {if str_starts_with($request->_url ?? '', '/forum')}active{/if}">
+        <i class="fa fa-comments me-3 text-secondary"></i>{=Forum|trans}</a>
+    {/if}
+
+    {if ($settings->side_menu_kb && $guest->extension_is_on(['mod' => 'kb']))}
+    <a href="{=kb|link}" title="{='Knowledge base'|trans}" class="list-group-item list-group-item-action py-3 {if str_starts_with($request->_url ?? '', '/kb')}active{/if}">
+        <i class="fa fa-graduation-cap me-3 text-secondary"></i>{='Knowledge base'|trans}</a>
+    {/if}
+
+    {if $settings->side_menu_contact}
+    <a href="{='/support/contact-us'|link}" class="list-group-item list-group-item-action py-3 {if str_starts_with($request->_url ?? '', '/support/contact-us')}active{/if}">
+        <i class="fa fa-envelope me-3 text-secondary"></i>{='Contact us'|trans}</a>
+    {/if}
+{/define}
+
+{if $is_client_layout}
+    <div class="list-group gm-subnav">
+        {include sidebar_links}
+    </div>
+{else}
+    <div class="card shadow-sm mb-4 border-0">
+        <div class="card-header bg-white border-bottom-0 pt-4">
+            <h5 class="card-title fw-bold mb-0"><i class="fa fa-list me-2 text-primary"></i>{=Menu|trans}</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="list-group list-group-flush rounded-bottom">
+                {include sidebar_links}
+            </div>
+        </div>
+    </div>
+
+    {if !$client && $settings->side_menu_register}
+    <div class="d-grid mb-4">
+        <a class="btn btn-success p-3 fw-bold shadow-sm" href="{='/login'|link}" title="{=Login|trans}">
+            <i class="fa fa-sign-in-alt me-2"></i> {=Login|trans}
+        </a>
+    </div>
+    {/if}
+{/if}

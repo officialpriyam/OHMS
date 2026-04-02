@@ -1,0 +1,10 @@
+{
+    "name": "Priyxo template",
+    "version": "1.0.0",
+    "description": "Priyxo theme assets merged into an OHMS-compatible template scaffold.",
+    "icon": "screenshot.jpg",
+    "author": "priyxstudio",
+    "author_url": "https://priyxstudios.in",
+    "homepage_url": "https://priyxstudios.in",
+    "license": "https://priyxstudios.in/ohms/license"
+}

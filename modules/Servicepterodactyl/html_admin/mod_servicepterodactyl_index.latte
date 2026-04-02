@@ -1,0 +1,44 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{block meta_title}{='Pterodactyl Module'|trans}{/block}
+
+{var $active_menu = 'extension'}
+
+{var $params = $admin->extension_config_get(['ext' => 'mod_servicepterodactyl'])}
+
+{block content}
+
+<div class="widget first">
+    <div class="head">
+        <h5>{='Pterodactyl Module'|trans}</h5>
+    </div>
+
+    <div class="help">
+        <h3>{='Pterodactyl Panel Module'|trans}</h3>
+    </div>
+    <div class="body">
+        <a href="{='extension/settings/servicepterodactyl'|alink}">{='Module Settings'|trans}</a> <br/>
+    </div>
+</div>
+{/block}

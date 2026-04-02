@@ -1,0 +1,81 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+{import 'macro_functions.latte'}
+{block meta_title}System activity{/block}
+{var $active_menu = 'activity'}
+
+{block content}
+<div class="widget">
+    <div class="head"><h5 class="iFrames">{='System activity'|trans}</h5></div>
+
+{include table_search}
+<table class="tableStatic wide">
+    <thead>
+        <tr>
+            <td style="width: 2%"><input type="checkbox" class="batch-delete-master-checkbox"/></td>
+            <td colspan="2">{='Message'|trans}</td>
+            <td>{='Ip'|trans}</td>
+            <td>{='Country'|trans}</td>
+            <td>{='Date'|trans}</td>
+            <td style="width: 5%">&nbsp;</td>
+        </tr>
+    </thead>
+
+    <tbody>
+    {var $events = $admin->activity_log_get_list(array_merge(['per_page' => 30, 'page' => $request->page], $request->get()))}
+    {foreach $events->list as $i => $event}
+    <tr>
+        <td><input type="checkbox" class="batch-delete-checkbox" data-item-id="{$event->id}"/></td>
+        <td>
+            {if $event->client}
+            <a href="{='client/manage'|alink}/{$event->client->id}" title="{$event->client->name}"><img src="{$event->client->email|gravatar}?size=20" alt="{$event->client->name}" /> {$event->client->name} </a>
+            {elseif $event->staff}
+            <a href="{='staff/manage'|alink}/{$event->staff->id}" title="{$event->staff->name}"><img src="{$event->staff->email|gravatar}?size=20" alt="{$event->staff->name}" /> {$event->staff->name}</a>
+            {else}
+            Guest
+            {/if}
+        </td>
+        <td><div style="overflow: auto; width: 250px;">{$event->message}</div></td>
+        <td>{$event->ip}</td>
+        <td>{=(($event->ip|ipcountryname)|default:Unknown)}</td>
+        <td>{$event->created_at|date:'Y-m-d H:i'}</td>
+        <td class="actions">
+            <a class="bb-button btn14 bb-rm-tr api-link" data-api-confirm="{='Are you sure?'|trans}" data-api-redirect="{='activity'|alink}" href="{='api/admin/activity/log_delete'|link:['id' => $event->id]}"><img src="{$theme->url}images/icons/dark/trash.png" alt=""></a>
+        </td>
+    </tr>
+    {else}
+    <tr>
+        <td colspan="6">
+            {='The list is empty'|trans}
+        </td>
+    </tr>
+    {/foreach}
+    </tbody>
+</table>
+
+</div>
+{include 'partial_batch_delete.latte', action: 'admin/activity/batch_delete'}
+{include 'partial_pagination.latte', list: $events, url: 'activity'}
+
+{/block}
+

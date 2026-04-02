@@ -1,0 +1,29 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+<div class="admin-footer">
+    <span>&copy; {$now|date:'Y'} OHMS. {='Version'|trans} {$guest->system_version()}.</span>
+    <div class="admin-footer-links">
+        <a href="http://docs.OHMS.org/" target="_blank">{='Documentation'|trans}</a>
+        <a href="https://github.com/OHMS/OHMS/issues" target="_blank">{='Report bug'|trans}</a>
+        <a href="{='/'|link}" target="_blank">{='Visit site'|trans}</a>
+    </div>
+</div>

@@ -1,0 +1,78 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{var $periods = $guest->system_periods}
+{var $pricing = $product['pricing']}
+
+<section>
+    <div class="well">
+        <strong>{$product['title']}</strong>
+        {$product['description']|bbmd}
+
+        {if ($product['pricing']['type'] == recurrent)}
+        <select name="period" id="period-selector">
+            {foreach $product['pricing']['recurrent'] as $code => $prices}
+            {if $prices->enabled}
+            <option value="{$code}" data-bb-price="{$prices->price|money_convert}" name="period">{$periods->{$code}} - {$prices->price|money_convert}</option>
+            {/if}
+            {/foreach}
+        </select>
+        {elseif ($product['pricing']['type'] == free)}
+        <span class="label label-info">{=FREE|trans}</span>
+        {else}
+        <span class="label label-info">{$product['pricing']['once']['price']|money_convert}</span>
+        {/if}
+        <div class="row-fluid">
+        <label class="control-label">{='Vps hostname'|trans} </label>
+            <div class="controls">
+                <input type="text" name="hostname" value="{$request->hostname}" placeholder="{='mydomain.com'|trans}">
+            </div>
+        </div>
+        <div class="row-fluid">
+        <label>{='OS template'|trans} </label>
+            <div class="controls">
+            <select name="template">
+                {foreach $guest->servicesolusvm_get_templates([type => $product['config']['vtype']]) as $t}
+                <option value="{$t}">{$t|capitalize}</option>
+                {/foreach}
+            </select>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" name="single" value="1" />
+    <input type="hidden" name="id" value="{$product['id']}" />
+</section>
+
+<script>
+$(function() {
+    $('#period-selector').change(function() {
+        $('.period').hide();
+        $('.period.' + $(this).val()).show();
+    }).trigger('change');
+
+    $('.addon-period-selector').change(function() {
+        var r = $(this).attr('rel');
+        $('#' + r + ' span').hide();
+        $('#' + r + ' span.' + $(this).val()).fadeIn();
+    }).trigger('change');
+});
+</script>

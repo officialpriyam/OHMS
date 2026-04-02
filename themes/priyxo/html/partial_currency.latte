@@ -1,0 +1,14 @@
+{var $currencies = $guest->currency_get_pairs() ?? []}
+
+{if (($currencies|length) > 1)}
+    <h4>{='Select currency'|trans}</h2>
+    <div class="form-group">
+        <select name="currency" class="currency_selector form-control">
+        {var $selected = $guest->cart_get_currency()->code}
+        
+        {foreach $currencies as $code => $title}
+            <option value="{$code}" class="currency_{$code}"{if ($code == $selected)} selected="selected"{/if}>{$code} - {$title}</option>
+        {/foreach}
+        </select>
+    </div>
+{/if}

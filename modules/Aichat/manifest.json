@@ -1,0 +1,8 @@
+{
+    "id": "aichat",
+    "type": "mod",
+    "name": "AI Chat Support",
+    "description": "AI-powered chat support module with multiple provider support (Gemini, OpenRouter, ChatGPT, Claude)",
+    "version": "1.0.0",
+    "author": "Priyx Studio"
+}

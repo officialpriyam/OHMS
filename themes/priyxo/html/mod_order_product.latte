@@ -1,0 +1,140 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{import 'macro_functions.latte'}
+
+{block meta_title}{$product['title']}{/block}
+
+{block content}
+<div class="gm-order-page" style="padding: 4rem 0;">
+    <div class="container container-md">
+        {var $periods = $guest->system_periods}
+        {var $pricing = $product['pricing']}
+        
+        <h1 class="mb-3" style="font-weight: 800; font-size: 2.5rem; color: #fff;">{$product['title']}</h1>
+        
+        <div class="gm-breadcrumb">
+            <a href="{='order'|link}" class="text-decoration-none" style="color: inherit;">1. Select product</a> <span class="mx-2">/</span> 
+            <span class="active">2. Configure - {$product['title']}</span> <span class="mx-2">/</span> 
+            3. Confirm <span class="mx-2">/</span> 
+            4. Checkout
+        </div>
+
+        <form method="post" class="api-form" data-api-url="guest/cart/add_item" data-api-redirect="{='cart'|link}">
+            <div class="row gx-4">
+                <div class="col-lg-8 mb-4">
+                    <div class="gm-order-box h-100">
+                        <div class="gm-order-title">Plan details</div>
+                        
+                        <!-- Billing Cycle -->
+                        {if $pricing['type'] == 'recurrent'}
+                        <div class="mb-4">
+                            <label class="form-label text-white fw-bold mb-3">{='Billing Cycle'|trans}</label>
+                            <div class="d-flex flex-wrap gap-2" id="period-selector">
+                                {foreach $pricing['recurrent'] as $code => $period}
+                                {if $period->enabled}
+                                <div class="gm-period-box {if $request->period == $code || (!$request->period && $iterator->first)}active{/if}" data-period="{$code}" style="border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1rem; cursor: pointer; flex: 1; min-width: 120px; text-align: center; transition: all 0.3s; background: rgba(0,0,0,0.2);">
+                                    <div class="fw-bold mb-1 text-white period-title">{$period|period_title}</div>
+                                    <div class="text-muted small period-price">{$period->price|money_convert}</div>
+                                    <input type="radio" name="period" value="{$code}" class="d-none" {if $request->period == $code || (!$request->period && $iterator->first)}checked="checked"{/if}>
+                                </div>
+                                {/if}
+                                {/foreach}
+                            </div>
+                        </div>
+                        {elseif $pricing['type'] == 'free'}
+                        <div class="mb-4">
+                            <div class="alert alert-success" style="background: rgba(40, 167, 69, 0.1); border: 1px solid rgba(40, 167, 69, 0.2); color: #28a745; border-radius: 12px;">
+                                <i class="fa fa-gift me-2"></i> This product is completely free!
+                            </div>
+                        </div>
+                        {elseif $pricing['type'] == 'once'}
+                        <div class="mb-4">
+                            <div class="gm-period-box active" style="border: 1px solid var(--gm-accent); border-radius: 12px; padding: 1rem; text-align: center; background: rgba(0,0,0,0.2);">
+                                <div class="fw-bold mb-1 text-white">One-time payment</div>
+                                <div class="text-muted small">{$pricing['once']['price']|money_convert}</div>
+                            </div>
+                        </div>
+                        {/if}
+
+                        <!-- Configuration Options -->
+                        <div class="mb-4">
+                            {if ($product['type'] === 'pterodactyl' || $product['type'] === 'servicepterodactyl')}
+                                 {include 'partial_pterodactyl_order.latte', product: $product}
+                            {/if}
+                            {include 'partial_configurable_options.latte', product: $product, request: $request}
+                        </div>
+
+                        <!-- Advanced Addons -->
+                        {if (($product['addons']|length) > 0)}
+                        <div class="mb-4">
+                            <label class="form-label text-white fw-bold mb-3">{='Extra Add-Ons'|trans}</label>
+                            {include 'partial_addons.latte', product: $product}
+                        </div>
+                        {/if}
+                    </div>
+                </div>
+
+                <div class="col-lg-4 mb-4">
+                    <div class="gm-order-box position-sticky" style="top: 2rem;">
+                        <div class="gm-order-title">Order summary</div>
+                        
+                        <div class="d-flex flex-column justify-content-between h-100">
+                            <div>
+                                <div class="gm-order-price-label">Total price:</div>
+                                <div class="gm-order-price-value" id="summary-total-val">
+                                    {if $pricing['type'] == 'recurrent'}
+                                        {foreach $pricing['recurrent'] as $code => $period}
+                                            {if $period->enabled && ($request->period == $code || (!$request->period && $iterator->first))}
+                                                {$period->price|money_convert}
+                                            {/if}
+                                        {/foreach}
+                                    {elseif $pricing['type'] == 'once'}
+                                        {$pricing['once']['price']|money_convert}
+                                    {elseif $pricing['type'] == 'free'}
+                                        {0|money_convert}
+                                    {/if}
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <button class="btn btn-gm-success w-100" type="submit" id="order-button">
+                                    ORDER NOW
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" name="id" value="{$product['id']}">
+        </form>
+    </div>
+</div>
+{/block}
+
+{block js}
+<script>
+    $(function() {
+        // Handle period selection active state
+        $('.gm-period-box').on('click', function() {
+            var grid = $(this).parent();
+            var radio = $(this).find('input[type="radio"]');
+            if(radio.length) {
+                grid.find('.gm-period-box').css('border-color', 'rgba(255,255,255,0.1)').removeClass('active');
+                $(this).css('border-color', 'var(--gm-accent)').addClass('active');
+                radio.prop('checked', true).trigger('change');
+            }
+        });
+
+        // Basic summary update on period change
+        $('input[name="period"]').on('change', function() {
+            var box = $(this).closest('.gm-period-box');
+            var price = box.find('.period-price').text();
+            $('#summary-total-val').text(price);
+        });
+        
+        // Initialize
+        $('.gm-period-box.active').css('border-color', 'var(--gm-accent)');
+        $('input[name="period"]:checked').trigger('change');
+    });
+</script>
+{/block}

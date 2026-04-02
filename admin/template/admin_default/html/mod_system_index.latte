@@ -1,0 +1,195 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+{import 'macro_functions.latte'}
+
+{block meta_title}{='Settings'|trans}{/block}
+
+{var $active_menu = 'system'}
+
+{block content}
+{var $request_data = $request->get()}
+{var $extensions = (array) $admin->extension_get_list(array_merge(['active' => 1, 'has_settings' => 1], $request_data))}
+{var $extension_ids = array_column($extensions, 'id')}
+{var $has_product_addons_access = $admin->system_is_allowed(['mod' => 'product'])}
+{var $extra_settings_count = ((!in_array('ipban', $extension_ids, true)) ? 1 : 0) + ((!in_array('frauddetector', $extension_ids, true)) ? 1 : 0)}
+{var $settings_count = (($extensions|length) + ($has_product_addons_access ? 1 : 0) + $extra_settings_count)}
+<div class="widget">
+    <div class="body">
+        <div class="admin-settings-hub">
+            <aside class="admin-settings-sidebar">
+                <div class="admin-settings-sidebar-card admin-settings-search">
+                    <span>{='Search settings'|trans}</span>
+                    <input type="search" value="{$request->search}" placeholder="{='Search modules, integrations, or tools'|trans}" data-settings-search />
+                </div>
+
+                <div class="admin-settings-sidebar-card">
+                    <h4>{='Filter groups'|trans}</h4>
+                    <div class="admin-settings-filter-list">
+                        <button type="button" class="admin-settings-filter is-active" data-settings-filter="all">{='All settings'|trans}</button>
+                        <button type="button" class="admin-settings-filter" data-settings-filter="applications">{='Applications'|trans}</button>
+                        <button type="button" class="admin-settings-filter" data-settings-filter="commerce">{='Commerce'|trans}</button>
+                        <button type="button" class="admin-settings-filter" data-settings-filter="addons">{='Addons'|trans}</button>
+                        <button type="button" class="admin-settings-filter" data-settings-filter="appearance">{='Appearance'|trans}</button>
+                        <button type="button" class="admin-settings-filter" data-settings-filter="other">{='Other'|trans}</button>
+                    </div>
+                </div>
+
+                <div class="admin-settings-sidebar-card">
+                    <h4>{='Environment'|trans}</h4>
+                    <dl class="admin-settings-summary">
+                        <div>
+                            <dt>{='Admin theme'|trans}</dt>
+                            <dd>{$theme['code'] ?? 'admin_default'}</dd>
+                        </div>
+                        <div>
+                            <dt>{='Configurable areas'|trans}</dt>
+                            <dd>{$settings_count}</dd>
+                        </div>
+                        <div>
+                            <dt>{='Language'|trans}</dt>
+                            <dd>{$lang}</dd>
+                        </div>
+                    </dl>
+                </div>
+            </aside>
+
+            <div class="admin-settings-main">
+                <div class="admin-settings-toolbar">
+                    <div>
+                        <span class="admin-section-kicker">{='Administration settings'|trans}</span>
+                        <h2>{='Dense control panel for system configuration'|trans}</h2>
+                        <p>{='Every settings page, extension entry point, and existing route remains intact. Use search or the category filters to narrow the list.'|trans}</p>
+                    </div>
+                    <span class="admin-settings-count" data-settings-count>{$settings_count} areas</span>
+                </div>
+
+                <div class="admin-settings-grid" data-settings-grid>
+                    {if $has_product_addons_access}
+                    <a
+                        href="{='product/addons'|alink}"
+                        class="admin-settings-card"
+                        data-settings-card
+                        data-settings-group="commerce"
+                        data-settings-search="product addons upsells order options pricing commerce products sellable addons"
+                    >
+                        <span class="admin-settings-card-icon">
+                            <strong>PA</strong>
+                        </span>
+                        <span class="admin-settings-card-tag">{='Commerce'|trans}</span>
+                        <strong class="admin-settings-card-title">{='Product addons'|trans}</strong>
+                        <span class="admin-settings-card-description">{='Manage sellable product add-ons and jump directly into addon creation. This is separate from addon modules.'|trans}</span>
+                        <span class="admin-settings-card-meta">{='Commerce workspace'|trans}</span>
+                    </a>
+                    {/if}
+
+                    {if !in_array('ipban', $extension_ids, true)}
+                    <a
+                        href="{='extension/settings/ipban'|alink}"
+                        class="admin-settings-card"
+                        data-settings-card
+                        data-settings-group="other"
+                        data-settings-search="ip ban security blocked ips wildcard cidr abuse access control"
+                    >
+                        <span class="admin-settings-card-icon">
+                            <strong>IP</strong>
+                        </span>
+                        <span class="admin-settings-card-tag">{='Other'|trans}</span>
+                        <strong class="admin-settings-card-title">{='IP ban'|trans}</strong>
+                        <span class="admin-settings-card-description">{='Block exact IPs, wildcard ranges, and CIDR ranges before login, signup, checkout, and public ticket creation.'|trans}</span>
+                        <span class="admin-settings-card-meta">{='Security control'|trans}</span>
+                    </a>
+                    {/if}
+
+                    {if !in_array('frauddetector', $extension_ids, true)}
+                    <a
+                        href="{='extension/settings/frauddetector'|alink}"
+                        class="admin-settings-card"
+                        data-settings-card
+                        data-settings-group="other"
+                        data-settings-search="fraud detector security signup checkout ticket screening risk scoring abuse"
+                    >
+                        <span class="admin-settings-card-icon">
+                            <strong>FD</strong>
+                        </span>
+                        <span class="admin-settings-card-tag">{='Other'|trans}</span>
+                        <strong class="admin-settings-card-title">{='Fraud detector'|trans}</strong>
+                        <span class="admin-settings-card-description">{='Apply email-domain rules and rate limits to signups, public tickets, and checkout attempts, then review the decision log.'|trans}</span>
+                        <span class="admin-settings-card-meta">{='Security control'|trans}</span>
+                    </a>
+                    {/if}
+
+                    {foreach $extensions as $extension}
+                        {var $ext_type = (string) ($extension['type'] ?? 'mod')}
+                        {var $settings_group = 'other'}
+                        {var $card_title = (string) ($extension['name'] ?? '')}
+                        {var $card_description = (string) ($extension['description'] ?? ('Settings for ' . ($extension['name'] ?? 'module')))}
+                        {var $card_meta = str_replace('-', ' ', $ext_type)}
+                        {if (($extension['id'] ?? '') == 'addons')}
+                            {var $settings_group = 'addons'}
+                            {var $card_title = 'Addon modules'}
+                            {var $card_description = 'Manage addon modules and module setup docs. This is separate from sellable product add-ons.'}
+                            {var $card_meta = 'Module workspace'}
+                        {elseif ($ext_type == 'mod')}
+                            {var $settings_group = 'applications'}
+                        {elseif (str_contains($ext_type, 'gateway') || str_contains($ext_type, 'registrar') || str_contains($ext_type, 'currency'))}
+                            {var $settings_group = 'commerce'}
+                        {elseif (str_contains($ext_type, 'theme'))}
+                            {var $settings_group = 'appearance'}
+                        {/if}
+                        {var $search_text = ($extension['name'] ?? '') . ' ' . ($extension['description'] ?? '') . ' ' . $ext_type . (($extension['id'] ?? '') == 'addons' ? ' addon modules extensions developer custom modules' : '')}
+                        <a
+                            href="{='extension/settings'|alink}/{$extension['id']}"
+                            class="admin-settings-card"
+                            data-settings-card
+                            data-settings-group="{$settings_group}"
+                            data-settings-search="{$search_text}"
+                        >
+                            <span class="admin-settings-card-icon">
+                                {if $extension['icon_url'] ?? false}
+                                    <img src="{$extension['icon_url']}" alt="{$extension['name'] ?? $extension['id']}" />
+                                {else}
+                                    <strong>{$extension['name']|truncate:1, false, ''}</strong>
+                                {/if}
+                            </span>
+                            <span class="admin-settings-card-tag">{$settings_group|capitalize}</span>
+                            <strong class="admin-settings-card-title">{$card_title}</strong>
+                            <span class="admin-settings-card-description">{$card_description|truncate:120}</span>
+                            <span class="admin-settings-card-meta">{$card_meta}</span>
+                        </a>
+                    {else}
+                        <div class="admin-settings-empty is-visible">
+                            <strong>{='No configurable extensions available.'|trans}</strong>
+                            <span>{='Activate modules with settings pages to see them here.'|trans}</span>
+                        </div>
+                    {/foreach}
+                </div>
+
+                <div class="admin-settings-empty" data-settings-empty>
+                    <strong>{='No settings matched the current filters.'|trans}</strong>
+                    <span>{='Adjust the search or switch to another category.'|trans}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

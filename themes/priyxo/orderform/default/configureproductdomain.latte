@@ -1,0 +1,166 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_public.latte'}
+{import 'macro_functions.latte'}
+
+{block meta_title}{$product['title']}{/block}
+{block head}{include 'shared/_styles.latte'}{/block}
+
+{block content_before}
+    <div class="wh-page-header">
+        <h1 class="wh-page-title">{='Register or Transfer a Domain'|trans}</h1>
+        <p class="wh-page-subtitle">{$product['description']|stripHtml|truncate:220}</p>
+    </div>
+    {include '_order-steps.latte', selected: 2, product: $product}
+{/block}
+
+{block content}
+    {var $periods = $guest->system_periods}
+    {var $pricing = $product['pricing']}
+    {var $transfer_tlds = $guest->serviceDomain_tlds(['allow_transfer' => 1])}
+    {var $register_tlds = $guest->serviceDomain_tlds(['allow_register' => 1])}
+    <form method="post" class="api-form" data-api-url="guest/cart/add_item" data-api-redirect="{='cart'|link}">
+        <div class="wh-form-panel">
+            <section>
+                <div class="wh-card">
+                    <div class="wh-card-body">
+                        <div class="wh-domain-tabs">
+                            <button class="btn btn-outline-primary active" type="button" data-domain-product-pane="register">{='Register domain'|trans}</button>
+                            {if ($transfer_tlds|length)}
+                                <button class="btn btn-outline-primary" type="button" data-domain-product-pane="transfer">{='Transfer domain'|trans}</button>
+                            {/if}
+                        </div>
+                        <div class="wh-domain-pane is-active" id="domain-product-pane-register">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" name="register_sld" value="{$request->register_sld}" placeholder="{='Enter new domain name to register'|trans}">
+                                {include selectboxtld, register_tld, $register_tlds, $request->register_tld, 0}
+                                <button class="btn btn-primary" type="button" id="domain-product-check">{='Check'|trans}</button>
+                            </div>
+                            <div class="onAfterDomainCheck" style="display:none;">
+                                <label class="form-label" for="registration-years">{='Registration period'|trans}</label>
+                                <select class="form-select mb-3" name="register_years" id="registration-years"></select>
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="toggle-nameservers" onclick="$('#domain-product-nameservers').slideToggle();">
+                                    <label class="form-check-label" for="toggle-nameservers">{='I want to use my own nameservers'|trans}</label>
+                                </div>
+                                <div id="domain-product-nameservers" style="display:none;">
+                                    <input class="form-control mb-2" type="text" name="ns1" placeholder="{='Nameserver 1'|trans}">
+                                    <input class="form-control mb-2" type="text" name="ns2" placeholder="{='Nameserver 2'|trans}">
+                                    <input class="form-control mb-2" type="text" name="ns3" placeholder="{='Nameserver 3'|trans}">
+                                    <input class="form-control" type="text" name="ns4" placeholder="{='Nameserver 4'|trans}">
+                                </div>
+                            </div>
+                        </div>
+                        {if ($transfer_tlds|length)}
+                        <div class="wh-domain-pane" id="domain-product-pane-transfer">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" name="transfer_sld" value="{$request->transfer_sld}" placeholder="{='Enter your domain name to transfer'|trans}">
+                                {include selectboxtld, transfer_tld, $transfer_tlds, $request->transfer_tld, 0}
+                                <button class="btn btn-primary" type="button" id="domain-product-transfer-check">{='Check'|trans}</button>
+                            </div>
+                            <div id="domain-product-transfer-config" style="display:none;">
+                                <p class="small text-secondary">{='Transfer price'|trans}: <strong id="domain-product-transfer-price"></strong></p>
+                                <input type="text" class="form-control" name="transfer_code" value="{$request->transfer_code}" placeholder="{='Enter domain transfer code'|trans}">
+                            </div>
+                        </div>
+                        {/if}
+                        <input type="hidden" name="action" value="register" id="domain-product-action">
+                        <input type="hidden" name="id" value="{$product['id']}">
+                    </div>
+                </div>
+                {include 'partial_configurable_options.latte', product: $product, request: $request}
+                {include 'recommendations-modal.latte', product: $product}
+            </section>
+            <aside class="wh-summary-stack">
+                <div class="wh-card">
+                    <div class="wh-card-body">
+                        <h2 class="wh-section-title">{='Domain order summary'|trans}</h2>
+                        {include 'partial_currency.latte'}
+                        <hr>
+                        {include 'partial_pricing.latte', product: $product, pricing: $pricing, periods: $periods, request: $request}
+                    </div>
+                </div>
+                {include 'partial_addons.latte', product: $product}
+            </aside>
+        </div>
+    </form>
+{/block}
+
+{block js}
+{var $currency = $guest->cart_get_currency()}
+{var $currency_code = $currency['code']}
+{var $year_label = (' Year/s @ '|trans)}
+<script>
+    (function() {
+        var buttons = document.querySelectorAll('[data-domain-product-pane]');
+        var actionField = document.getElementById('domain-product-action');
+        var yearLabel = {=json_encode($year_label)};
+        var currencyRate = {$currency['conversion_rate']};
+        var currencyCode = {=json_encode($currency_code)};
+
+        buttons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                buttons.forEach(function(item) {
+                    item.classList.remove('active');
+                });
+                document.querySelectorAll('[id^="domain-product-pane-"]').forEach(function(pane) {
+                    pane.classList.remove('is-active');
+                });
+                button.classList.add('active');
+                document.getElementById('domain-product-pane-' + button.getAttribute('data-domain-product-pane')).classList.add('is-active');
+                if (actionField) {
+                    actionField.value = button.getAttribute('data-domain-product-pane');
+                }
+            });
+        });
+
+        $('#domain-product-check').on('click', function() {
+            var sld = $('input[name="register_sld"]').val();
+            var tld = $('select[name="register_tld"]').val();
+
+            bb.post('guest/servicedomain/check', { sld: sld, tld: tld }, function() {
+                bb.post('guest/servicedomain/pricing', { tld: tld }, function(result) {
+                    var select = $('#registration-years');
+                    select.find('option').remove();
+
+                    for (var i = 1; i < 6; i++) {
+                        select.append(new Option(i + yearLabel + bb.currency(result.price_registration, currencyRate, currencyCode, i), i));
+                    }
+
+                    $('.onAfterDomainCheck').fadeIn('fast');
+                });
+            });
+
+            return false;
+        });
+
+        $('#domain-product-transfer-check').on('click', function() {
+            var sld = $('input[name="transfer_sld"]').val();
+            var tld = $('select[name="transfer_tld"]').val();
+
+            bb.post('guest/servicedomain/can_be_transferred', { sld: sld, tld: tld }, function() {
+                bb.post('guest/servicedomain/pricing', { tld: tld }, function(result) {
+                    $('#domain-product-transfer-price').text(bb.currency(result.price_transfer, currencyRate, currencyCode));
+                    $('#domain-product-transfer-config').fadeIn('fast');
+                });
+            });
+
+            return false;
+        });
+
+        if ($(".addons").length) {
+            $('#order-button').one('click', function() {
+                $(this).hide();
+                $('.addons').slideDown('fast');
+
+                return false;
+            });
+        }
+
+        $('.addon-period-selector').on('change', function() {
+            var rel = $(this).attr('rel');
+            $('#' + rel + ' span').hide();
+            $('#' + rel + ' span.' + $(this).val()).fadeIn();
+        }).trigger('change');
+    })();
+</script>
+{/block}
+

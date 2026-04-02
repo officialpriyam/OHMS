@@ -1,0 +1,241 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{import 'macro_functions.latte'}
+
+{block meta_title}{='Checkout'|trans}{/block}
+
+{var $cart = $guest->cart_get()}
+
+{block content}
+<div class="gm-order-page" style="padding: 4rem 0;">
+    <div class="container container-md">
+        
+        <h1 class="mb-3 text-center" style="font-weight: 800; font-size: 2.5rem; color: #fff;">{='Checkout'|trans}</h1>
+        
+        <div class="gm-breadcrumb text-center mb-5">
+            <a href="{='order'|link}" class="text-decoration-none" style="color: inherit;">1. Select product</a> <span class="mx-2">/</span> 
+            2. Configure <span class="mx-2">/</span> 
+            <span class="active">3. Confirm</span> <span class="mx-2">/</span> 
+            <span class="active">4. Checkout</span>
+        </div>
+
+        {if (($cart->items|length) > 0)}
+        <div class="row gx-4">
+            <div class="col-lg-8 mb-4">
+                
+                {if !$client}
+                <div class="gm-order-box mb-4 text-center py-4">
+                    <p class="mb-0 text-white fw-bold">
+                        {='You are not logged in.'|trans}
+                    </p>
+                    <div class="mt-3">
+                        <a href="{='/login'|link}?return_to=/checkout" class="btn btn-outline-light px-4 mx-2 rounded-pill">{=Login|trans}</a>
+                        <a href="{='/register'|link}?return_to=/checkout" class="btn btn-gm-success px-4 mx-2 text-dark">{=Register|trans}</a>
+                    </div>
+                </div>
+                {else}
+                <div class="gm-order-box mb-4 text-center py-4">
+                    <p class="mb-0 text-white">
+                        {='You are logged in as'|trans} <strong class="text-success">{$client->email}</strong>. 
+                        <a href="{='/logout'|link}" class="text-muted text-decoration-none ms-2 small">({='Log out'|trans})</a>
+                    </p>
+                </div>
+                {/if}
+
+                <form method="post" action="{='api/client/cart/checkout'|link}" class="api-form" id="checkout-form" data-api-jsonp="onAfterCartCheckout">
+                    
+                    <div class="gm-order-box mb-4">
+                        <div class="gm-order-title mb-4">Payment Details</div>
+                        {var $enough_in_balance = ($client && $client->client_balance_get_total >= $cart->total)}
+                        
+                        {if ($cart->total && !$enough_in_balance)}
+                            <div class="d-flex flex-column gap-2 mb-4">
+                                {foreach $guest->invoice_gateways as $gtw}
+                                    {if in_array($cart->currency->code, $gtw->accepted_currencies, true)}
+                                    <label class="gm-period-box position-relative {if $iterator->first}active{/if}" style="border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1.25rem 1.5rem; cursor: pointer; transition: all 0.3s; background: rgba(0,0,0,0.2);">
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-3">
+                                                {if ($gtw->title == 'PayPal')}
+                                                    <i class="fa fa-paypal fa-2x text-white"></i>
+                                                {elseif ($gtw->title == 'Stripe')}
+                                                    <i class="fa fa-cc-stripe fa-2x text-white"></i>
+                                                {else}
+                                                    <i class="fa fa-credit-card fa-2x text-white"></i>
+                                                {/if}
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold text-white fs-5">{$gtw->title}</div>
+                                                <div class="small text-muted">Pay securely via {$gtw->title}</div>
+                                            </div>
+                                        </div>
+                                        <input type="radio" class="d-none" name="gateway_id" value="{$gtw->id}" {$iterator->first ? checked : ''}>
+                                    </label>
+                                    {/if}
+                                {/foreach}
+                            </div>
+                        {else}
+                            <div class="text-success border border-success p-3 rounded" style="background: rgba(16, 185, 129, 0.1);">
+                                <i class="fa fa-check-circle me-2"></i> Your account balance covers this order. No further payment required.
+                            </div>
+                        {/if}
+                        
+                        <div class="form-check d-flex align-items-center mt-4">
+                            <input class="form-check-input bg-dark border-secondary me-3 mt-0" type="checkbox" id="tos" name="tos" required value="1" style="width: 22px; height: 22px;">
+                            <label class="form-check-label text-white" for="tos">
+                                I agree with the <a href="{='/tos'|link}" target="_blank" class="text-success text-decoration-none fw-bold">Terms of Service</a>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="gm-order-box mb-4">
+                        <div class="gm-order-title mb-3">Additional notes</div>
+                        <textarea name="notes" class="form-control" rows="3" placeholder="Tell us anything we should know about your order..." style="background: rgba(15,18,35,0.85); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 1rem; border-radius: 12px; resize: none;"></textarea>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="col-lg-4 mb-4">
+                <!-- Order Summary -->
+                <div class="gm-order-box position-sticky" style="top: 2rem;">
+                    <div class="gm-order-title">Order summary</div>
+                    
+                    <div class="mb-4">
+                        {var $total_discount = 0}
+                        {foreach $cart->items as $i => $item}
+                            {var $selected_config_options = ($item->config_options_data ?? [])}
+                            
+                            <div class="mb-3 pb-3" style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                <div class="d-flex justify-content-between align-items-start mb-1">
+                                    <div class="fw-bold text-white fs-6">
+                                        {$item->title|truncate:30} 
+                                        {if ($item->quantity > 1)}<span class="badge bg-secondary ms-1">x{$item->quantity}</span>{/if}
+                                    </div>
+                                    <div class="fw-bold text-white fs-6">
+                                        {if $item->discount_price}
+                                            <del class="text-muted small fw-normal d-block text-end">{$item->price|money_convert}</del>
+                                            {$item->price - $item->discount_price|money_convert}
+                                        {else}
+                                            {$item->price|money_convert}
+                                        {/if}
+                                    </div>
+                                </div>
+                                <div class="small text-muted mb-2">
+                                    {if (($item->period|period_title) != '-')}{$item->period|period_title}{/if}
+                                </div>
+                                                                
+                                {if ($selected_config_options|length)}
+                                    {foreach $selected_config_options as $selection}
+                                    <div class="d-flex justify-content-between align-items-center mb-1 text-muted" style="font-size: 0.85rem;">
+                                        <span><i class="fa fa-angle-right me-1 opacity-50"></i> {$selection->option_title}</span>
+                                        <span>
+                                            {$selection->value_label}
+                                            {if (($selection->type ?? '') === 'quantity')} x{$selection->quantity}{/if}
+                                        </span>
+                                    </div>
+                                    {/foreach}
+                                {/if}
+                                
+                                {if $item->setup_price > 0}
+                                    <div class="d-flex justify-content-between align-items-center mt-2 text-muted" style="font-size: 0.85rem;">
+                                        <span><i class="fa fa-cog me-1 opacity-50"></i> {=Setup|trans}</span>
+                                        <span>
+                                            {if $item->discount_setup}
+                                                <del class="me-1">{$item->setup_price|money_convert}</del>
+                                                {$item->setup_price - $item->discount_setup|money_convert}
+                                            {else}
+                                                {$item->setup_price|money_convert}
+                                            {/if}
+                                        </span>
+                                    </div>
+                                {/if}
+
+                                {if ($item->discount_price || $item->discount_setup)}
+                                    {var $total_discount = (($total_discount + $item->discount_price) + $item->discount_setup)}
+                                {/if}
+                            </div>
+                        {/foreach}
+                    </div>
+
+                    <div class="mb-4">
+                        <form action="{='api/guest/cart/apply_promo'|link}" method="post" class="api-form m-0" data-api-reload="1">
+                            <div class="input-group">
+                                <input type="text" name="promocode" class="form-control" placeholder="{='Promo code'|trans}" value="{$request->promocode ?? $cart->promocode}" {if $cart->promocode}readonly{/if} required style="background: rgba(15,18,35,0.85); border: 1px solid rgba(255,255,255,0.12); color: #fff; border-radius: 12px 0 0 12px;">
+                                {if $cart->promocode}
+                                    <button class="btn btn-outline-danger" type="button" onclick="bb.post('guest/cart/remove_promo', {}, function(){ window.location.reload(); })" style="border-radius: 0 12px 12px 0;"><i class="fa fa-times"></i></button>
+                                {else}
+                                    <button class="btn btn-outline-light" type="submit" style="border-radius: 0 12px 12px 0; border-color: rgba(255,255,255,0.12);"><i class="fa fa-check text-success"></i></button>
+                                {/if}
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="gm-order-price-label">Total price:</div>
+                            
+                            {if $client && $client->client_is_taxable}
+                                {var $tax_rate = $client->invoice_get_tax_rate}
+                                {var $tax_amount = (($cart->total * $tax_rate) / 100)}
+                                <div class="text-muted small mb-1">VAT ({$tax_rate}%): {$tax_amount|money_convert}</div>
+                            {else}
+                                {var $tax_amount = 0}
+                            {/if}
+                            
+                            {if ($total_discount > 0)}
+                                <div class="text-success fw-bold small mb-2">Discount: -{$total_discount|money_convert}</div>
+                            {/if}
+
+                            <div class="gm-order-price-value mb-1">
+                                {($cart->total + $tax_amount)|money_convert}
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <button class="btn btn-gm-success w-100" type="button" onclick="$('#checkout-form').submit();">
+                                ORDER NOW
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {else}
+        <div class="gm-order-box text-center py-5">
+            <h2 class="text-white mb-3" style="font-weight: 800;">{='Your cart is empty'|trans}</h2>
+            <p class="text-muted mb-4">{='There are no items in your shopping cart.'|trans}</p>
+            <a class="btn btn-gm-success px-5" href="{='order'|link}">{='ORDER NEW SERVICE'|trans}</a>
+        </div>
+        {/if}
+    </div>
+</div>
+{/block}
+
+{block js}
+<script>
+    $(function() {
+        // Handle payment method selection active state
+        $('.gm-period-box').on('click', function() {
+            var grid = $(this).parent();
+            var radio = $(this).find('input[type="radio"]');
+            
+            if(radio.length) {
+                grid.find('.gm-period-box').css('border-color', 'rgba(255,255,255,0.1)').removeClass('active');
+                $(this).css('border-color', 'var(--gm-accent)').addClass('active');
+                radio.prop('checked', true);
+            }
+        });
+        
+        // Initialize checked gateway
+        $('.gm-period-box.active').css('border-color', 'var(--gm-accent)');
+    });
+
+    function onAfterCartCheckout(result) {
+        if (result.invoice_hash) {
+            bb.redirect({=json_encode(('invoice'|link) . '/')} + result.invoice_hash + '?auto_redirect=1');
+        } else {
+            bb.redirect({=json_encode(('order/service/manage'|link) . '/')} + result.order_id);
+        }
+    }
+</script>
+{/block}

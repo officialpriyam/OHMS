@@ -1,0 +1,11 @@
+{
+    "id": "ipban",
+    "type": "mod",
+    "name": "IP Ban",
+    "description": "Block exact IPs, wildcard ranges, and CIDR ranges before login, signup, checkout, and public ticket submission.",
+    "homepage_url": "https://OHMS.org",
+    "author": "OHMS",
+    "author_url": "https://OHMS.org/",
+    "license": "Apache-2.0",
+    "version": "1.0.0"
+}

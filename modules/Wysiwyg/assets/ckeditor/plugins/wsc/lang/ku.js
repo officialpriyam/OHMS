@@ -1,0 +1,23 @@
+/**
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ */
+﻿CKEDITOR.plugins.setLang("wsc","ku",{btnIgnore:"پشتگوێ کردن",btnIgnoreAll:"پشتگوێکردنی ههمووی",btnReplace:"لهبریدانن",btnReplaceAll:"لهبریدانانی ههمووی",btnUndo:"پووچکردنهوه",changeTo:"گۆڕینی بۆ",errorLoading:"ههڵه لههێنانی داخوازینامهی خانهخۆێی ڕاژه: %s.",ieSpellDownload:"پشکنینی ڕێنووس دانهمزراوه. دهتهوێت ئێستا دایبگریت?",manyChanges:"پشکنینی ڕێنووس کۆتای هات: لهسهدا %1 ی وشهکان گۆڕدرا",noChanges:"پشکنینی ڕێنووس کۆتای هات: هیچ وشهیهك نۆگۆڕدرا",noMispell:"پشکنینی ڕێنووس کۆتای هات: هیچ ههڵهیهکی ڕێنووس نهدۆزراوه",
+noSuggestions:"- هیچ پێشنیارێك -",notAvailable:"ببووره، لهمکاتهدا ڕاژهکه لهبهردهستا نیه.",notInDic:"لهفهرههنگ دانیه",oneChange:"پشکنینی ڕێنووس کۆتای هات: یهك وشه گۆڕدرا",progress:"پشکنینی ڕێنووس لهبهردهوامبوون دایه...",title:"پشکنینی ڕێنووس",toolbar:"پشکنینی ڕێنووس"});

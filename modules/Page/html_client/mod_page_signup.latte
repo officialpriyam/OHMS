@@ -1,0 +1,263 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends 'layout_public.latte'}
+
+{import 'macro_functions.latte'}
+
+{block meta_title}{='Sign up'|trans}{/block}
+
+{block body}
+<section class="container login" role="main">
+    {if $settings['login_page_show_logo']}
+    {var $company = $guest->system_company()}
+    <h1 style="text-align: center">
+        {if $settings['login_page_show_logo']}
+        <a href="{$settings['login_page_logo_url'] ?? '/'}" target="_blank"><img src="{$guest->system_company()->logo_url}" alt="{$guest->system_company()->name}"/></a>
+        {/if}
+    </h1>
+    {/if}
+    <div class="data-block">
+        <div class="data-container">
+
+            <form method="post" action="" id="client-signup">
+                <div class="alert alert-info" style="display: none" id="account-created-info-block">
+                    <button class="close" data-dismiss="alert">Ã—</button>
+                    <strong>{='Account has been created'|trans}.</strong> {='Please check your mailPriyx and confirm email address'|trans}.
+                </div>
+                <fieldset>
+                    {var $r = (array) $guest->client_required}
+                    <div class="control-group">
+                        <label class="control-label" for="reg-email">{='Email Address'|trans}</label>
+                        <div class="controls">
+                            <input type="text" name="email" value="{$request->email}" required="required" id="reg-email">
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="first-name">{='First Name'|trans}</label>
+                        <div class="controls">
+                            <input type="text" name="first_name" id="first-name" value="{$request->first_name}" required="required">
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
+
+
+                    {if in_array('last_name', $r, true)}
+                    <div class="control-group">
+                        <label class="control-label" for="last_name">{='Last Name'|trans}</label>
+                        <div class="controls">
+                            <input type="text" name="last_name" id="last_name" value="{$request->last_name}" required="required">
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
+                    {/if}
+
+
+                    {if in_array('company', $r, true)}
+                    <div class="control-group">
+                        <label class="control-label" for="company">{=Company|trans}</label>
+                        <div class="controls">
+                            <input type="text" name="company" id="company" value="{$request->company}" required="required">
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
+                    {/if}
+
+                    {if in_array('birthday', $r, true)}
+                    <div class="control-group">
+                        <label class="control-label" for="birthday">{=Birthday|trans}</label>
+                        <div class="controls">
+                            <input type="text" name="birthday" id="birthday" value="">
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
+                    {/if}
+
+                    {if in_array('gender', $r, true)}
+                    <div class="control-group">
+                        <label class="control-label" for="gender">{='You are'|trans}</label>
+                        <div class="controls">
+                            <select name="gender" id="gender">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
+                    {/if}
+
+                    {if in_array('address_1', $r, true)}
+                    <div class="control-group">
+                        <label class="control-label" for="address_1">{=Address|trans}</label>
+                        <div class="controls">
+                            <input type="text" name="address_1" id="address_1" value="{$request->address_1}">
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
+                    {/if}
+
+                    {if in_array('address_2', $r, true)}
+                    <div class="control-group">
+                        <label class="control-label" for="address_2">{='Address 2'|trans}</label>
+                        <div class="controls">
+                            <input type="text" name="address_2" id="address_2" value="{$request->address_2}">
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
+                    {/if}
+
+                    {if in_array('city', $r, true)}
+                    <div class="control-group">
+                        <label class="control-label" for="city">{=City|trans}</label>
+                        <div class="controls">
+                            <input type="text" name="city" id="city" value="{$request->city}">
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
+                    {/if}
+
+                    {if in_array('country', $r, true)}
+                    <div class="control-group">
+                        <label class="control-label" for="country">{=Country|trans}</label>
+                        <div class="controls">
+                            <select name="country" required="required">
+                                <option value="">{='-- Select country --'|trans}</option>
+                                {foreach $guest->system_countries as $val => $label}
+                                <option value="{$val}" label="{$label}">{$label}</option>
+                                {/foreach}
+                            </select>
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
+                    {/if}
+
+                    {if in_array('state', $r, true)}
+                    <div class="control-group">
+                        <label class="control-label" for="state">{=State|trans}</label>
+                        <div class="controls">
+                            {* mf.selectbox('state', guest.system_states, request.state, 0, 'Select state') *}
+                            <input type="text" name="state" id="state" value="{$request->state}" />
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
+                    {/if}
+
+                    {if in_array('postcode', $r, true)}
+                    <div class="control-group">
+                        <label class="control-label" for="postcode">{='Zip/Postal Code'|trans}</label>
+                        <div class="controls">
+                            <input type="text" name="postcode" id="postcode" value="{$request->postcode}">
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
+                    {/if}
+
+                    {if in_array('phone', $r, true)}
+                    <div class="control-group">
+                        <label class="control-label" for="phone">{='Phone Number'|trans}</label>
+                            <div class="input-prepend">
+                                <input type="text" name="phone_cc" value="" style="width:20%">
+                                <input id="phone" type="text" name="phone" value="{$request->phone}" style="width:70%">
+                            </div>
+                            <p class="help-block"></p>
+                    </div>
+                    {/if}
+
+                    {var $custom_fields = (array) $guest->client_custom_fields}
+                    {foreach $custom_fields as $field_name => $field}
+                        {var $field = (array) $field}
+                        {if $field['active'] ?? false}
+                            <div class="control-group">
+                                <label class="control-label" for="{$field_name}">{if !empty($field['title'] ?? '')}{$field['title']}{else} {$field_name|capitalize} {/if}</label>
+                                <div class="controls">
+                                    <input type="text" name="{$field_name}" id="{$field_name}" value="{$request->{$field_name}}" {if $field['required'] ?? false}required="required"{/if}>
+                                    <p class="help-block"></p>
+                                </div>
+                            </div>
+                        {/if}
+                    {/foreach}
+
+
+                    <div class="control-group">
+                        <label class="control-label" for="reg-password">{=Password|trans}</label>
+                        <div class="controls">
+                            <input type="password" name="password" value="" required="required" id="reg-password">
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="password-confirm">{='Password confirm'|trans}</label>
+                        <div class="controls">
+                            <input type="password" name="password_confirm" name="password-confirm" value="" required="required">
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
+
+                    {include recaptcha}
+
+                    <div class="form-actions">
+                        <button class="btn btn-block btn-large btn-inverse btn-alt" type="submit">{='Sign up'|trans}</button>
+                    </div>
+
+                </fieldset>
+                <input type="hidden" name="auto_login" value="1"/>
+            </form>
+        </div>
+    </div>
+
+    <ul class="login-footer">
+        <li><a href="{=login|link}"><small>{=Login|trans}</small></a></li>
+    </ul>
+</section>
+{/block}
+
+{block js}
+<script type="text/javascript">
+    $(function () {
+        $('#client-signup').bind('submit', function (event) {
+            $.ajax({
+                type: "POST",
+                url: bb.restUrl('guest/client/create'),
+                data: $(this).serialize(),
+                dataType: 'json',
+                success: function (data) {
+                    if (data.error) {
+                        if (data.error.code == 7777) {
+                            $('#account-created-info-block').show();
+                        } else {
+                            $('.wait').hide();
+                            bb.msg(data.error.message, 'error');
+                        }
+                    } else {
+                        bb.redirect({=json_encode(constant('PS_URL'))});
+                    }
+                }
+            });
+
+            return false;
+        });
+    });
+</script>
+{/block}
+

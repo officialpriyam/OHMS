@@ -1,0 +1,184 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+{import 'macro_functions.latte'}
+{block meta_title}{='Transactions'|trans}{/block}
+{var $active_menu = 'invoice'}
+
+{block top_content}
+{if $request->show_filter}
+<div class="widget filterWidget">
+    <div class="head">
+        <h5 class="iMagnify">{='Filter transactions'|trans}</h5>
+    </div>
+    <div class="body nopadding">
+        <form method="get" action="" class="mainForm">
+            <input type="hidden" name="_url" value="{$request->_url}" />
+            <fieldset>
+                <div class="rowElem noborder">
+                    <label>{='ID'|trans}</label>
+                    <div class="formRight">
+                        <input type="text" name="id" value="{$request->id}">
+                    </div>
+                    <div class="fix"></div>
+                </div>
+
+                <div class="rowElem">
+                    <label>{='ID on payment gateway'|trans}</label>
+                    <div class="formRight">
+                        <input type="text" name="txn_id" value="{$request->txn_id}">
+                    </div>
+                    <div class="fix"></div>
+                </div>
+
+                <div class="rowElem">
+                    <label>{='Invoice Id'|trans}</label>
+                    <div class="formRight">
+                        <input type="text" name="invoice_id" value="{$request->invoice_id}">
+                    </div>
+                    <div class="fix"></div>
+                </div>
+
+                <div class="rowElem">
+                    <label>{='Currency'|trans}</label>
+                    <div class="formRight">
+                        {include selectbox, currency, $guest->currency_get_pairs, $request->currency, 0, 'All currencies'}
+                    </div>
+                    <div class="fix"></div>
+                </div>
+
+                <div class="rowElem">
+                    <label>{='Status'|trans}</label>
+                        <div class="formRight">
+                            {include selectbox, status, $admin->invoice_transaction_get_statuses_pairs, $request->status, 0, 'All statuses'}
+                        </div>
+                    <div class="fix"></div>
+                </div>
+
+                <div class="rowElem">
+                    <label>{='Payment Gateway'|trans}:</label>
+                    <div class="formRight">
+                        {include selectbox, gateway_id, $admin->invoice_gateway_get_pairs, $request->gateway_id, 0, 'All payment gateways'}
+                    </div>
+                    <div class="fix"></div>
+                </div>
+
+                <div class="rowElem">
+                    <label>{='Received at'|trans}</label>
+                    <div class="formRight moreFields">
+                        <ul>
+                            <li style="width: 100px"><input type="text" name="date_from" value="{if $request->date_from}{$request->date_from|date:'Y-m-d'}{/if}" placeholder="{$now|date:'Y-m-d'}" class="datepicker"/></li>
+                            <li class="sep">-</li>
+                            <li style="width: 100px"><input type="text" name="date_to" value="{if $request->date_to}{$request->date_to|date:'Y-m-d'}{/if}" placeholder="{$now|date:'Y-m-d'}" class="datepicker"/></li>
+                        </ul>
+                    </div>
+                    <div class="fix"></div>
+                </div>
+
+                <input type="hidden" name="show_filter" value="1" />
+                <input type="submit" value="{='Filter'|trans}" class="greyishBtn submitForm" />
+            </fieldset>
+        </form>
+        <div class="fix"></div>
+    </div>
+</div>
+{else}
+{var $statuses = $admin->invoice_transaction_get_statuses}
+<div class="stats">
+    <ul>
+        <li class="stats-card stats-card--green">
+            <a href="{='invoice/transactions'|alink:['status' => 'processed']}" class="count green" title="">{$statuses->processed}</a>
+            <span>{='Processed'|trans}</span>
+        </li>
+        <li class="stats-card stats-card--blue">
+            <a href="{='invoice/transactions'|alink:['status' => 'approved']}" class="count blue" title="">{$statuses->approved}</a>
+            <span>{='Approved'|trans}</span>
+        </li>
+        <li class="stats-card stats-card--red">
+            <a href="{='invoice/transactions'|alink:['status' => 'error']}" class="count red" title="">{$statuses->error}</a>
+            <span>{='Error'|trans}</span>
+        </li>
+        <li class="last stats-card stats-card--neutral">
+            <a href="{='invoice/transactions'|alink}" class="count grey" title="">{=(($statuses->received + $statuses->approved) + $statuses->processed) + $statuses->error}</a>
+            <span>{='Total'|trans}</span>
+        </li>
+    </ul>
+    <div class="fix"></div>
+</div>
+{/if}
+
+{/block}
+
+{block content}
+
+<div class="widget">
+    <div class="head"><h5 class="iFrames">{='Transactions'|trans}</h5></div>
+    
+    {include table_search}
+    <table class="tableStatic wide">
+        <thead>
+            <tr>
+                <td style="width: 2%"><input type="checkbox" class="batch-delete-master-checkbox"/></td>
+                <td width="5%">{='Invoice'|trans}</td>
+                <td>{='Type'|trans}</td>
+                <td>{='Status'|trans}</td>
+                <td>{='Gateway'|trans}</td>
+                <td>{='Amount'|trans}</td>
+                <td>{='Date'|trans}</td>
+                <td width="18%">&nbsp;</td>
+            </tr>
+        </thead>
+
+        <tbody>
+            {var $transactions = $admin->invoice_transaction_get_list(array_merge(['per_page' => 30, 'page' => $request->page], $request->get()))}
+            {foreach $transactions->list as $i => $tx}
+            <tr>
+                <td><input type="checkbox" class="batch-delete-checkbox" data-item-id="{$tx->id}"/></td>
+                <td>{if $tx->invoice_id}<a href="{='invoice/manage'|alink}/{$tx->invoice_id}">#{$tx->invoice_id}</a>{else}n/a{/if}</td>
+                <td>{include status_name, ($tx->type ?? '-')}</td>
+                <td>{if $tx->error}<a href="#" onclick='bb.msg({=json_encode((string) $tx->error)}, {=json_encode((string) $tx->error_code)}); return false;'>{$tx->error_code}</a>{else}{include status_name, $tx->status}{/if}</td>
+                <td>{$tx->gateway}</td>
+                <td>{include currency_format, $tx->amount, $tx->currency}</td>
+                <td>{$tx->created_at|date:'Y-m-d H:i'}</td>
+                <td class="actions">
+                    <a class="btn14" href="{='invoice/transaction'|alink}/{$tx->id}"><img src="{$theme->url}images/icons/dark/pencil.png" alt=""></a>
+                    <a class="btn14 api-link" href="{='api/admin/invoice/transaction_process'|link:[id => $tx->id]}" data-api-msg="Processed" title="Process again"><img src="{$theme->url}images/icons/dark/refresh4.png" alt=""></a>
+                    <a class="btn14 bb-rm-tr api-link" href="{='api/admin/invoice/transaction_delete'|link:[id => $tx->id]}" data-api-confirm="Are you sure?" data-api-reload="1"><img src="{$theme->url}images/icons/dark/trash.png" alt=""></a>
+                </td>
+            </tr>
+            {else}
+            <tr>
+                <td colspan="7">
+                    {='The list is empty'|trans}
+                </td>
+            </tr>
+            {/foreach}
+        </tbody>
+    </table>
+
+
+</div>
+{include 'partial_batch_delete.latte', action: 'admin/invoice/batch_delete_transaction'}
+{include 'partial_pagination.latte', list: $transactions, url: 'invoice/transactions'}
+{/block}
+
+

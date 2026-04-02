@@ -1,0 +1,258 @@
+{var $nr = ($invoice['serie'] . ('%05s'|format:$invoice['nr']))}
+{var $seller = $invoice['seller']}
+{var $buyer = $invoice['buyer']}
+{var $company = $guest->system_company()}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel='stylesheet' type='text/css' href="{='css/bootstrap.min.css'|asset_url}" media="screen">
+        <link rel='stylesheet' type='text/css' href="{='css/bootstrap.min.css'|asset_url}" media="print">
+
+        {if $settings['favicon']}
+		<link rel="icon" href="{$settings['favicon']}">
+    	{/if}
+
+        <style>
+        @media print {
+            .dl-horizontal dt {
+                width: auto;
+            }
+            .invoice-well dt {
+                padding-right: 5px;
+            }
+            #proforma-invoice{
+                margin-left: auto;
+                margin-right: auto;
+                display: block;
+            }
+
+            #invoice-title{
+                text-align: center;
+                padding-bottom: 3%;
+            }
+        }
+
+        .dl-horizontal dt {
+            width: auto;
+        }
+        .invoice-well dt {
+            padding-right: 5px;
+        }
+        #proforma-invoice {
+            width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+
+        #invoice-title {
+            text-align: center;
+            padding-bottom: 3%;
+        }
+
+        .invoice-well img {
+            margin-bottom: 5px;
+            max-height: 50px;
+        }
+
+        .col {
+            padding-right: 5px;
+            padding-left: 5px;
+        }
+    </style>
+    </head>
+    <body onload="window.print()">
+    <div class="row" id="proforma-invoice">
+        <article class="span10 data-block" style="margin-left: 0px">
+            <div class="data-container">
+                <header>
+                    <h2 id="invoice-title">{=Invoice|trans} {$nr}</h2>
+                </header>
+                <section>
+                    <div class="row row-fluid">
+                        <div class="col col-xs-4">
+
+                            <div class="well small invoice-well">
+                                {if $company['logo_url']}
+                                <img src="{$company['logo_url']}" alt="Logo">
+                                {/if}
+                                <dl class="dl-horizontal">
+                                    <dt>{='Invoice number'|trans}:</dt>
+                                    <dd>{$nr}</dd>
+                                    <dt>{='Invoice date'|trans}:</dt>
+                                    <dd>{if $invoice['created_at']}
+                                        {$invoice['created_at']|bb_date}
+                                        {else}
+                                        -----
+                                        {/if}
+                                    </dd>
+                                    <dt>{='Due date'|trans}:</dt>
+                                    <dd>{if $invoice['due_at']}
+                                        {$invoice['due_at']|bb_date}
+                                        {else}
+                                        -----
+                                        {/if}
+                                    </dd>
+                                    <dt>{='Invoice status'|trans}:</dt>
+                                    <dd>
+                                    <span class="badge {if ($invoice['status'] == 'paid')}bg-success{elseif ($invoice['status'] == 'unpaid')}bg-warning{/if}">
+                                          <span class="{if ($invoice['status'] == 'paid')}awe-ok-sign{elseif ($invoice['status'] == 'unpaid')}awe-exclamation-sign{/if}"></span>
+                                          {$invoice['status']|capitalize}
+                                    </span>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="col col-xs-4">
+                            <div class="small">
+                                <h4>{=Company|trans}</h4>
+                                <dl class="dl-horizontal">
+                                    {if $seller->company}
+                                        <dt>{=Name|trans}:</dt>
+                                        <dd>{$seller->company}</dd>
+                                    {/if}
+
+                                    {if $seller->company_vat}
+                                        <dt>{='VAT'|trans}:</dt>
+                                        <dd>{$seller->company_vat}</dd>
+                                    {/if}
+
+                                    {if $seller->address}
+                                        <dt>{=Address|trans}:</dt>
+                                        <dd>{$seller->address}</dd>
+                                    {/if}
+
+                                    {if $seller->phone}
+                                        <dt>{=Phone|trans}:</dt>
+                                        <dd>{$seller->phone}</dd>
+                                    {/if}
+
+                                    {if $seller->email}
+                                        <dt>{=Email|trans}:</dt>
+                                        <dd>{$seller->email}</dd>
+                                    {/if}
+
+                                    {if $seller->account_number}
+                                        <dt>{=Account|trans}:</dt>
+                                        <dd>{$seller->account_number}</dd>
+                                    {/if}
+
+                                    {if $seller->note}
+                                        <dt>{=Note|trans}:</dt>
+                                        <dd>{$seller->note}</dd>
+                                    {/if}
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="col col-xs-4">
+                            <div class="small">
+                                <h4>{=Client|trans}</h4>
+                                <dl class="dl-horizontal">
+                                    {if ($buyer->first_name || $buyer->last_name)}
+                                        <dt>{=Name|trans}:</dt>
+                                        <dd>{$buyer->first_name} {$buyer->last_name}</dd>
+                                    {/if}
+
+                                    {if $buyer->company}
+                                        <dt>{=Company|trans}:</dt>
+                                        <dd>{$buyer->company}</dd>
+                                    {/if}
+
+                                    {if $buyer->company_number}
+                                        <dt>{='Company number'|trans}:</dt>
+                                        <dd>{$buyer->company_number}</dd>
+                                    {/if}
+
+                                    {if $buyer->company_vat}
+                                        <dt>{='Company VAT'|trans}:</dt>
+                                        <dd>{$buyer->company_vat}</dd>
+                                    {/if}
+
+                                    {if $buyer->address}
+                                        <dt>{=Address|trans}:</dt>
+                                        <dd>{$buyer->address}</dd>
+                                        <dd>{$buyer->city}, {$buyer->state}</dd>
+                                        <dd>{$buyer->zip}, {$guest->system_countries->{$buyer->country}}</dd>
+                                    {/if}
+
+                                    {if $buyer->phone}
+                                        <dt>{=Phone|trans}:</dt>
+                                        <dd>{$buyer->phone}</dd>
+                                    {/if}
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+
+                    {if $invoice['text_1']}
+                    <div class="well">
+                        {$invoice['text_1']|markdown}
+                    </div>
+                    {/if}
+
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>{='#'|trans}</th>
+                            <th>{=Title|trans}</th>
+                            <th>{=Price|trans}</th>
+                            <th>{=Total|trans}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $invoice['lines'] as $item}
+                            <tr>
+                                <td>{$iterator->counter}.</td>
+                                <td>
+                                    {if $item->order_id}
+                                        {$item->title}
+                                    {else}
+                                        {$item->title}
+                                    {/if}
+                                </td>
+                                <td class="text-center">
+                                    {$item->price|money:$invoice['currency']}
+                                    {if ($item->quantity > 1)}
+                                    x {$item->quantity} {* item.unit *}
+                                    {/if}
+                                </td>
+                                <td class="text-end">{$item->total|money:$invoice['currency']}</td>
+                            </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                    <div class="row row-fluid">
+                        <div class="col-xs-4 col-xs-offset-8">
+                            <table class="table">
+                                {if ($invoice['tax'] > 0)}
+                                <tr>
+                                    <td>{$invoice['taxname']} {$invoice['taxrate']}%</td>
+                                    <td>{$invoice['tax']|money:$invoice['currency']}</td>
+                                </tr>
+                                {/if}
+                                {if ($invoice['discount'] > 0)}
+                                <tr>
+                                    <td>{=Discount|trans}</td>
+                                    <td>{$invoice['discount']|money:$invoice['currency']}</td>
+                                </tr>
+                                {/if}
+                                <tr>
+                                    <td><strong>{=Total|trans}</strong></td>
+                                    <td class="text-end"><strong>{$invoice['total']|money:$invoice['currency']}</strong></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    {if $invoice['text_2']}
+                    <div class="well">
+                        {$invoice['text_2']|markdown}
+                    </div>
+                    {/if}
+                </section>
+            </div>
+        </article>
+    </div>
+    </body>
+</html>

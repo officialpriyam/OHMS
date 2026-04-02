@@ -1,0 +1,115 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+<div class="help">
+    <h5>{='Stock control settings'|trans}</h5>
+</div>
+
+<form method="post" action="{='api/admin/product/update'|link}" class="mainForm api-form save" data-api-msg="Settings updated">
+<fieldset>
+    <div class="rowElem noborder">
+        <label>{='Enable stock control'|trans}:</label>
+        <div class="formRight">
+            <input type="radio" name="stock_control" value="1"{if $product['stock_control']} checked="checked"{/if}/><label>Yes</label>
+            <input type="radio" name="stock_control" value="0"{if !$product['stock_control']} checked="checked"{/if} /><label>No</label>
+        </div>
+        <div class="fix"></div>
+    </div>
+    
+    <div class="rowElem">
+        <label>{='Allow quantity select on order form'|trans}:</label>
+        <div class="formRight">
+            <input type="radio" name="allow_quantity_select" value="1"{if $product['allow_quantity_select']} checked="checked"{/if}/><label>Yes</label>
+            <input type="radio" name="allow_quantity_select" value="0"{if !$product['allow_quantity_select']} checked="checked"{/if} /><label>No</label>
+        </div>
+        <div class="fix"></div>
+    </div>
+
+    <div class="rowElem">
+        <label>{='Quantity in stock'|trans}:</label>
+        <div class="formRight">
+            <input type="text" name="quantity_in_stock" value="{$product['quantity_in_stock']}">
+        </div>
+        <div class="fix"></div>
+    </div>
+    
+    <input type="submit" value="{=Update|trans}" class="greyishBtn submitForm" />
+</fieldset>
+    
+<input type="hidden" name="id" value="{$product['id']}" />
+</form>
+
+<div class="help">
+    <h5>{=Plugin|trans}</h5>
+</div>
+
+<form method="post" action="{='api/admin/product/update'|link}" class="mainForm api-form save" data-api-msg="Settings updated">
+<fieldset>
+    <div class="rowElem noborder">
+        <label>{='Plugin name'|trans}:</label>
+        <div class="formRight">
+            <input type="text" name="plugin" value="{$product['plugin']}"/>
+        </div>
+        <div class="fix"></div>
+    </div>
+    
+    <input type="submit" value="{=Update|trans}" class="greyishBtn submitForm" />
+</fieldset>
+    
+<input type="hidden" name="id" value="{$product['id']}" />
+</form>
+
+<form method="post" action="{='api/admin/product/update_config'|link}" class="mainForm save api-form" data-api-reload="1">
+    <fieldset>
+        <legend>Custom parameters</legend>
+        {foreach $product['config'] as $k => $v}
+        <div class="rowElem">
+            <label>{$k}:</label>
+            <div class="formRight">
+                <input type="text" name="config[{$k}]" value="{$v}">
+            </div>
+            <div class="fix"></div>
+        </div>
+        {/foreach}
+    </fieldset>
+    
+    <fieldset>
+        <legend>Add custom parameter</legend>
+        <div class="rowElem">
+            <label>Parameter name:</label>
+            <div class="formRight">
+                <input type="text" name="new_config_name">
+            </div>
+            <div class="fix"></div>
+        </div>
+
+        <div class="rowElem">
+            <label>Parameter value:</label>
+            <div class="formRight noborder">
+                <textarea rows="7" cols="" name="new_config_value"></textarea>
+            </div>
+            <div class="fix"></div>
+        </div>
+        <input type="submit" value="{='Update configuration fields'|trans}" class="greyishBtn submitForm" />
+        <div class="fix"></div>
+        <input type="hidden" name="id" value="{$product['id']}"/>
+    </fieldset>
+</form>

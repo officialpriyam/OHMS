@@ -1,0 +1,50 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{block meta_title}{$category['title']}{/block}
+
+{block content_before}
+    <div class="gm-page-heading">
+        <h1>{$category['title']}</h1>
+    </div>
+    {if $client}
+        <div class="gm-client-tabs">
+            <a class="active" href="{=kb|link}">{='General'|trans}</a>
+            <a href="{=support|link}">{='Support Tickets'|trans}</a>
+        </div>
+    {/if}
+    <p class="text-secondary">{$category['description']}</p>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{=kb|link}">{='Knowledge base'|trans}</a>
+        </li>
+        <li class="breadcrumb-item active">{$category['title']}</li>
+    </ol>
+{/block}
+
+{block content}
+    {if (($category['articles']|length) > 0)}
+        <div class="list-group">
+            {foreach $category['articles'] as $i => $article}
+                <a href="{='/kb'|link}/{$article['category']['slug']}/{$article['slug']}" class="list-group-item">{$article['title']}</a>
+            {/foreach}
+        </div>
+        <hr>
+    {else}
+        <p>{='Try using other keyword. No matches not for keyword:'|trans}
+            <b>{$request->q}</b>
+        </p>
+    {/if}
+
+    <h4>{='What are you looking for?'|trans}</h4>
+    <form method="get" action="{=kb|link}">
+        <div class="input-group my-3">
+            <input name="q" type="text" class="form-control" value="{$request->q}">
+            <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
+        </div>
+    </form>
+
+    <div class="text-center">
+        <a class="btn btn-default" href="{=kb|link}">
+            <i class="fa fa-arrow-left me-2"></i>{='Back to list'|trans}</a>
+    </div>
+{/block}

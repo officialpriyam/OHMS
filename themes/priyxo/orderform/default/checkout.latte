@@ -1,0 +1,189 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_public.latte'}
+
+{block meta_title}{='Checkout'|trans}{/block}
+{block head}{include 'shared/_styles.latte'}{/block}
+
+{block content_before}
+    <div class="wh-page-header">
+        <h1 class="wh-page-title">{='Checkout'|trans}</h1>
+        <p class="wh-page-subtitle">{='Review the final total, choose a payment method, and place your order using the active OHMS checkout backend.'|trans}</p>
+    </div>
+    {include '_order-steps.latte', selected: 4}
+{/block}
+
+{block content}
+    {var $cart = $guest->cart_get()}
+    {var $tax_amount = 0}
+    {if ($client && $client->client_is_taxable)}
+        {var $tax_rate = $client->invoice_get_tax_rate}
+        {var $tax_amount = (($cart->total * $tax_rate) / 100)}
+    {/if}
+
+    {if (($cart->items|length) > 0)}
+        <div class="wh-form-panel">
+            <section>
+                <div class="wh-card mb-4">
+                    <div class="wh-card-body">
+                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+                            <div>
+                                <h2 class="wh-section-title mb-1">{='Order summary'|trans}</h2>
+                                <p class="text-secondary mb-0">{='Everything below is still powered by the existing OHMS cart and order APIs.'|trans}</p>
+                            </div>
+                            <a class="btn btn-outline-primary" href="{='/cart'|link}">{='Edit cart'|trans}</a>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table wh-cart-table align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>{='Product'|trans}</th>
+                                        <th>{='Details'|trans}</th>
+                                        <th class="text-end">{='Price'|trans}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {foreach $cart->items as $item}
+                                        {var $selected_config_options = ($item->config_options_data ?? [])}
+                                        <tr>
+                                            <td>
+                                                <strong>{$item->title}</strong>
+                                                {if ($item->quantity > 1)}
+                                                    <span class="badge bg-secondary ms-2">x {$item->quantity}</span>
+                                                {/if}
+                                            </td>
+                                            <td>
+                                                <div class="wh-cart-meta mt-0">
+                                                    {if $item->period}
+                                                        <div>{='Cycle'|trans}: {$item->period|period_title}</div>
+                                                    {/if}
+                                                    {if ($selected_config_options|length)}
+                                                        {foreach $selected_config_options as $selection}
+                                                            <div>
+                                                                {$selection->option_title}: {$selection->value_label}
+                                                                {if (($selection->type ?? '') === 'quantity')} x {$selection->quantity}{/if}
+                                                            </div>
+                                                        {/foreach}
+                                                    {/if}
+                                                </div>
+                                            </td>
+                                            <td class="text-end">
+                                                <strong>
+                                                    {if $item->discount_price}
+                                                        <del class="text-secondary me-2">{$item->total|money_convert}</del>
+                                                        {$item->total - $item->discount_price|money_convert}
+                                                    {else}
+                                                        {$item->total|money_convert}
+                                                    {/if}
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    {/foreach}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                {if !$client}
+                    <div class="wh-card">
+                        <div class="wh-card-body">
+                            <h2 class="wh-section-title">{='Sign in to continue'|trans}</h2>
+                            <p class="text-secondary">{='Checkout requires a client account so OHMS can issue invoices, activate services, and track renewals in your client area.'|trans}</p>
+                            <div class="wh-inline-actions">
+                                <a class="btn btn-success" href="{='/login'|link}?return_to=/checkout">{='Login'|trans}</a>
+                                <a class="btn btn-outline-primary" href="{='/register'|link}?return_to=/checkout">{='Register'|trans}</a>
+                            </div>
+                        </div>
+                    </div>
+                {/if}
+            </section>
+
+            <aside class="wh-summary-stack">
+                <div class="wh-card">
+                    <div class="wh-card-body">
+                        <h2 class="wh-section-title">{='Total due today'|trans}</h2>
+                        <div class="wh-cart-total text-success mb-3">{$cart->total + $tax_amount|money_convert}</div>
+                        <div class="wh-summary-list mb-4">
+                            <div class="wh-summary-row">
+                                <span>{='Subtotal'|trans}</span>
+                                <strong>{$cart->subtotal|money_convert}</strong>
+                            </div>
+                            {if (($cart->discount ?? 0) > 0)}
+                                <div class="wh-summary-row">
+                                    <span>{='Discount'|trans}</span>
+                                    <strong>-{$cart->discount|money_convert}</strong>
+                                </div>
+                            {/if}
+                            {if $tax_amount > 0}
+                                <div class="wh-summary-row">
+                                    <span>{='VAT'|trans} ({$tax_rate}%)</span>
+                                    <strong>{$tax_amount|money_convert}</strong>
+                                </div>
+                            {/if}
+                        </div>
+
+                        {if $client}
+                            {var $enough_in_balance = ($client->client_balance_get_total >= $cart->total)}
+                            {var $gateway_count = 0}
+                            <form method="post" action="{='api/client/cart/checkout'|link}" class="api-form" data-api-jsonp="onAfterCartCheckout">
+                                <div class="mb-4">
+                                    <h3 class="h6 fw-bold">{='Payment method'|trans}</h3>
+                                    {if ($cart->total && !$enough_in_balance)}
+                                        {foreach $guest->invoice_gateways as $gtw}
+                                            {if in_array($cart->currency->code, $gtw->accepted_currencies, true)}
+                                                {var $gateway_count = $gateway_count + 1}
+                                                <label class="border rounded-3 p-3 d-flex align-items-center justify-content-between gap-3 mb-2">
+                                                    <span>
+                                                        <input type="radio" class="form-check-input me-2" name="gateway_id" value="{$gtw->id}" {$iterator->first ? checked : ''}>
+                                                        {$gtw->title}
+                                                    </span>
+                                                    <span class="text-secondary small">{$cart->currency->code}</span>
+                                                </label>
+                                            {/if}
+                                        {/foreach}
+                                        {if $gateway_count === 0}
+                                            <p class="small text-danger mb-0">{='No enabled payment gateway currently accepts this cart currency.'|trans}</p>
+                                        {/if}
+                                    {else}
+                                        <p class="small text-secondary mb-0">{='The total will be deducted from your client balance or completed without an online gateway when the due amount is zero.'|trans}</p>
+                                    {/if}
+                                </div>
+
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="checkout-tos" name="tos" required>
+                                    <label class="form-check-label small text-secondary" for="checkout-tos">
+                                        {='I agree to the'|trans} <a href="{='/tos'|link}" target="_blank">{='Terms and Conditions'|trans}</a>
+                                    </label>
+                                </div>
+
+                                <div class="d-grid">
+                                    <button class="btn btn-success btn-lg" type="submit" {if (!$enough_in_balance && $cart->total && $gateway_count === 0)}disabled{/if}>
+                                        {='Place order'|trans}
+                                    </button>
+                                </div>
+                            </form>
+                        {else}
+                            <p class="small text-secondary mb-0">{='Login or register to choose a payment method and complete the order.'|trans}</p>
+                        {/if}
+                    </div>
+                </div>
+            </aside>
+        </div>
+    {else}
+        {include 'shared/_placeholder.latte', title: ('Your cart is empty'|trans), description: ('There is nothing to check out yet. Add a product first, then return here to complete the order.'|trans), note: ('The new checkout route is ready and will continue using the existing OHMS order pipeline.'|trans)}
+        <div class="text-center mt-4">
+            <a class="btn btn-primary btn-lg" href="{='/order'|link}">{='Browse products'|trans}</a>
+        </div>
+    {/if}
+{/block}
+
+{block js}
+<script>
+    function onAfterCartCheckout(result) {
+        if (result.invoice_hash) {
+            bb.redirect({=('invoice'|link) . '/'|noescape} + result.invoice_hash + '&auto_redirect=1');
+        } else {
+            bb.redirect({=('order/service/manage'|link) . '/'|noescape} + result.order_id);
+        }
+    }
+</script>
+{/block}

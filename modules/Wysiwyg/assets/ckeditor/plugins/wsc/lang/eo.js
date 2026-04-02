@@ -1,0 +1,23 @@
+/**
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ */
+﻿CKEDITOR.plugins.setLang("wsc","eo",{btnIgnore:"Ignori",btnIgnoreAll:"Ignori Ĉion",btnReplace:"Anstataŭigi",btnReplaceAll:"Anstataŭigi Ĉion",btnUndo:"Malfari",changeTo:"Ŝanĝi al",errorLoading:"Eraro en la servoelŝuto el la gastiga komputiko: %s.",ieSpellDownload:"Ortografikontrolilo ne instalita. Ĉu vi volas elŝuti ĝin nun?",manyChanges:"Ortografikontrolado finita: %1 vortoj korektitaj",noChanges:"Ortografikontrolado finita: neniu vorto korektita",noMispell:"Ortografikontrolado finita: neniu eraro trovita",
+noSuggestions:"- Neniu propono -",notAvailable:"Bedaŭrinde la servo ne funkcias nuntempe.",notInDic:"Ne trovita en la vortaro",oneChange:"Ortografikontrolado finita: unu vorto korektita",progress:"La ortografio estas kontrolata...",title:"Kontroli la ortografion",toolbar:"Kontroli la ortografion"});

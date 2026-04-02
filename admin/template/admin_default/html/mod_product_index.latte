@@ -1,0 +1,205 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends 'layout_default.latte'}
+
+{import 'macro_functions.latte'}
+
+{var $active_menu = 'product'}
+
+{block meta_title}{='Products'|trans}{/block}
+
+{block content}
+<div class="widget simpleTabs">
+    <ul class="tabs">
+        <li><a href="#tab-index">{='Products'|trans}</a></li>
+        <li><a href="#tab-new">{='New product'|trans}</a></li>
+        <li><a href="#tab-new-category">{='New category'|trans}</a></li>
+        <li><a href="#tab-categories">{='Manage categories'|trans}</a></li>
+        <li><a href="{='product/options'|alink}">{='Configurable options'|trans}</a></li>
+    </ul>
+
+    <div class="tabs_container">
+        <div class="fix"></div>
+        <div class="tab_content nopadding" id="tab-index">
+            {include table_search}
+            <form method="post" action="{='api/admin/product/update_priority'|link}" class="mainForm api-form" data-api-reload="1">
+                <fieldset>
+                    <table class="tableStatic wide">
+                        <thead>
+                            <tr>
+                                <td width="50%">Title</td>
+                                <td>Status</td>
+                                <td>Category</td>
+                                <td width="10%">Type</td>
+                                <td style="width: 5%">{='Priority'|trans}</td>
+                                <td width="13%">&nbsp;</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {var $products = $admin->product_get_list(array_merge(['per_page' => 30, 'page' => $request->page], $request->get()))}
+                            {foreach $products->list as $product_row}
+                            <tr>
+                                <td><a href="{='product/manage'|alink}/{$product_row['id']}">{$product_row['title']}</a></td>
+                                <td>{include status_name, $product_row['status']}</td>
+                                <td><a href="{='/product/category'|alink}/{$product_row['category']['id']}">{$product_row['category']['title']}</a></td>
+                                <td>{include status_name, $product_row['type']}</td>
+                                <td><input type="text" name="priority[{$product_row['id']}]" value="{$product_row['priority']}" style="width:30px;"></td>
+                                <td class="actions">
+                                    <a class="bb-button btn14" href="{='product/manage'|alink}/{$product_row['id']}"><img src="{$theme->url}images/icons/dark/pencil.png" alt=""></a>
+                                    <a class="bb-button btn14 bb-rm-tr api-link" data-api-confirm="Are you sure?" href="{='api/admin/product/delete'|link:['id' => $product_row['id']]}" data-api-redirect="{='product'|alink}"><img src="{$theme->url}images/icons/dark/trash.png" alt=""></a>
+                                </td>
+                            </tr>
+                            {else}
+                            <tr>
+                                <td colspan="6">{='The list is empty'|trans}</td>
+                            </tr>
+                            {/foreach}
+                        </tbody>
+                    </table>
+                
+                    {include 'partial_pagination.latte', list: $products, url: 'product'}
+            
+                    <input type="submit" value="{='Update priority'|trans}" class="greyishBtn submitForm" />
+                </fieldset>
+            </form>
+        </div>
+
+        <div class="tab_content nopadding" id="tab-new">
+            <form method="post" action="{='api/admin/product/prepare'|link}" class="mainForm" id="prepare-product" data-product-manage-url="{='product/manage'|alink}/">
+                <fieldset>
+                    <div class="rowElem noborder">
+                        <label>{='Type'|trans}:</label>
+                        <div class="formRight">
+                            {include selectbox, type, $admin->product_get_types, $request->type, 1}
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+                    <div class="rowElem">
+                        <label>{='Category'|trans}:</label>
+                        <div class="formRight">
+                            {include selectbox, product_category_id, $admin->product_category_get_pairs, $request->product_category_id, 1}
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+                    <div class="rowElem">
+                        <label>{='Title'|trans}:</label>
+                        <div class="formRight">
+                            <input type="text" name="title" value="{$request->title}" required="required" placeholder=""/>
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+
+                    <input type="submit" value="{='Create'|trans}" class="greyishBtn submitForm" />
+                </fieldset>
+            </form>
+
+            <div class="fix"></div>
+        </div>
+
+        <div class="tab_content nopadding" id="tab-new-category">
+
+            <div class="help">
+                <h3>{='Create product category'|trans}</h3>
+                <p>{='Title, image URL, and description are all supported here.'|trans}</p>
+            </div>
+            <form method="post" action="{='api/admin/product/category_create'|link}" class="mainForm save api-form" data-api-redirect="{='product'|alink}">
+                <fieldset>
+                    <div class="rowElem noborder">
+                        <label>{='Title'|trans}:</label>
+                        <div class="formRight">
+                            <input type="text" name="title" value="{$request->cat_title}" required="required" placeholder="{='Shared hosting'|trans}"/>
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+
+                    <div class="rowElem">
+                        <label>{='Icon URL'|trans}:</label>
+                        <div class="formRight">
+                            <input type="text" name="icon_url" value="{$request->icon_url}" placeholder="https://example.com/icon.png"/>
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+
+                    <div class="rowElem">
+                        <label>{='Description'|trans}:</label>
+                        <div class="formRight">
+                            <textarea name="description" cols="5" rows="4" placeholder="{='Short category description shown on order pages'|trans}">{$request->cat_description}</textarea>
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+
+                    <div class="rowElem">
+                        <label>{='Orderform'|trans}:</label>
+                        <div class="formRight">
+                            {include selectbox, orderform_code, $admin->theme_orderform_get_pairs, $request->orderform_code, 0, 'Use theme default'}
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+
+                    <input type="submit" value="{='Create'|trans}" class="greyishBtn submitForm" />
+                </fieldset>
+            </form>
+        </div>
+
+        <div class="tab_content nopadding" id="tab-categories">
+            <table class="tableStatic wide">
+                <tbody>
+                    {foreach $admin->product_category_get_pairs as $cat_id => $cat_title}
+                    <tr {if $iterator->first}class="noborder"{/if}>
+                        <td>{$cat_title}</td>
+                        <td class="actions" style="width:13%">
+                            <a class="bb-button btn14" href="{='/product/category'|alink}/{$cat_id}"><img src="{$theme->url}images/icons/dark/pencil.png" alt=""></a>
+                            <a class="bb-button btn14 bb-rm-tr api-link" data-api-confirm="Are you sure?" href="{='api/admin/product/category_delete'|link:['id' => $cat_id]}" data-api-redirect="{='product'|alink}"><img src="{$theme->url}images/icons/dark/trash.png" alt=""></a>
+                        </td>
+                    </tr>
+                    {else}
+                    <tr>
+                        <td colspan="3">{='The list is empty'|trans}</td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block js}
+<script>
+    $(function() {
+        $('#prepare-product').bind('submit', function(){
+            var form = $(this);
+
+            bb.post(
+                form.attr('action'),
+                form.serialize(),
+                function(result) {
+                    bb.redirect(form.data('product-manage-url') + result);
+                }
+            );
+            
+            return false;
+        });
+    });
+</script>
+{/block}
+

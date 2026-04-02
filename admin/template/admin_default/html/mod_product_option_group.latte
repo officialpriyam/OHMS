@@ -1,0 +1,145 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends 'layout_default.latte'}
+
+{import 'macro_functions.latte'}
+
+{var $active_menu = products}
+
+{block meta_title}{$group['title']}{/block}
+
+{block breadcrumbs}
+<ul>
+    <li class="firstB"><a href="{='/'|alink}">{=Home|trans}</a></li>
+    <li><a href="{=product|alink}">{=Products|trans}</a></li>
+    <li><a href="{='product/options'|alink}">{='Configurable options'|trans}</a></li>
+    <li class="lastB">{$group['title']}</li>
+</ul>
+{/block}
+
+{block content}
+<div class="widget simpleTabs">
+    <ul class="tabs">
+        <li><a href="#tab-settings">{='Group settings'|trans}</a></li>
+        <li><a href="#tab-options">{='Configurable options'|trans}</a></li>
+    </ul>
+
+    <div class="tabs_container">
+        <div class="fix"></div>
+
+        <div class="tab_content nopadding" id="tab-settings">
+            <div class="help">
+                <h5>{='Manage group details and product assignments'|trans}</h5>
+            </div>
+
+            <form method="post" action="{='api/admin/product/configurable_group_update'|link}" class="mainForm api-form" data-api-reload="1">
+                <fieldset>
+                    <div class="rowElem noborder">
+                        <label>{='Group name'|trans}</label>
+                        <div class="formRight">
+                            <input type="text" name="title" value="{$group['title']}" required="required">
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+
+                    <div class="rowElem">
+                        <label>{='Description'|trans}</label>
+                        <div class="formRight">
+                            <textarea name="description" cols="5" rows="4">{$group['description']}</textarea>
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+
+                    <div class="rowElem">
+                        <label>{='Assigned products'|trans}</label>
+                        <div class="formRight">
+                            {var $selected_product_ids = $group['product_ids'] ?? []}
+                            <select name="product_ids[]" multiple="multiple" class="multiple" size="{max(6, (($product_pairs ?? [])|length))}">
+                                {foreach $product_pairs as $product_id => $product_title}
+                                <option value="{$product_id}" {if in_array((int) $product_id, $selected_product_ids, true)}selected="selected"{/if}>{$product_title}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+
+                    <input type="hidden" name="id" value="{$group['id']}">
+                    <input type="submit" value="{='Save changes'|trans}" class="greyishBtn submitForm">
+                </fieldset>
+            </form>
+        </div>
+
+        <div class="tab_content nopadding" id="tab-options">
+            <div class="help">
+                <h5>{='Create and price the options offered inside this group'|trans}</h5>
+            </div>
+
+            <table class="tableStatic wide">
+                <thead>
+                    <tr>
+                        <td>{='Option'|trans}</td>
+                        <td style="width: 14%">{='Type'|trans}</td>
+                        <td style="width: 10%">{='Required'|trans}</td>
+                        <td style="width: 10%">{='Hidden'|trans}</td>
+                        <td style="width: 10%">{='Sort order'|trans}</td>
+                        <td style="width: 12%">&nbsp;</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {foreach ($group['options'] ?? []) as $option}
+                    <tr>
+                        <td>
+                            <a href="{='product/options/group'|alink}/{$group['id']}/option/{$option['id']}">{$option['title']}</a>
+                            {if $option['description']}
+                            <div class="small" style="margin-top: 4px;">{$option['description']}</div>
+                            {/if}
+                        </td>
+                        <td>{$option['type']|replace:['_' => ' ']}</td>
+                        <td>{if $option['required']}{='Yes'|trans}{else}{='No'|trans}{/if}</td>
+                        <td>{if $option['hidden']}{='Yes'|trans}{else}{='No'|trans}{/if}</td>
+                        <td>{$option['sort_order']}</td>
+                        <td class="actions">
+                            <a class="bb-button btn14" href="{='product/options/group'|alink}/{$group['id']}/option/{$option['id']}"><img src="{$theme->url}images/icons/dark/pencil.png" alt=""></a>
+                            <a class="bb-button btn14 api-link" data-api-confirm="Are you sure?" data-api-reload="1" href="{='api/admin/product/configurable_option_delete'|link:['id' => $option['id']]}"><img src="{$theme->url}images/icons/dark/trash.png" alt=""></a>
+                        </td>
+                    </tr>
+                    {else}
+                    <tr>
+                        <td colspan="6">{='The list is empty'|trans}</td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="6">
+                            <a href="{='product/options/group'|alink}/{$group['id']}/option/new" class="btnIconLeft mr10 mt5">
+                                <img src="{$theme->url}images/icons/dark/settings2.png" alt="" class="icon">
+                                <span>{='Add new configurable option'|trans}</span>
+                            </a>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+{/block}

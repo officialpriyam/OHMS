@@ -1,0 +1,136 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{import 'macro_functions.latte'}
+
+{block meta_title}{='Contact us'|trans}{/block}
+{block breadcrumb}{='Contact us'|trans}{/block}
+
+{block content}
+{var $company = $guest->system_company()}
+<div class="content-block" role="main">
+    <div class="row">
+        <article class=" span12 data-block">
+            <div class="data-container">
+                <header>
+                    <h2>{='Contact us'|trans}</h2>
+                    <p>{$company['signature']}</p>
+                </header>
+                <section>
+                    <form method="post" action="" id="public-ticket-create" class="form form-horizontal span6">
+                        <fieldset>
+                            <div class="control-group">
+                                <label for="name">{=Name|trans}: </label>
+                                <div class="controls">
+                                    <input type="text" name="name" value="{$request->name}" required="required" id="name">
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label for="email">{=Email|trans}: </label>
+                                <div class="controls">
+                                    <input type="email" name="email" value="{$request->email}" required="required" id="email">
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label for="subject">{=Subject|trans}: </label>
+                                <div class="controls">
+                                    <input type="text" name="subject" value="{$request->subject}" required="required" id="subject">
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label for="message">{=Message|trans}: </label>
+                                <div class="controls">
+                                    <textarea name="message" cols="5" rows="5" required="required" id="message">{$request->message}</textarea>
+                                </div>
+                            </div>
+
+
+                            {include recaptcha}
+                            <div class="control-group">
+                                <div class="controls">
+                                    <button class="btn btn-primary btn-large pull-right" type="submit" value="{=Send|trans}" data-loading-text="Loading...">{=Send|trans}</button>
+                                </div>
+                            </div>
+
+
+                        </fieldset>
+
+                        <input type="hidden" name="anti-spam" value="1" id="anti-spam" required="required"/>
+                    </form>
+
+                    <strong>
+                        <dl class="span3 offset1">
+                            <dd>
+                                {$company['name']}
+                            </dd>
+                            <dd>
+                                {$company['address_1']}
+                            </dd>
+                            <dd>
+                                {$company['address_2']}
+                            </dd>
+                            <dd>
+                                {$company['address_3']}
+                            </dd>
+                            <dd>
+                                {$company['tel']}
+                            </dd>
+                            <dd>
+                                {$company['www']}
+                            </dd>
+                            <dd>
+                                {$company['email']}
+                            </dd>
+                        </dl>
+                    </strong>
+                </section>
+
+            </div>
+        </article>
+    </div>
+</div>
+{/block}
+
+{block js}
+<script>
+$(function() {
+    $('#anti-spam').remove();
+
+    $('#public-ticket-create').bind('submit', function(event) {
+        $('.wait').show();
+        bb.post(
+            'guest/support/ticket_create',
+            $(this).serialize(),
+            function(result) {
+                bb.redirect({=json_encode(('support/contact-us/conversation'|link) . '/')} + result);
+            }
+        );
+
+        return false;
+    });
+});
+</script>
+{/block}

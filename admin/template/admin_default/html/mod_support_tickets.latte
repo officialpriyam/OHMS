@@ -1,0 +1,352 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{import 'macro_functions.latte'}
+
+{block meta_title}{='Support tickets'|trans}{/block}
+
+{var $active_menu = 'support'}
+{var $profile = $admin->profile_get()}
+
+{block top_content}
+
+{if $request->show_filter}
+<div class="widget filterWidget">
+    <div class="head"><h5 class="iMagnify">{='Filter support tickets'|trans}</h5></div>
+    <div class="body nopadding">
+
+        <form method="get" action="" class="mainForm">
+            <input type="hidden" name="_url" value="{$request->_url}" />
+            <fieldset>
+                <div class="rowElem noborder">
+                    <label>{='Client ID'|trans}</label>
+                    <div class="formRight">
+                        <input type="text" name="client_id" value="{$request->client_id}">
+                    </div>
+                    <div class="fix"></div>
+                </div>
+
+                <div class="rowElem">
+                    <label>{='Order ID'|trans}</label>
+                    <div class="formRight">
+                        <input type="text" name="order_id" value="{$request->order_id}">
+                    </div>
+                    <div class="fix"></div>
+                </div>
+
+                <div class="rowElem">
+                    <label>{='Ticket subject'|trans}</label>
+                    <div class="formRight">
+                        <input type="text" name="subject" value="{$request->subject}">
+                    </div>
+                    <div class="fix"></div>
+                </div>
+
+                <div class="rowElem">
+                    <label>{='Ticket messages'|trans}</label>
+                    <div class="formRight">
+                        <input type="text" name="content" value="{$request->content}">
+                    </div>
+                    <div class="fix"></div>
+                </div>
+
+                <div class="rowElem">
+                    <label>{=Priority|trans}</label>
+                    <div class="formRight">
+                        <input type="text" name="priority" value="{$request->priority}">
+                    </div>
+                    <div class="fix"></div>
+                </div>
+
+                <div class="rowElem">
+                    <label>{=Status|trans}</label>
+                        <div class="formRight">
+                            {include selectbox, status, $admin->support_ticket_get_statuses(['titles' => 1]), $request->status, 0, 'All statuses'}
+                        </div>
+                    <div class="fix"></div>
+                </div>
+
+                <div class="rowElem">
+                    <label>{='Help desk'|trans}:</label>
+                    <div class="formRight">
+                            {include selectbox, support_helpdesk_id, $admin->support_helpdesk_get_pairs, $request->support_helpdesk_id, 0, 'All help desks'}
+                    </div>
+                    <div class="fix"></div>
+                </div>
+
+                <div class="rowElem">
+                    <label>{='Created at'|trans}</label>
+                    <div class="formRight moreFields">
+                        <ul>
+                            <li style="width: 100px"><input type="text" name="date_from" value="{if $request->date_from}{$request->date_from|date:Y-m-d}{/if}" placeholder="{$now|date:Y-m-d}" class="datepicker"/></li>
+                            <li class="sep">-</li>
+                            <li style="width: 100px"><input type="text" name="date_to" value="{if $request->date_to}{$request->date_to|date:Y-m-d}{/if}" placeholder="{$now|date:Y-m-d}" class="datepicker"/></li>
+                        </ul>
+                    </div>
+                    <div class="fix"></div>
+                </div>
+
+                <input type="hidden" name="show_filter" value="1" />
+                <input type="submit" value="{=Filter|trans}" class="greyishBtn submitForm" />
+            </fieldset>
+        </form>
+        <div class="fix"></div>
+    </div>
+</div>
+{else}
+{var $statuses = $admin->support_ticket_get_statuses([])}
+<div class="stats">
+    <ul>
+        <li class="stats-card stats-card--green">
+            <a href="{='support'|alink:['status' => 'open']}" class="count green" title="">{$statuses['open'] ?? 0}</a>
+            <span>{='Tickets waiting for staff reply'|trans}</span>
+        </li>
+        <li class="stats-card stats-card--blue">
+            <a href="{='support'|alink:['status' => 'on_hold']}" class="count blue" title="">{$statuses['on_hold'] ?? 0}</a>
+            <span>{='Tickets waiting for client reply'|trans}</span>
+        </li>
+        <li class="stats-card stats-card--neutral">
+            <a href="{='support'|alink:['status' => 'closed']}" class="count grey" title="">{$statuses['closed'] ?? 0}</a>
+            <span>{='Solved tickets'|trans}</span>
+        </li>
+        <li class="last stats-card stats-card--neutral">
+            <a href="{='support'|alink}" class="count grey" title="">{=($statuses['open'] ?? 0) + ($statuses['on_hold'] ?? 0) + ($statuses['closed'] ?? 0)}</a>
+            <span>{=Total|trans}</span>
+        </li>
+    </ul>
+    <div class="fix"></div>
+</div>
+{/if}
+
+{/block}
+
+{block content}
+<div class="widget simpleTabs">
+    <ul class="tabs">
+        <li><a href="#tab-index">{='Support tickets'|trans}</a></li>
+        <li><a href="#tab-new">{='New ticket'|trans}</a></li>
+        <li><a href="#tab-email">{='New email'|trans}</a></li>
+    </ul>
+
+    <div class="tabs_container">
+        <div class="fix"></div>
+        <div class="tab_content nopadding" id="tab-index">
+            {include table_search}
+            <table class="tableStatic wide">
+                <thead>
+                    <tr>
+                        <td style="width: 2%"><input type="checkbox" class="batch-delete-master-checkbox"/></td>
+                        <td colspan="2">{=Client|trans}</td>
+                        <td>{=Subject|trans}</td>
+                        <td>{=Status|trans}</td>
+                        <td>{=Helpdesk|trans}</td>
+                        <td style="width: 13%">&nbsp;</td>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {var $tickets = $admin->support_ticket_get_list(array_merge(['per_page' => 30, 'page' => $request->page], $request->get()))}
+                    {foreach ($tickets['list'] ?? []) as $i => $ticket}
+                    <tr class="priority_{$ticket['priority']}">
+                        <td><input type="checkbox" class="batch-delete-checkbox" data-item-id="{$ticket['id']}"/></td>
+                        <td style="width:5%">
+                            <a href="{='client/manage'|alink}/{$ticket['client_id']}"><img src="{$ticket['client']['email']|gravatar}?size=20" alt="gravatar" /></a>
+                        </td>
+                        <td style="width:20%">
+                            <a href="{='client/manage'|alink}/{$ticket['client_id']}">{$ticket['client']['first_name']|truncate:1, null, '.'} {$ticket['client']['last_name']}</a>
+                        </td>
+                        <td>
+                            <a href="{='support/ticket'|alink}/{$ticket['id']}#reply-Priyx">#{$ticket['id']} - {$ticket['subject']|truncate:50} ({$ticket['replies']})</a>
+                            <br/>
+                            {if ($ticket['notes']|length)}
+                            <a href="#" rel="{$ticket['id']}" title="{$ticket['notes']|length}" class="show-notes">
+                                <img src="{$theme->url}images/icons/dark/notebook.png" alt="" />
+                            </a>
+                            {/if}
+                            {$ticket['updated_at']|timeago} {=ago|trans}
+                        </td>
+                        <td>{include status_name, $ticket['status']}</td>
+                        <td>{$ticket['helpdesk']['name']}</td>
+                        <td class="actions">
+                            <a class="bb-button btn14" href="{='/support/ticket'|alink}/{$ticket['id']}#reply-Priyx"><img src="{$theme->url}images/icons/dark/pencil.png" alt=""></a>
+                            <a class="bb-button btn14 bb-rm-tr api-link" data-api-confirm="Are you sure?" data-api-redirect="{='support'|alink}" href="{='api/admin/support/ticket_delete'|link:['id' => $ticket['id']]}"><img src="{$theme->url}images/icons/dark/trash.png" alt=""></a>
+                        </td>
+                    </tr>
+                    {else}
+                    <tr>
+                        <td colspan="6">{='The list is empty'|trans}</td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+            {include 'partial_batch_delete.latte', action: 'admin/support/batch_delete'}
+            {include 'partial_pagination.latte', list: $tickets, url: support}
+
+        </div>
+
+        <div class="tab_content nopadding" id="tab-new">
+            <div class="help">
+                <h3>{='Open ticket for existing client'|trans}</h3>
+            </div>
+
+            <form method="post" action="{='api/admin/support/ticket_create'|link}" class="mainForm api-form" data-api-redirect="{='support'|alink}">
+                <fieldset>
+                    {if !$request->client_id}
+                    <div class="rowElem noborder">
+                        <label>{=Client|trans}</label>
+                        <div class="formRight noborder">
+                            <input type="text" id="client_selector" placeholder="{='Start typing clients name, email or ID'|trans}"/>
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+                    {/if}
+                    <div class="rowElem">
+                        <label>{='Help desk'|trans}</label>
+                        <div class="formRight">
+                            {include selectbox, support_helpdesk_id, $admin->support_helpdesk_get_pairs, '', 1}
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+
+                    <div class="rowElem">
+                        <label>{=Subject|trans}</label>
+                        <div class="formRight">
+                            <input type="text" name="subject" value="{$request->subject}" required="required"/>
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+
+                    <div class="rowElem">
+                        <label>{=Message|trans}</label>
+                        <div class="formRight">
+                            <textarea name="content" cols="5" rows="10" required="required" id="msg-area-new">{$profile['signature'] ?? ''}</textarea>
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+                    
+                    <input type="hidden" name="client_id" value="{$request->client_id}" id="client_id"/>
+                    <input type="submit" value="{=Create|trans}" class="greyishBtn submitForm" />
+                </fieldset>
+            </form>
+        </div>
+
+        <div class="tab_content nopadding" id="tab-email">
+            <div class="help">
+                <h3>{='Open public ticket for non client'|trans}</h3>
+            </div>
+
+            <form method="post" action="{='api/admin/support/public_ticket_create'|link}" class="mainForm api-form" data-api-jsonp="onAfterPublicTicketCreate" data-notes-title="{=Notes|trans}" data-public-ticket-url="{='support/public-ticket'|alink}">
+                <fieldset>
+                    <div class="rowElem noborder">
+                        <label>{='Receivers name'|trans}</label>
+                        <div class="formRight noborder">
+                            <input type="text" name="name" required="required" placeholder="{='John Smith'|trans}"/>
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+                    
+                    <div class="rowElem">
+                        <label>{=Email|trans}</label>
+                        <div class="formRight noborder">
+                            <input type="text" name="email" required="required" placeholder="{='to@gmail.com'|trans}"/>
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+
+                    <div class="rowElem">
+                        <label>{=Subject|trans}</label>
+                        <div class="formRight">
+                            <input type="text" name="subject" value="{$request->subject}" required="required" placeholder="{='Email subject'|trans}"/>
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+
+                    <div class="rowElem">
+                        <label>{=Message|trans}</label>
+                        <div class="formRight">
+                            <textarea name="message" cols="5" rows="10" required="required">{$profile['signature'] ?? ''}</textarea>
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+                    
+                    <input type="hidden" name="client_id" value="{$request->client_id}" id="client_id"/>
+                    <input type="submit" value="{=Create|trans}" class="greyishBtn submitForm" />
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block js}
+<script type="text/javascript">
+$(function() {
+	$('#client_selector').autocomplete({
+        source: function( request, response ) {
+            $.ajax({
+                url: bb.restUrl('admin/client/get_pairs'),
+                dataType: "json",
+                data: {
+                    per_page: 10,
+                    search: request.term
+                },
+                success: function( data ) {
+                    response( $.map( data.result, function( name, id) {
+                        return {
+                            label: name,
+                            value: id
+                        }
+                    }));
+                }
+            });
+        },
+        minLength: 1,
+        select: function( event, ui ) {
+            $('#client_selector').val(ui.item.label);
+            $('#client_id').val(ui.item.value);
+            
+            return false;
+        }
+    });
+
+    $('a.show-notes').click(function() {
+        bb.post('admin/support/ticket_get', { id: $(this).attr('rel') }, function(result){
+            var html = $('<div>');
+            $.each(result.notes, function(i, v){
+                html.append($('<div>').html(v.note));
+                html.append($('<hr>'));
+            });
+            jAlert(html, $('form[data-api-jsonp="onAfterPublicTicketCreate"]').data('notes-title'));
+        });
+        
+        return false;
+    });
+});
+
+function onAfterPublicTicketCreate(result) {
+    bb.redirect($('form[data-api-jsonp="onAfterPublicTicketCreate"]').data('public-ticket-url') + '/' + result);
+}
+</script>
+{/block}
+
+

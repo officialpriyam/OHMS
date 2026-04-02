@@ -1,0 +1,12 @@
+{
+    "id":           "affiliate",
+    "type":         "mod",
+    "name":         "Affiliate",
+    "description":  "Affiliate management module for OHMS.",
+    "icon_url":     "icon.png",
+    "homepage_url": "https://OHMS.org",
+    "author":       "OHMS",
+    "author_url":   "https://OHMS.org/",
+    "license":      "GPL version 2 or later",
+    "version":      "1.0.0"
+}

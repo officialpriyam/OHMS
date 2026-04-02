@@ -1,0 +1,97 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{if $guest->extension_is_on(['mod' => 'formbuilder'])}
+    {var $form = $guest->formbuilder_get(['id' => $product['form_id']])}
+    {if ($form->style->show_title != 0)}
+    <div class="control-group">
+        <div class="controls">
+            <legend>{$form->name}</legend>
+        </div>
+    </div>
+    {/if}
+
+    <fieldset>
+        {foreach $form->fields as $field}
+    {if ($form->style->type == 'horizontal')}
+       <div class="control-group">
+    {/if}
+            {if ($field->hide_label != 1)}<label {if ($form->style->type == 'horizontal')}class="control-label"{/if} for="{$field->name}">{$field->label}</label>{/if}
+       {if ($form->style->type == 'horizontal')}
+           <div class="controls">
+       {/if}
+
+
+                {if ($field->type == 'text')}
+                    {if (!empty($field->prefix) || !empty($field->suffix))}<div class="{if !empty($field->prefix)}input-prepend{/if} {if !empty($field->suffix)}input-append{/if} ">{/if}
+                    {if !empty($field->prefix)}<span class="add-on">{$field->prefix}</span>{/if}
+                    <input type="text" name="{$field->name}" value="{$field->default_value}"
+                    {if ($field->required == 1)}required="required"{/if}
+                    {if ($field->readonly == 1)}readonly="readonly"{/if}
+                    />
+                    {if !empty($field->suffix)}<span class="add-on">{$field->suffix}</span>{/if}
+                    {if (!empty($field->prefix) || !empty($field->suffix))} </div>{/if}
+
+                {elseif ($field->type == 'select')}
+                <select name="{$field->name}" required="required">
+                    {foreach $field->options as $k => $v}
+                        <option value="{$v}" {if ($v == $field->default_value)}selected="selected"{/if}>{$k}</option>
+                    {/foreach}
+                </select>
+    
+                {elseif ($field->type == 'checkbox')}
+                    {foreach $field->options as $k => $v}
+                    <label class="checkbox"><input type="checkbox" name="{$field->name}[]" value="{$v}"
+                    {if ($field->readonly == 1)}readonly="readonly"{/if}
+                    {if in_array($v, $field->default_value, true)}checked="checked"{/if}
+                        />{$k}
+                    </label>
+                    {/foreach}
+
+                {elseif ($field->type == 'radio')}
+                {foreach $field->options as $k => $v}
+                <label class="radio">
+                    <input type="radio" name="{$field->name}" value="{$v}"
+                    {if ($field->default_value == $v)}checked{/if}
+                    {if ($field->required == 1)}required="required"{/if}
+                    {if ($field->readonly == 1)}readonly="readonly"{/if}
+                    />
+                    {$k}
+                </label>
+                {/foreach}
+
+                {elseif ($field->type == 'textarea')}
+                <textarea id="{$field->name}" name="{$field->name}" cols="{$field->options->cols}" rows="{$field->options->rows}"
+                    {if ($field->required == 1)}required="required"{/if}
+                    {if ($field->readonly == 1)}readonly="readonly"{/if}
+                >{$field->default_value}</textarea>
+                {/if}
+                <span class="help-block">{$field->description}</span>
+    {if ($form->style->type == 'horizontal')}
+        </div>
+        </div>
+    {/if}
+
+        {/foreach}
+    </fieldset>
+    <input type="hidden" name="form_id" value="{$form->id}" />
+    <input type="hidden" name="id" value="{$product['id']}" />
+{/if}

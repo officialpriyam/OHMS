@@ -1,0 +1,15 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_public.latte'}
+
+{block meta_title}{='Linked accounts'|trans}{/block}
+{block head}{include 'shared/_styles.latte'}{/block}
+
+{block content_before}
+    <div class="wh-page-header">
+        <h1 class="wh-page-title">{='Linked Accounts'|trans}</h1>
+        <p class="wh-page-subtitle">{='This screen is present for WHMCS-style orderform compatibility.'|trans}</p>
+    </div>
+{/block}
+
+{block content}
+    {include 'shared/_placeholder.latte', title: ('Linked account checkout is not part of the current OHMS client model'|trans), description: ('OHMS uses direct client authentication and client-area ownership instead of external linked-account orderform flows.'|trans), note: ('A custom theme can still replace this placeholder later without backend changes.'|trans)}
+{/block}

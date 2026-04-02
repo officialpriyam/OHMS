@@ -1,0 +1,57 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_public.latte'}
+
+{import 'macro_functions.latte'}
+
+{block meta_title}{=Login|trans}{/block}
+{var $redirect_to = ($request->return_to ?? '/client')}
+{if !str_starts_with($redirect_to, '/')}
+    {var $redirect_to = '/client'}
+{/if}
+
+{block content_before}
+    <div class="row justify-content-center">
+        <div class="col-xl-6">
+            <h1>{=Login|trans}</h1>
+            <p class="text-secondary">{='Sign in to manage services, invoices, support tickets, and renewals from your client area.'|trans}</p>
+        </div>
+    </div>
+{/block}
+
+{block content}
+    {if !$client}
+        <div class="row justify-content-center">
+            <div class="col-xl-6">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-4 p-lg-5">
+                    <form id="client-login-form" method="post" class="api-form" action="{='api/guest/client/login'|link}" data-api-redirect="{$redirect_to}">
+                        <div class="mb-3">
+                            <label class="form-label" for="inputLoginEmail">{='Email address'|trans}</label>
+                            <input class="form-control" id="inputLoginEmail" type="email" name="email" value="{$request->email}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="inputLoginPassword">{=Password|trans}</label>
+                            <input class="form-control" id="inputLoginPassword" type="password" name="password" required>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input class="form-check-input" id="checkboxLoginRemember" type="checkbox" name="remember" checked>
+                            <label class="form-check-label" for="checkboxLoginRemember">{='Remember me'|trans}</label>
+                            <a href="{=reset-password|link}" class="float-end">{='Reset password'|trans}</a>
+                        </div>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-success btn-lg" type="submit">{=Login|trans}</button>
+                                <a class="btn btn-link" href="{='/register'|link}{if $request->return_to}?return_to={$request->return_to}{/if}">{=Register|trans}</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {else}
+        <script>
+            window.location.replace({=json_encode(('/client'|link))});
+        </script>
+    {/if}
+{/block}
+
+{block js}{/block}
+

@@ -1,0 +1,135 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{import 'macro_functions.latte'}
+
+{block meta_title}Client settings{/block}
+
+{var $active_menu = system}
+
+{block breadcrumbs}
+<ul>
+    <li class="firstB"><a href="{='/'|alink}">{=Home|trans}</a></li>
+    <li><a href="{=system|alink}">{=Settings|trans}</a></li>
+    <li class="lastB">{='Client settings'|trans}</li>
+</ul>
+{/block}
+
+{block content}
+    {var $params = (array) $admin->extension_config_get([ext => 'mod_client'])}
+    {var $allow_signup = (bool) ($params['allow_signup'] ?? false)}
+    {var $require_email_confirmation = (bool) ($params['require_email_confirmation'] ?? false)}
+    {var $allow_change_email = (bool) ($params['allow_change_email'] ?? false)}
+    {var $required_fields = (array) ($params['required'] ?? [])}
+    {var $custom_fields = (array) ($params['custom_fields'] ?? [])}
+<form method="post" action="{='api/admin/extension/config_save'|link}" class="mainForm api-form" data-api-msg="{='Configuration updated'|trans}">
+
+<div class="widget simpleTabs">
+    <ul class="tabs">
+        <li><a href="#tab-index">{=General|trans}</a></li>
+        <li><a href="#tab-custom-fields">{='Custom Fields'|trans}</a></li>
+    </ul>
+    
+    <div class="tabs_container">
+        <div class="fix"></div>
+        <div id="tab-index" class="tab_content nopadding">
+            <fieldset>
+                <div class="rowElem noborder">
+                    <label>{='Allow new signups'|trans}</label>
+                    <div class="formRight">
+                        <input type="radio" name="allow_signup" value="1"{if $allow_signup} checked="checked"{/if}/><label>{=Yes|trans}</label>
+                        <input type="radio" name="allow_signup" value="0"{if !$allow_signup} checked="checked"{/if} /><label>{=No|trans}</label>
+                    </div>
+                    <div class="fix"></div>
+                </div>
+                <div class="rowElem">
+                    <label>{='Require email confirmation'|trans}</label>
+                    <div class="formRight">
+                        <input type="radio" name="require_email_confirmation" value="1"{if $require_email_confirmation} checked="checked"{/if}/><label>{=Yes|trans}</label>
+                        <input type="radio" name="require_email_confirmation" value="0"{if !$require_email_confirmation} checked="checked"{/if} /><label>{=No|trans}</label>
+                        <span class="formNote">{='After enabling this feature, all existing users will have to confirm their emails if it was not done before'|trans}.</span>
+                    </div>
+                    <div class="fix"></div>
+                </div>
+
+                <div class="rowElem">
+                    <label>{='Allow email change'|trans}</label>
+                    <div class="formRight">
+                        <input type="radio" name="allow_change_email" value="1"{if $allow_change_email} checked="checked"{/if}/><label>{=Yes|trans}</label>
+                        <input type="radio" name="allow_change_email" value="0"{if !$allow_change_email} checked="checked"{/if} /><label>{=No|trans}</label>
+                    </div>
+                    <div class="fix"></div>
+                </div>
+
+                <div class="rowElem">
+                    <label>{='Required fields'|trans}</label>
+                    <div class="formRight">
+                        <select multiple="multiple" class="multiple" title="{='Select required fields'|trans}" name="required[]">
+                            <optgroup label="General">
+                                <option value="last_name" {if in_array('last_name', $required_fields, true)}selected{/if}>{='Last Name'|trans}</option>
+                                <option value="company" {if in_array('company', $required_fields, true)}selected{/if}>{=Company|trans}</option>
+                                <option value="gender" {if in_array('gender', $required_fields, true)}selected{/if}>{=Gender|trans}</option>
+                                <option value="birthday" {if in_array('birthday', $required_fields, true)}selected{/if}>{=Birthday|trans}</option>
+                            </optgroup>
+                            <optgroup label="Address">
+                                <option value="country" {if in_array('country', $required_fields, true)}selected{/if}>{=Country|trans}</option>
+                                <option value="city" {if in_array('city', $required_fields, true)}selected{/if}>{=City|trans}</option>
+                                <option value="state" {if in_array('state', $required_fields, true)}selected{/if}>{=State|trans}</option>
+                                <option value="address_1" {if in_array('address_1', $required_fields, true)}selected{/if}>{='Address Line 1'|trans}</option>
+                                <option value="address_2" {if in_array('address_2', $required_fields, true)}selected{/if}>{='Address Line 2'|trans}</option>
+                                <option value="postcode" {if in_array('postcode', $required_fields, true)}selected{/if}>{='Post code'|trans}</option>
+                                <option value="phone" {if in_array('phone', $required_fields, true)}selected{/if}>{=Phone|trans}</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div class="fix"></div>
+                </div>
+                <input type="submit" value="{=Update|trans}" class="greyishBtn submitForm" />
+            </fieldset>
+        </div>
+        <div id="tab-custom-fields" class="tab_content nopadding">
+            <fieldset>
+                {foreach range(1, 10) as $i}
+                {var $field_name = ('custom_' . $i)}
+                {var $custom_field = (array) ($custom_fields[$field_name] ?? [])}
+                <div class="rowElem noborder">
+                    <label>{if !empty($custom_field['title'] ?? '')} {$custom_field['title']} ({=Custom_|trans}{$i}) {else}{=Custom_|trans}{$i}{/if}</label>
+                    <div class="formRight">
+                        <input type="checkbox" name="custom_fields[{$field_name}][active]" value="1"{if ($custom_field['active'] ?? false)} checked="checked"{/if}/><label>{=Active|trans}</label>
+                        <input type="checkbox" name="custom_fields[{$field_name}][required]" value="1"{if ($custom_field['required'] ?? false)} checked="checked"{/if}/><label>{=Required|trans}</label>
+                        <input type="text" placeholder="Field title" name="custom_fields[{$field_name}][title]" value="{$custom_field['title'] ?? ''}" style="width: 300px"/>
+                    </div>
+                    <div class="fix"></div>
+                </div>
+                <hr/>
+                {/foreach}
+                <input type="submit" value="{='Update profile'|trans}" class="greyishBtn submitForm" />
+            </fieldset>
+        </div>
+    </div>
+</div>
+    
+    <input type="hidden" name="ext" value="mod_client" />
+    </form>
+{/block}
+

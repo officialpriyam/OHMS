@@ -1,0 +1,15 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_public.latte'}
+
+{block meta_title}{='Order summary'|trans}{/block}
+{block head}{include 'shared/_styles.latte'}{/block}
+
+{block content_before}
+    <div class="wh-page-header">
+        <h1 class="wh-page-title">{='Order Summary'|trans}</h1>
+        <p class="wh-page-subtitle">{='A dedicated order-summary screen can be rendered here when a theme expects a post-cart review step.'|trans}</p>
+    </div>
+{/block}
+
+{block content}
+    {include 'shared/_placeholder.latte', title: ('Use cart and checkout for the current OHMS flow'|trans), description: ('OHMS currently summarizes the order in /cart and finalizes payment in /checkout.'|trans), note: ('This placeholder keeps the orderform contract complete without inventing a second checkout backend.'|trans)}
+{/block}

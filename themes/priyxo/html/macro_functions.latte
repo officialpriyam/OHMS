@@ -1,0 +1,55 @@
+{define selectbox, $name, $options, $selected, $required, $nullOption, $id}
+    <select class="form-select" id="{$id}" name="{$name}" {if $required} required{/if}>
+        {if $nullOption}<option value="">-- {$nullOption|trans} --</option>{/if}
+        {foreach ($options ?? []) as $val => $label}
+            <option value="{$val}"{if ($selected == $val)} selected{/if}>{$label|trans}</option>
+        {/foreach}
+    </select>
+{/define}
+
+{define selectboxtld, $name, $options, $selected, $required}
+    <select name="{$name}" {if $required}required{/if} class="form-select">
+        {foreach ($options ?? []) as $data}
+            <option value="{$data->tld}" label="{$data->tld}" {if ($selected == $data->tld)}selected{/if}>{$data->tld}</option>
+        {/foreach}
+    </select>
+{/define}
+
+{* deprecated - use money filter *}
+{define currency_format, $price, $currency}
+    {$price|money:$currency}
+{/define}
+
+{* deprecated - use money_convert filter *}
+{define currency, $price, $currency}
+    {$price|money_convert:$currency}
+{/define}
+
+{define status_name, $status}
+    {((string)$status)|replace:[_ => ' ']|capitalize|trans}
+{/define}
+
+{* deprecated - use period_title filter *}
+{define period_name, $period}
+    {$period|period_title}
+{/define}
+
+{define markdown_quote, $text}
+{foreach ($text|split:"\n") as $line}
+> {$line}
+{/foreach}
+{/define}
+
+{define recaptcha}
+    {if $guest->extension_is_on([mod => spamchecker])}
+        {var $rc = $guest->spamchecker_recaptcha}
+
+        {if $rc->enabled}
+            {if ($rc->version == 2)}
+                <script src='https://www.google.com/recaptcha/api.js' async defer></script>
+                <div class="g-recaptcha" data-sitekey="{$rc->publickey}"></div>
+            {/if}
+        {/if}
+    {/if}
+{/define}
+

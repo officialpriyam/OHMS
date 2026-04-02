@@ -1,0 +1,7 @@
+{
+    "id":           "stats",
+	"type":         "mod",
+    "name":         "Statistics",
+    "description":  "OHMS core module",
+    "version":      "1.0.0"
+}

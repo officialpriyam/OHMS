@@ -1,0 +1,23 @@
+/**
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ */
+﻿CKEDITOR.plugins.setLang("wsc","uk",{btnIgnore:"Пропустити",btnIgnoreAll:"Пропустити все",btnReplace:"Замінити",btnReplaceAll:"Замінити все",btnUndo:"Назад",changeTo:"Замінити на",errorLoading:"Помилка завантаження : %s.",ieSpellDownload:"Модуль перевірки орфографії не встановлено. Бажаєте завантажити його зараз?",manyChanges:"Перевірку орфографії завершено: 1% слів(ова) змінено",noChanges:"Перевірку орфографії завершено: жодне слово не змінено",noMispell:"Перевірку орфографії завершено: помилок не знайдено",
+noSuggestions:"- немає варіантів -",notAvailable:"Вибачте, але сервіс наразі недоступний.",notInDic:"Немає в словнику",oneChange:"Перевірку орфографії завершено: змінено одне слово",progress:"Виконується перевірка орфографії...",title:"Перевірка орфографії",toolbar:"Перевірити орфографію"});

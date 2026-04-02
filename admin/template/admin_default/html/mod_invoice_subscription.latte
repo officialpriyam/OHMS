@@ -1,0 +1,154 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+{import 'macro_functions.latte'}
+{var $active_menu = invoice}
+{block meta_title}Subscription {$subscription->sid}{/block}
+
+{block content}
+
+<div class="widget simpleTabs">
+    <ul class="tabs">
+        <li><a href="#tab-index">{=Subscription|trans}</a></li>
+        <li><a href="#tab-manage">{=Manage|trans}</a></li>
+    </ul>
+
+    <div class="tab_container">
+        <div class="tab_content nopadding" id="tab-index">
+            <div class="help">
+                <h3>{='Subscription details'|trans}</h3>
+            </div>
+
+            <table class="tableStatic wide">
+                <tbody>
+                    <tr class="noborder">
+                        <td>{=Client|trans}</td>
+                        <td><a href="{='client/manage'|alink}/{$subscription->client->id}">{$subscription->client->first_name} {$subscription->client->last_name}</a></td>
+                    </tr>
+
+                    <tr>
+                        <td>{=Amount|trans}</td>
+                        <td>{include currency_format, $subscription->amount, $subscription->currency} {include period_name, $subscription->period}</td>
+                    </tr>
+
+                    <tr>
+                        <td>{='Payment gateway'|trans}</td>
+                        <td>{$subscription->gateway->title}</td>
+                    </tr>
+
+                    <tr>
+                        <td>{='Subscription ID on payment gateway'|trans}</td>
+                        <td>{$subscription->sid ?? '-'}</td>
+                    </tr>
+
+                    <tr>
+                        <td>{=Status|trans}</td>
+                        <td>{include status_name, $subscription->status}</td>
+                    </tr>
+
+                    <tr>
+                        <td>{='Created at'|trans}</td>
+                        <td>{$subscription->created_at|date:'l, d F Y'}</td>
+                    </tr>
+
+                    {if ($subscription->created_at != $subscription->updated_at)}
+                    <tr>
+                        <td>{='Updated at'|trans}</td>
+                        <td>{$subscription->updated_at|date:'l, d F Y'}</td>
+                    </tr>
+                    {/if}
+                 </tbody>
+
+                 <tfoot>
+                     <tr>
+                         <td colspan="2">
+                            <div class="aligncenter">
+                                <a class="btn55 mr10 api-link" href="{='api/admin/invoice/subscription_delete'|link:[id => $subscription->id]}" data-api-confirm="Are you sure?" data-api-redirect="{='invoice/subscriptions'|alink}">
+                                    <img src="{$theme->url}images/icons/middlenav/trash.png" alt=""><span>{=Delete|trans}</span>
+                                </a>
+                            </div>
+                         </td>
+                     </tr>
+                 </tfoot>
+            </table>
+        </div>
+
+        <div id="tab-manage" class="tab_content nopadding">
+            <form method="post" action="{='api/admin/invoice/subscription_update'|link}" class="mainForm save api-form" data-api-reload="1">
+                <fieldset>
+                    <div class="rowElem">
+                        <label>{='Payment Gateway'|trans}:</label>
+                        <div class="formRight">
+                            {include selectbox, gateway_id, $admin->invoice_gateway_get_pairs, $subscription->gateway->id, 0, 'Select payment gateway'}
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+                    <div class="rowElem">
+                        <label>{='Subscription ID on payment gateway'|trans}:</label>
+                        <div class="formRight">
+                            <input type="text" name="sid" value="{$subscription->sid}" required="required" placeholder=""/>
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+                    <div class="rowElem">
+                        <label>{=Status|trans}:</label>
+                        <div class="formRight">
+                            <input type="radio" name="status" value="active" {if ($subscription->status == 'active')} checked="checked"{/if}/><label>Active</label>
+                            <input type="radio" name="status" value="canceled" {if ($subscription->status == 'canceled')} checked="checked"{/if}/><label>Canceled</label>
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+                    <div class="rowElem">
+                        <label>{=Period|trans}:</label>
+                        <div class="formRight">
+                            {include selectbox, period, $guest->system_periods, $subscription->period, 1, 'Select period'}
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+                    
+                    <div class="rowElem">
+                        <label>{=Amount|trans}:</label>
+                        <div class="formRight">
+                            <input type="text" name="amount" value="{$subscription->amount}" required="required" placeholder=""/>
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+
+                    <div class="rowElem">
+                        <label>{=Currency|trans}</label>
+                        <div class="formRight">
+                            {include selectbox, currency, $guest->currency_get_pairs, $subscription->currency, 1, 'Select currency'}
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+                    
+                    <input type="submit" value="{=Update|trans}" class="greyishBtn submitForm" />
+                    <input type="hidden" name="id" value="{$subscription->id}" />
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+    <div class="fix"></div>
+</div>
+
+{/block}

@@ -1,0 +1,23 @@
+/**
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ */
+﻿CKEDITOR.plugins.setLang("wsc","bg",{btnIgnore:"Игнорирай",btnIgnoreAll:"Игнорирай всичко",btnReplace:"Препокриване",btnReplaceAll:"Препокрий всичко",btnUndo:"Възтанови",changeTo:"Промени на",errorLoading:"Error loading application service host: %s.",ieSpellDownload:"Spell checker not installed. Do you want to download it now?",manyChanges:"Spell check complete: %1 words changed",noChanges:"Spell check complete: No words changed",noMispell:"Spell check complete: No misspellings found",noSuggestions:"- Няма препоръчани -",
+notAvailable:"Съжаляваме, но услугата не е достъпна за момента",notInDic:"Не е в речника",oneChange:"Spell check complete: One word changed",progress:"Проверява се правописа...",title:"Проверка на правопис",toolbar:"Проверка на правопис"});

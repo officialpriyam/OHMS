@@ -1,0 +1,166 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends 'layout_default.latte'}
+
+{block meta_title}{$msg->subject}{/block}
+
+{var $active_menu = system}
+
+{block content}
+<div class="widget">
+    <div class="head">
+        <h5>{='Send Email Message'|trans} - {$msg->subject}</h5>
+    </div>
+    
+    <form method="post" action="admin/massmailer/update" class="mainForm save api-form" data-api-jsonp="onAfterMessageUpdate" id="msg-form">
+        <fieldset>
+            
+            <div class="rowElem noborder">
+                <label>{=From|trans}</label>
+                <div class="formRight moreFields">
+                    <ul>
+                        <li style="width: 250px"><input type="text" name="from_name" value="{$msg->from_name}" required="required" title="{='From name'|trans}"/></li>
+                        <li class="sep"></li>
+                        <li style="width: 245px"><input type="text" name="from_email" value="{$msg->from_email}" required="required"  title="{='From email'|trans}"/></li>
+                    </ul>
+                </div>
+                <div class="fix"></div>
+            </div>
+            
+            <div class="rowElem">
+                <label>{=Subject|trans}</label>
+                <div class="formRight">
+                    <input type="text" name="subject" value="{$msg->subject}" required="required"/>
+                </div>
+                <div class="fix"></div>
+            </div>
+            
+            </fieldset>
+        
+            <fieldset>
+                <legend>{='Recipients filter. Select none to send message to all clients'|trans}</legend>
+            <div class="rowElem">
+                <label>{='Client status and group'|trans}</label>
+                <div class="formRight">
+                    <input type="hidden" name="filter" />
+                    <select name="filter[client_status][]" multiple="multiple" size="3">
+                        <option value="active" {if in_array(active, $msg->filter->client_status, true)} selected="selected"{/if}>{=Active|trans}</option>
+                        <option value="suspended" {if in_array(suspended, $msg->filter->client_status, true)} selected="selected"{/if}>{=Suspended|trans}</option>
+                        <option value="canceled" {if in_array(canceled, $msg->filter->client_status, true)} selected="selected"{/if}>{=Canceled|trans}</option>
+                    </select>
+                    
+                    <select name="filter[client_groups][]" multiple="multiple" size="5">
+                        {foreach $admin->client_group_get_pairs as $id => $label}
+                        <option value="{$id}" {if in_array($id, $msg->filter->client_groups, true)} selected="selected"{/if}>{$label}</option>
+                        {/foreach}
+                    </select>
+                </div>
+                <div class="fix"></div>
+            </div>
+
+            <div class="rowElem">
+                <label>{='Has order'|trans}</label>
+                <div class="formRight">
+                            <select name="filter[has_order_with_status][]" multiple="multiple" size="5">
+                                {foreach $admin->order_get_status_pairs as $id => $label}
+                                <option value="{$id}" {if in_array($id, $msg->filter->has_order_with_status, true)} selected="selected"{/if}>{$label}</option>
+                                {/foreach}
+                            </select>
+                            <select name="filter[has_order][]" multiple="multiple" size="5">
+                                {foreach $admin->product_get_pairs as $id => $label}
+                                <option value="{$id}" {if in_array($id, $msg->filter->has_order, true)} selected="selected"{/if}>{$label}</option>
+                                {/foreach}
+                            </select>
+                </div>
+                <div class="fix"></div>
+            </div>
+                </fieldset>
+        
+            <fieldset>
+                <legend>{='Message content'|trans}</legend>
+            <div class="rowElem">
+                <div class="formBottom">
+                    <textarea name="content" cols="5" rows="20" placeholder="Email content">{$msg->content}</textarea>
+                </div>
+                </div>
+                
+            <div class="body">
+                <div class="pt20" id="preview" style="display: none;">
+                    <div class="body esubject mb20" style="background: white; border: 1px dashed grey; overflow: auto;"></div>
+                    <div class="body econtent" style="background: white; border: 1px dashed grey; overflow: auto;"></div>
+                </div>
+            </div>
+            
+            <input type="submit" value="{='Update and preview'|trans}" class="greyishBtn submitForm">
+            <input type="button" value="{='Send test message'|trans}" class="blueBtn submitForm" id="send-test-msg" style="float: left;">
+            <input type="button" value="{='Send message to clients'|trans}" class="greenBtn submitForm" id="send-msg" style="float: left;">
+            <input type="hidden" name="id" value="{$msg->id}">
+        </fieldset>
+    </form>
+    
+    <div class="body">
+        <a href="{=massmailer|alink}"  title="" class="btnIconLeft mr10">
+            <img src="{$theme->url}images/icons/dark/arrowLeft.png" alt="" class="icon"><span>{='Back to list'|trans}</span>
+        </a>
+    </div>
+</div>
+{/block}
+
+{block js}
+
+<script>
+function onAfterMessageUpdate() {
+        bb.post('admin/massmailer/preview', { id: '{$msg->id}' }, function(result) {
+            $('#preview').show();
+            $('#preview .econtent').html(result.content);
+            $('#preview .esubject').html(result.subject);
+        });
+}
+
+$(function() {
+    $('#send-msg').click(function() {
+        jConfirm('Send message to clients?', 'Confirm', function(confirm) {
+            if (confirm) {
+                bb.post('admin/massmailer/send', { id: {$msg->id} }, function(result) {
+                    bb.msg({=json_encode(('Message was added to mail queue and will be sent with scheduled tasks.'|trans))});
+                });
+            }
+        });
+        
+        return false;
+    });
+    
+    $('#send-test-msg').click(function() {
+        jConfirm('Send test message?', 'Confirm', function(confirm) {
+            if (confirm) {
+                bb.post('admin/massmailer/send_test', { id: {$msg->id} }, function(result) {
+                    bb.msg({=json_encode(('Message was sent'|trans))});
+                });
+            }
+        });
+
+        return false;
+    });
+});
+</script>
+
+{/block}

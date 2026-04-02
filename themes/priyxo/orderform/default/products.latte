@@ -1,0 +1,84 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_public.latte'}
+
+{block meta_title}{='Order New Service'|trans}{/block}
+{block head}{include 'shared/_styles.latte'}{/block}
+
+{block content_before}
+    <div class="wh-page-header">
+        <h1 class="wh-page-title">{='Choose Your Server'|trans}</h1>
+        <p class="wh-page-subtitle">{='Browse products directly, jump through categories from the sidebar, and launch setup from clean square cards.'|trans}</p>
+    </div>
+    {include '_order-steps.latte', selected: 1}
+{/block}
+
+{block content}
+    {var $categories = ($guest->product_category_get_list(['per_page' => 100])['list'] ?? [])}
+    <div class="wh-order-layout wh-order-layout--catalog">
+        <aside class="wh-order-layout-sidebar">
+            {include 'sidebar-categories.latte', categories: $categories}
+        </aside>
+        <section class="wh-order-layout-main">
+            {include 'sidebar-categories-selector.latte', categories: $categories}
+            {foreach $categories as $category}
+                {if count($category['products'] ?? []) > 0}
+                    {var $isDefaultCategory = strtolower($category['title'] ?? '') === 'default'}
+                    {var $categoryTitle = $isDefaultCategory ? ('Products'|trans) : $category['title']}
+                    {var $showHeading = !$isDefaultCategory || count($categories) > 1}
+                    <section class="wh-catalog-section" id="category-{$category['id']}">
+                        {if $showHeading}
+                            <div class="wh-catalog-heading">
+                                <div>
+                                    <div class="wh-catalog-kicker">{='Category'|trans}</div>
+                                    <h2 class="wh-catalog-title">{$categoryTitle}</h2>
+                                    {if $category['description']}
+                                        <p class="wh-catalog-description">{$category['description']|stripHtml|truncate:160}</p>
+                                    {/if}
+                                </div>
+                                <div class="wh-catalog-count">
+                                    {count($category['products'] ?? [])} {if count($category['products'] ?? []) === 1}{='Product'|trans}{else}{='Products'|trans}{/if}
+                                </div>
+                            </div>
+                        {/if}
+                        <div class="wh-product-grid wh-product-grid--catalog">
+                            {foreach $category['products'] as $product}
+                                {var $productImage = $product['icon_url'] ?? ($category['icon_url'] ?? '')}
+                                <article class="wh-product-card wh-product-card--catalog">
+                                    <div class="wh-product-media">
+                                        {if $productImage}
+                                            <img src="{$productImage}" alt="{$product['title']}">
+                                        {else}
+                                            <div class="wh-product-media-fallback">
+                                                <span>{strtoupper(substr($product['title'], 0, 1))}</span>
+                                            </div>
+                                        {/if}
+                                    </div>
+                                    <div class="wh-product-content">
+                                        <div class="wh-product-meta-row">
+                                            {if $showHeading}
+                                                <span class="wh-product-category">{$categoryTitle}</span>
+                                            {/if}
+                                            <span class="wh-product-type">{$product['type']|capitalize}</span>
+                                        </div>
+                                        <h3>{$product['title']}</h3>
+                                        <p class="wh-product-description">{($product['description'] ?? '')|stripHtml|truncate:135}</p>
+                                    </div>
+                                    <div class="wh-product-bottom">
+                                        <div class="wh-price-stack">
+                                            <span class="wh-price-label">{='Starting from'|trans}</span>
+                                            <div class="wh-price">{$product['price_starting_from']|money_convert}</div>
+                                        </div>
+                                        <a class="btn wh-catalog-cta" href="{='/order'|link}/{$product['slug']}">{='Order Now'|trans}</a>
+                                    </div>
+                                </article>
+                            {else}
+                                <div class="text-secondary">{='No products are currently available in this category.'|trans}</div>
+                            {/foreach}
+                        </div>
+                    </section>
+                {/if}
+            {else}
+                {include 'shared/_placeholder.latte', title: ('No products yet'|trans), description: ('Enable at least one product category to start using the new orderform catalog.'|trans)}
+            {/foreach}
+        </section>
+    </div>
+{/block}

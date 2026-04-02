@@ -1,0 +1,310 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{import 'macro_functions.latte'}
+
+{var $company = $guest->system_company()}
+{var $languages = $guest->extension_languages()}
+{var $version = $guest->system_version()}
+{var $company_name = $company['name'] ?? 'OHMS'}
+{var $profile = []}
+{var $current_theme = $theme['code'] ?? 'admin_default'}
+
+{if $admin}
+    {var $profile = $admin->profile_get()}
+{/if}
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>{block meta_title}{/block} - {$company_name}</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <link rel="shortcut icon" href="{$theme->url}favicon.ico" />
+
+    <script type="text/javascript">
+        (function() {
+            try {
+                var mode = localStorage.getItem('ohms-admin-color-mode');
+                if (mode !== 'dark' && mode !== 'light') {
+                    mode = 'light';
+                }
+                document.documentElement.setAttribute('data-admin-color-mode', mode);
+            } catch (error) {
+                document.documentElement.setAttribute('data-admin-color-mode', 'light');
+            }
+        })();
+    </script>
+
+    {include 'partial_bb_meta.latte'}
+    {include 'partial_styles.latte'}
+
+    <script type="text/javascript" src="{$theme->url}js/ohms.min.js?v={$version}"></script>
+    <script type="text/javascript" src="{$theme->url}js/admin.js?v={$version}&ui=20260307-10"></script>
+    <script type="text/javascript" src="{$theme->url}js/admin-panel.js?v={$version}&ui=20260307-10"></script>
+
+    {block head}{/block}
+</head>
+<body class="admin-theme-shell admin-shell-v2">
+{if !$admin}
+{var $login_url = ('staff/login'|alink)}
+<script type="text/javascript">
+    $(function() {
+        bb.redirect({=json_encode($login_url)});
+    });
+</script>
+{else}
+    {var $active_menu = $active_menu ?? null}
+    {var $hide_menu = $hide_menu ?? false}
+    {var $product = $product ?? null}
+
+    {var $order_statuses = []}
+    {var $invoice_statuses = []}
+    {var $ticket_statuses = []}
+    {var $public_ticket_statuses = []}
+    {var $notification_total = 0}
+    {var $current_path = (string) ($request->_url ?? '')}
+
+    {if $admin->system_is_allowed(['mod' => 'order'])}
+        {var $order_statuses = $admin->order_get_statuses([])}
+    {/if}
+    {if $admin->system_is_allowed(['mod' => 'invoice'])}
+        {var $invoice_statuses = $admin->invoice_get_statuses([])}
+    {/if}
+    {if $admin->system_is_allowed(['mod' => 'support'])}
+        {var $ticket_statuses = $admin->support_ticket_get_statuses([])}
+        {var $public_ticket_statuses = $admin->support_public_ticket_get_statuses([])}
+    {/if}
+    {if ($admin->system_is_allowed(['mod' => 'notification']) && $guest->extension_is_on(['mod' => 'notification']))}
+        {var $notifications = $admin->notification_get_list(['per_page' => 1])}
+        {var $notification_total = $notifications['total'] ?? 0}
+    {/if}
+
+<div id="topNav">
+    <div class="fixed">
+        <div class="wrapper admin-topbar">
+            <div class="admin-brand">
+                <a href="{='index'|alink}" title="{$company_name}">
+                    <span class="admin-brand-mark">
+                        <span class="admin-brand-fallback">{$company_name}</span>
+                    </span>
+                </a>
+            </div>
+
+            <div class="admin-primary-nav">
+                <ul>
+                    <li><a class="{if $active_menu == 'dashboard'}is-active{/if}" href="{='index'|alink}">{='Dashboard'|trans}</a></li>
+
+                    {if $admin->system_is_allowed(['mod' => 'client'])}
+                    <li><a class="{if $active_menu == 'client'}is-active{/if}" href="{='client'|alink}">{='Clients'|trans}</a></li>
+                    {/if}
+
+                    {if $admin->system_is_allowed(['mod' => 'order'])}
+                    <li>
+                        <a class="{if $active_menu == 'order'}is-active{/if}" href="{='order'|alink:['status' => 'failed_setup']}">{='Orders'|trans}</a>
+                        {if ($order_statuses['failed_setup'] ?? 0)}<span class="numberMiddle">{$order_statuses['failed_setup']}</span>{/if}
+                    </li>
+                    {/if}
+
+                    {if $admin->system_is_allowed(['mod' => 'invoice'])}
+                    <li>
+                        <a class="{if $active_menu == 'invoice'}is-active{/if}" href="{='invoice'|alink:['status' => 'unpaid']}">{='Billing'|trans}</a>
+                        {if ($invoice_statuses['unpaid'] ?? 0)}<span class="numberMiddle">{$invoice_statuses['unpaid']}</span>{/if}
+                    </li>
+                    {/if}
+
+                    {if $admin->system_is_allowed(['mod' => 'support'])}
+                    <li>
+                        <a class="{if (($active_menu == 'support' || $active_menu == 'kb') && !str_contains($current_path, 'support/public'))}is-active{/if}" href="{='support'|alink:['status' => 'open']}">{='Support'|trans}</a>
+                        {if ($ticket_statuses['open'] ?? 0)}<span class="numberMiddle">{$ticket_statuses['open']}</span>{/if}
+                    </li>
+                    <li>
+                        <a class="{if str_contains($current_path, 'support/public')}is-active{/if}" href="{='support/public-tickets'|alink:['status' => 'open']}">{='Inquiries'|trans}</a>
+                        {if ($public_ticket_statuses['open'] ?? 0)}<span class="numberMiddle">{$public_ticket_statuses['open']}</span>{/if}
+                    </li>
+                    {/if}
+
+                    {if ($admin->system_is_allowed(['mod' => 'notification']) && $guest->extension_is_on(['mod' => 'notification']))}
+                    <li>
+                        <a href="{='notification'|alink}">{='Alerts'|trans}</a>
+                        {if $notification_total}<span class="numberMiddle">{$notification_total}</span>{/if}
+                    </li>
+                    {/if}
+
+                    {if $guest->extension_is_on(['mod' => 'updater'])}
+                        {var $update_available = $admin->updater_get_info()}
+                        {if $update_available && isset($update_available['version'])}
+                        <li>
+                            <a href="{='updater'|alink}" style="background: #5ab86c !important; color: #fff !important; border-radius: 4px; padding: 0 10px;">
+                                <i class="fa fa-refresh"></i> {='Update Available'|trans}
+                            </a>
+                        </li>
+                        <script type="text/javascript">
+                            $(function() {
+                                {if $active_menu == 'dashboard'}
+                                var updateVer = {= $update_available['version']|json_encode|noescape};
+                                var updateLink = {= ('updater'|alink)|json_encode|noescape};
+                                if(!sessionStorage.getItem('ohms_update_popup_shown')) {
+                                    bb.msg('A new update (' + updateVer + ') is available! Go to <a href="' + updateLink + '">Software Update</a> to install.', 'info');
+                                    sessionStorage.setItem('ohms_update_popup_shown', '1');
+                                }
+                                {/if}
+                            });
+                        </script>
+                        {/if}
+                    {/if}
+                </ul>
+            </div>
+
+            <div class="admin-user-nav">
+                <ul>
+                    <div class="loading" style="display: none;"><img src="{$theme->url}images/loader.gif" alt="" /><span>{='Loading...'|trans}</span></div>
+
+                    <li class="admin-theme-toggle-item">
+                        <button type="button" class="admin-theme-toggle" data-admin-theme-toggle aria-pressed="false">
+                            <span data-admin-theme-label>{='Dark mode'|trans}</span>
+                        </button>
+                    </li>
+
+                    <li class="admin-user-link">
+                        <a href="{='staff/profile'|alink}">
+                            <img src="{$profile['email']|gravatar}?size=24" alt="{$profile['name'] ?? 'Admin'}" />
+                            <span>{$profile['name'] ?? 'Administrator'}</span>
+                        </a>
+                    </li>
+
+                    <li class="dd" data-admin-dropdown>
+                        <button type="button" class="admin-dropdown-toggle" data-admin-dropdown-toggle aria-expanded="false">{='New'|trans}</button>
+                        {include 'partial_menu_top.latte'}
+                    </li>
+
+                    {if $admin->system_is_allowed(['mod' => 'system'])}
+                    <li class="dd" data-admin-dropdown>
+                        <button type="button" class="admin-dropdown-toggle" data-admin-dropdown-toggle aria-expanded="false">{='Settings'|trans}</button>
+                        <ul class="menu_body" hidden data-admin-dropdown-menu>
+                            <li><a href="{='system'|alink}">{='All settings'|trans}</a></li>
+                            <li><a href="{='addons'|alink}">{='Addons workspace'|trans}</a></li>
+                            <li><a href="{='theme'|alink}/{$current_theme}">{='Theme settings'|trans}</a></li>
+                        </ul>
+                    </li>
+                    {/if}
+
+                    <li><a href="{='/'|link}" target="_blank">{='Visit site'|trans}</a></li>
+                    <li><a href="{='api/admin/profile/logout'|link}" class="api-link" data-api-redirect="{='staff/login'|alink}">{='Logout'|trans}</a></li>
+                </ul>
+            </div>
+
+            <button class="admin-menu-toggle" type="button" data-admin-menu-toggle>
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="header">
+    <div class="wrapper admin-pagebar">
+        <div class="admin-pagebar-copy">
+            <span class="admin-pagebar-kicker">{='OHMS admin'|trans}</span>
+            <h1>{include meta_title}</h1>
+            <p>{='Operations, billing, support, and configuration for'|trans} {$company_name}.</p>
+        </div>
+        <div class="admin-pagebar-side">
+            {if (($languages|length) > 1)}
+            <label class="admin-language-switch">
+                <span>{='Language'|trans}</span>
+                <select name="lang" class="language_selector">
+                    {foreach $languages as $language}
+                    <option value="{$language}" class="lang_{$language}"{if $lang == $language} selected="selected"{/if}>{$language|trans}</option>
+                    {/foreach}
+                </select>
+            </label>
+            {/if}
+            <a class="admin-pagebar-link" href="{='index'|alink}">{='Dashboard'|trans}</a>
+            {if $admin->system_is_allowed(['mod' => 'system'])}
+            <a class="admin-pagebar-link" href="{='addons'|alink}">{='Addon modules'|trans}</a>
+            {/if}
+            <a class="admin-pagebar-link" href="{='system'|alink}">{='Settings'|trans}</a>
+            <div class="admin-user-card">
+                <img src="{$profile['email']|gravatar}?size=36" alt="{$profile['name'] ?? 'Admin'}" />
+                <div>
+                    <strong>{$profile['name'] ?? 'Administrator'}</strong>
+                    <span>{$profile['email'] ?? ''}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper admin-layout{if $hide_menu} admin-layout--wide{/if}">
+    {if $hide_menu}
+    <div class="admin-main-column admin-main-column--wide">
+        {block content_wide}{/block}
+    </div>
+    {else}
+    <aside class="admin-sidebar" data-admin-sidebar>
+        <div class="admin-sidebar-search">
+            <input type="search" value="" placeholder="{='Search navigation'|trans}" data-nav-search />
+        </div>
+        {block left_top}{/block}
+        <div class="admin-sidebar-nav">
+            {block nav}{include 'partial_menu.latte'}{/block}
+        </div>
+        {block left_bottom}{/block}
+    </aside>
+
+    <div class="admin-main-column">
+        {block before_content}{/block}
+        <div class="content admin-content">
+            <div class="breadCrumbHolder module">
+                <div class="breadCrumb module">
+                    {block breadcrumbs}
+                    <ul>
+                        <li class="firstB"><a href="{='index'|alink}">{='Home'|trans}</a></li>
+                        <li class="lastB">{include meta_title}</li>
+                    </ul>
+                    {/block}
+                </div>
+            </div>
+
+            {block top_content}{/block}
+            {block content}{/block}
+        </div>
+    </div>
+    {/if}
+</div>
+
+<div id="footer">
+    <div class="wrapper">
+        {include 'partial_footer.latte', product: $product}
+    </div>
+</div>
+<div class="loading dim"></div>
+{block js}{/block}
+<noscript id="noscript">
+    <div class="msg error">
+        NOTE: Many features on OHMS require Javascript and cookies. You can enable both via your browser's preference settings.
+    </div>
+</noscript>
+{/if}
+</body>
+</html>

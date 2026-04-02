@@ -1,0 +1,23 @@
+/**
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ */
+﻿CKEDITOR.plugins.setLang("wsc","sl",{btnIgnore:"Prezri",btnIgnoreAll:"Prezri vse",btnReplace:"Zamenjaj",btnReplaceAll:"Zamenjaj vse",btnUndo:"Razveljavi",changeTo:"Spremeni v",errorLoading:"Napaka pri nalaganju storitve programa na naslovu %s.",ieSpellDownload:"Črkovalnik ni nameščen. Ali ga želite prenesti sedaj?",manyChanges:"Črkovanje je končano: Spremenjenih je bilo %1 besed",noChanges:"Črkovanje je končano: Nobena beseda ni bila spremenjena",noMispell:"Črkovanje je končano: Brez napak",noSuggestions:"- Ni predlogov -",
+notAvailable:"Oprostite, storitev trenutno ni dosegljiva.",notInDic:"Ni v slovarju",oneChange:"Črkovanje je končano: Spremenjena je bila ena beseda",progress:"Preverjanje črkovanja se izvaja...",title:"Črkovalnik",toolbar:"Preveri črkovanje"});

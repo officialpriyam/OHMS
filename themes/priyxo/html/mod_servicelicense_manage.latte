@@ -1,0 +1,72 @@
+{if ($order['status'] == 'active')}
+<h2 class="text-center">{$order['title']}</h2>
+<div class="alert alert-info text-center">
+    <h4>{='License details'|trans}</h4>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <h4 class="list-group-item-heading">{=Key|trans}</h4>
+            <p class="list-group-item-text">{$service['license_key']}</p>
+        </li>
+        {if $service['validate_ip']}
+            <li class="list-group-item">
+                <h4 class="list-group-item-heading">{='Valid IPs'|trans}</h4>
+                <p class="list-group-item-text">
+                {foreach $service['ips'] as $ip}{$ip} <br>
+                {else}{='All ips'|trans}
+                {/foreach}
+                </p>
+            </li>
+        {/if}
+        {if $service['validate_host']}
+            <li class="list-group-item">
+                <h4 class="list-group-item-heading">{='Valid Domains'|trans}</h4>
+                <p class="list-group-item-text">
+                {foreach $service['hosts'] as $host}
+                    {$host} <br>
+                {else}
+                    {='All hosts'|trans}
+                {/foreach}
+                </p>
+            </li>
+        {/if}
+        {if $service['validate_version']}
+            <li class="list-group-item">
+                <h4 class="list-group-item-heading">{='Valid Versions'|trans}</h4>
+                <p class="list-group-item-text">
+                {foreach $service['versions'] as $version}{$version} <br>
+                {else}{='All versions'|trans}
+                {/foreach}
+                </p>
+            </li>
+        {/if}
+        {if $service['validate_path']}
+            <li class="list-group-item">
+                <h4 class="list-group-item-heading">{='Valid Install paths'|trans}</h4>
+                <p class="list-group-item-text">
+                {foreach $service['paths'] as $path}{$path} <br>
+                {else}{='All paths'|trans}
+                {/foreach}
+                </p>
+            </li>
+        {/if}
+    </ul>
+</div>
+
+<div class="alert alert-warning text-center">
+    <h4>{='Reset license'|trans}</h4>
+    <p>{='You can reset your license parameters if you have changed your server'|trans}</p>
+    <p><button class="btn btn-warning" type="button" id="license-reset">{=Reset|trans}</button></p>
+</div>
+
+<script>
+$(function() {
+    $('#license-reset').bind('click', function(event) {
+        if (confirm({=json_encode(('Are you sure?'|trans))})) {
+            bb.post('client/servicelicense/reset', { order_id: {$order['id']} }, function(result) {
+                OHMS.message({=json_encode(('License was reset'|trans))});
+            });
+        }
+    });
+});
+</script>
+{/if}

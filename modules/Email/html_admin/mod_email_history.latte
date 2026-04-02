@@ -1,0 +1,84 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{import 'macro_functions.latte'}
+
+{block meta_title}{='Email history'|trans}{/block}
+
+{var $active_menu = 'activity'}
+
+{block content}
+{var $config = $admin->extension_config_get(['ext' => 'mod_email'])}
+{if (!isset($config->log_enabled) || ($config->log_enabled != 1))}
+<div class="nNote nInformation first">
+    <p><strong>{='INFORMATION'|trans}: </strong>{='Email logging is not enabled. If you want to log sent mails to database, enable it in'|trans}
+        <a href="{='extension/settings/email'|alink}"> {='email settings.'|trans}</a>
+    </p>
+</div>
+{/if}
+
+<div class="widget">
+    <div class="head"><h5 class="iFrames">{='Email history'|trans}</h5></div>
+
+    {include table_search}
+    <table class="tableStatic wide">
+        <thead>
+            <tr>
+                <td style="width: 2%"><input type="checkbox" class="batch-delete-master-checkbox"/></td>
+                <td>{=To|trans}</td>
+                <td>{=From|trans}</td>
+                <td>{=Subject|trans}</td>
+                <td>{=Date|trans}</td>
+                <td style="width: 13%">&nbsp;</td>
+            </tr>
+        </thead>
+
+        <tbody>
+        {var $emails = $admin->email_email_get_list(array_merge(['per_page' => 30, 'page' => $request->page], $request->getArrayCopy()))}
+        {foreach $emails->list as $i => $email}
+        <tr>
+            <td><input type="checkbox" class="batch-delete-checkbox" data-item-id="{$email['id']}"/></td>
+            <td>{$email['recipients']}</td>
+            <td>{$email['sender']}</td>
+            <td>{$email['subject']|truncate:40}</td>
+            <td>{$email['created_at']|date:Y-m-d}</td>
+            <td class="actions">
+                <a class="bb-button btn14" href="{='/email'|alink}/{$email['id']}"><img src="{$theme->url}images/icons/dark/pencil.png" alt=""></a>
+                <a class="bb-button btn14 bb-rm-tr api-link" data-api-redirect="{='email/history'|alink}" data-api-confirm="Are you sure?"  href="{='api/admin/email/email_delete'|link:['id' => $email['id']]}"><img src="{$theme->url}images/icons/dark/trash.png" alt=""></a>
+            </td>
+        </tr>
+        {else}
+            <tr>
+                <td colspan="7">
+                    {='The list is empty'|trans}
+                </td>
+            </tr>
+        {/foreach}
+        </tbody>
+    </table>
+</div>
+
+{include 'partial_batch_delete.latte', action: 'admin/email/batch_delete'}
+{include 'partial_pagination.latte', list: $emails, url: 'email/history'}
+{/block}
+

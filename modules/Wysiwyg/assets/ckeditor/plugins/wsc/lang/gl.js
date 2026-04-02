@@ -1,0 +1,23 @@
+/**
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ */
+﻿CKEDITOR.plugins.setLang("wsc","gl",{btnIgnore:"Ignorar",btnIgnoreAll:"Ignorar Todas",btnReplace:"Substituir",btnReplaceAll:"Substituir Todas",btnUndo:"Desfacer",changeTo:"Cambiar a",errorLoading:"Error loading application service host: %s.",ieSpellDownload:"O corrector ortográfico non está instalado. ¿Quere descargalo agora?",manyChanges:"Corrección ortográfica rematada: %1 verbas substituidas",noChanges:"Corrección ortográfica rematada: Non se substituiu nengunha verba",noMispell:"Corrección ortográfica rematada: Non se atoparon erros",
+noSuggestions:"- Sen candidatos -",notAvailable:"Sorry, but service is unavailable now.",notInDic:"Non está no diccionario",oneChange:"Corrección ortográfica rematada: Unha verba substituida",progress:"Corrección ortográfica en progreso...",title:"Spell Checker",toolbar:"Corrección Ortográfica"});

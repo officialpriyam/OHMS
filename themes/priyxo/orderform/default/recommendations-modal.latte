@@ -1,0 +1,37 @@
+{if (($product['addons'] ?? [])|length)}
+<div class="wh-card mt-4">
+    <div class="wh-card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="wh-section-title mb-0">{='Recommended extras'|trans}</h2>
+            <span class="wh-pill">{=Addons|trans}</span>
+        </div>
+        <div class="row g-3">
+            {foreach $product['addons'] as $addon}
+                <div class="col-md-6">
+                    <div class="border rounded-3 p-3 h-100">
+                        {var $addonPrice = 0}
+                        {if $addon->pricing->type === 'recurrent'}
+                            {foreach $addon->pricing->recurrent as $periodCode => $periodPrice}
+                                {if ($periodPrice->enabled && $addonPrice == 0)}
+                                    {var $addonPrice = $periodPrice->price + $periodPrice->setup}
+                                {/if}
+                            {/foreach}
+                        {elseif $addon->pricing->type === 'once'}
+                            {var $addonPrice = $addon->pricing->once->price + $addon->pricing->once->setup}
+                        {/if}
+                        <h3 class="h6 fw-bold mb-1">{$addon->title}</h3>
+                        <div class="small text-secondary mb-2">{$addon->description|bbmd}</div>
+                        <div class="text-success fw-semibold">
+                            {if $addon->pricing->type === 'free'}
+                                {='Included'|trans}
+                            {else}
+                                {$addonPrice|money_convert}
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+            {/foreach}
+        </div>
+    </div>
+</div>
+{/if}

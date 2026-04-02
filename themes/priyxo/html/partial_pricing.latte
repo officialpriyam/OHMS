@@ -1,0 +1,166 @@
+{var $pricing = $pricing ?? ($product['pricing'] ?? null)}
+{var $pricing_type = (is_array($pricing) ? ($pricing['type'] ?? null) : ($pricing->type ?? null))}
+{var $pricing_once = (is_array($pricing) ? ($pricing['once'] ?? null) : ($pricing->once ?? null))}
+{var $pricing_recurrent = (is_array($pricing) ? ($pricing['recurrent'] ?? null) : ($pricing->recurrent ?? null))}
+
+{if isset($only_price) && $only_price}
+    {if ($pricing_type == 'free')}
+        {0|money_convert}
+    {elseif ($pricing_type == 'once')}
+        {var $once_price = (is_array($pricing_once) ? ($pricing_once['price'] ?? 0) : ($pricing_once->price ?? 0))}
+        {$once_price|money_convert}
+    {elseif ($pricing_type == 'recurrent')}
+        {var $first_period = null}
+        {foreach ($pricing_recurrent ?? []) as $code => $prices}
+            {if !$first_period && (is_array($prices) ? ($prices['enabled'] ?? false) : ($prices->enabled ?? false))}
+                {var $first_period = $prices}
+            {/if}
+        {/foreach}
+        {if $first_period}
+            {(is_array($first_period) ? ($first_period['price'] ?? 0) : ($first_period->price ?? 0))|money_convert}
+        {/if}
+    {/if}
+{elseif isset($only_billing) && $only_billing}
+    {if ($pricing_type == 'recurrent')}
+        <select name="period" id="period-selector" class="form-select">
+            {foreach ($pricing_recurrent ?? []) as $code => $prices}
+                {var $price_enabled = (is_array($prices) ? ($prices['enabled'] ?? false) : ($prices->enabled ?? false))}
+                {var $price_value = (is_array($prices) ? ($prices['price'] ?? 0) : ($prices->price ?? 0))}
+                {var $price_setup = (is_array($prices) ? ($prices['setup'] ?? 0) : ($prices->setup ?? 0))}
+                {if $price_enabled}
+                    <option value="{$code}"{if ($request->period == $code)} selected="selected"{/if}>
+                        {$price_value + $price_setup|money_convert} {$periods[$code]}
+                    </option>
+                {/if}
+            {/foreach}
+        </select>
+    {else}
+        <div class="text-white p-2">{$pricing_type|capitalize}</div>
+    {/if}
+{elseif isset($only_summary) && $only_summary}
+    <div class="lemon-summary-details text-muted mt-2">
+        <div class="lemon-summary-item">
+            <span>{$product['title']}</span>
+            <span>
+                {if ($pricing_type == 'free')}
+                    {0|money_convert}
+                {elseif ($pricing_type == 'once')}
+                    {var $once_price = (is_array($pricing_once) ? ($pricing_once['price'] ?? 0) : ($pricing_once->price ?? 0))}
+                    {$once_price|money_convert}
+                {elseif ($pricing_type == 'recurrent')}
+                    {var $sel_period = $request->period}
+                    {if !$sel_period}
+                        {foreach ($pricing_recurrent ?? []) as $code => $prices}
+                            {if !$sel_period && (is_array($prices) ? ($prices['enabled'] ?? false) : ($prices->enabled ?? false))}
+                                {var $sel_period = $code}
+                            {/if}
+                        {/foreach}
+                    {/if}
+                    {if $sel_period && isset($pricing_recurrent[$sel_period])}
+                        {var $p = $pricing_recurrent[$sel_period]}
+                        {(is_array($p) ? ($p['price'] ?? 0) : ($p->price ?? 0))|money_convert}
+                    {/if}
+                {/if}
+            </span>
+        </div>
+        
+        {var $total_setup = 0}
+        {if ($pricing_type == 'once')}
+            {var $total_setup = (is_array($pricing_once) ? ($pricing_once['setup'] ?? 0) : ($pricing_once->setup ?? 0))}
+        {elseif ($pricing_type == 'recurrent' && $sel_period && isset($pricing_recurrent[$sel_period]))}
+             {var $p = $pricing_recurrent[$sel_period]}
+             {var $total_setup = (is_array($p) ? ($p['setup'] ?? 0) : ($p->setup ?? 0))}
+        {/if}
+        
+        <div class="lemon-summary-item">
+            <span>{='Setup Fees'|trans}:</span>
+            <span>{$total_setup|money_convert}</span>
+        </div>
+        
+        <div class="lemon-summary-total text-white mt-3">
+            <span>{='Total Due Today'|trans}</span>
+            <span class="text-lemon">
+                 {if ($pricing_type == 'free')}
+                    {0|money_convert}
+                {elseif ($pricing_type == 'once')}
+                    {$once_price + $total_setup|money_convert}
+                {elseif ($pricing_type == 'recurrent' && $sel_period && isset($pricing_recurrent[$sel_period]))}
+                     {var $p = $pricing_recurrent[$sel_period]}
+                     {(is_array($p) ? ($p['price'] ?? 0) : ($p->price ?? 0)) + $total_setup |money_convert}
+                {/if}
+            </span>
+        </div>
+    </div>
+{else}
+<div class="total">
+    {if ($pricing && ($pricing_type == 'free'))}
+        {if $product['allow_quantity_select']}
+            <h4>{='Quantity'|trans}:</h4>
+            <input type="text" name="quantity" value="1" class="form-control">
+            <hr>
+        {/if}
+        
+        <h2><strong>{='Total price'|trans}:</strong><br>{0|money_convert}</h2>
+    {/if}
+
+    {if ($pricing && ($pricing_type == 'once'))}
+        {if $product['allow_quantity_select']}
+            <h4>{='Quantity'|trans}:</h4>
+            <input type="text" name="quantity" value="1" class="form-control">
+            <hr>
+        {/if}
+
+        {var $once_price = (is_array($pricing_once) ? ($pricing_once['price'] ?? 0) : ($pricing_once->price ?? 0))}
+        {var $once_setup = (is_array($pricing_once) ? ($pricing_once['setup'] ?? 0) : ($pricing_once->setup ?? 0))}
+        <h2><strong>{='Total price'|trans}:</strong><br> {$once_price + $once_setup|money_convert}</h2>
+    {/if}
+
+    {if ($pricing && ($pricing_type == 'recurrent'))}
+        {if $product['allow_quantity_select']}
+            <h4>{='Quantity:'|trans}:</h4>
+            <input type="text" name="quantity" value="1" class="form-control">
+            <hr>
+        {/if}
+            
+        <select name="period" id="period-selector" class="form-select">
+            {foreach ($pricing_recurrent ?? []) as $code => $prices}
+                {var $price_enabled = (is_array($prices) ? ($prices['enabled'] ?? false) : ($prices->enabled ?? false))}
+                {var $price_value = (is_array($prices) ? ($prices['price'] ?? 0) : ($prices->price ?? 0))}
+                {var $price_setup = (is_array($prices) ? ($prices['setup'] ?? 0) : ($prices->setup ?? 0))}
+                {if $price_enabled}
+                    <option value="{$code}"{if ($request->period == $code)} selected="selected"{/if}>{$price_value + $price_setup|money_convert} {$periods[$code]}</option>
+                {/if}
+            {/foreach}
+        </select>
+        <hr>
+
+        {foreach ($pricing_recurrent ?? []) as $code => $prices}
+            {var $price_enabled = (is_array($prices) ? ($prices['enabled'] ?? false) : ($prices->enabled ?? false))}
+            {var $price_value = (is_array($prices) ? ($prices['price'] ?? 0) : ($prices->price ?? 0))}
+            {var $price_setup = (is_array($prices) ? ($prices['setup'] ?? 0) : ($prices->setup ?? 0))}
+            {if ($price_enabled && ($price_setup > 0))}
+                <div class="period {$code}" style="{if !$iterator->first}display: none;{/if}">
+                    <table class="table">
+                        <tr>
+                            <td>{='Price'|trans}</td>
+                            <td>{$price_value|money_convert}</td>
+                        </tr>
+                        <tr>
+                            <td>{='Setup Price'|trans}</td>
+                            <td>{$price_setup|money_convert}</td>
+                        </tr>
+                    </table>
+                </div>
+            {/if}
+        {/foreach}
+    {/if}
+</div>
+
+<div class="d-grid">
+    {if (($product['addons']|length) > 0)}
+        <button class="btn btn-success btn-lg" type="submit" id="order-button">{='Continue'|trans}</button>
+    {else}
+        <button class="btn btn-success btn-lg" type="submit" id="order-button">{='Order now'|trans}</button>
+    {/if}
+</div>
+{/if}

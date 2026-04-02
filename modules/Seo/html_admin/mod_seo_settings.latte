@@ -1,0 +1,71 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{import 'macro_functions.latte'}
+
+{block meta_title}{='SEO settings'|trans}{/block}
+
+{var $active_menu = system}
+
+{block breadcrumbs}
+<ul>
+    <li class="firstB"><a href="{='/'|alink}">{=Home|trans}</a></li>
+    <li><a href="{=system|alink}">{=Settings|trans}</a></li>
+    <li class="lastB">{='SEO settings'|trans}</li>
+</ul>
+{/block}
+
+{block content}
+<div class="widget">
+    <div class="head">
+        <h5 class="iCog">{='SEO settings'|trans}</h5>
+    </div>
+
+    {var $params = $admin->extension_config_get([ext => 'mod_seo'])}
+    <form method="post" action="{='api/admin/extension/config_save'|link}" class="mainForm api-form" data-api-msg="{='Configuration updated'|trans}">
+        <fieldset>
+            <legend>Sitemap</legend>
+            <div class="rowElem noborder">
+                <label>{='Ping sitemap to Google'|trans}</label>
+                <div class="formRight">
+                    <input type="radio" name="sitemap_google" value="1" {if ($params->sitemap_google == 1)}checked="checked"{/if}/><label>{=Yes|trans}</label>
+                    <input type="radio" name="sitemap_google" value="0" {if !$params->sitemap_google}checked="checked"{/if}/><label>{=No|trans}</label>
+                </div>
+                <div class="fix"></div>
+            </div>
+            
+            <div class="rowElem">
+                <label>{='Ping sitemap to Bing'|trans}</label>
+                <div class="formRight">
+                    <input type="radio" name="sitemap_bing" value="1" {if ($params->sitemap_bing == 1)}checked="checked"{/if}/><label>{=Yes|trans}</label>
+                    <input type="radio" name="sitemap_bing" value="0" {if !$params->sitemap_bing}checked="checked"{/if}/><label>{=No|trans}</label>
+                </div>
+                <div class="fix"></div>
+            </div>
+
+            <input type="submit" value="{=Update|trans}" class="greyishBtn submitForm" />
+            <input type="hidden" name="ext" value="mod_seo" />
+        </fieldset>
+    </form>
+</div>
+{/block}

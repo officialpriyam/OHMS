@@ -1,0 +1,15 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_public.latte'}
+
+{block meta_title}{='Domain options'|trans}{/block}
+{block head}{include 'shared/_styles.latte'}{/block}
+
+{block content_before}
+    <div class="wh-page-header">
+        <h1 class="wh-page-title">{='Domain Options'|trans}</h1>
+        <p class="wh-page-subtitle">{='Reserved for WHMCS-style orderform flows that split nameserver and registration extras into a separate screen.'|trans}</p>
+    </div>
+{/block}
+
+{block content}
+    {include 'shared/_placeholder.latte', title: ('Domain extras stay inside the active order flow'|trans), description: ('OHMS keeps nameservers, transfer codes, and other domain details on the product configuration step instead of a separate page.'|trans), note: ('This screen is present so the default orderform mirrors the full WHMCS reference surface.'|trans)}
+{/block}

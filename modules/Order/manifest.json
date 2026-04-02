@@ -1,0 +1,8 @@
+{"icon_url":     "icon.png",
+    "id":           "order",
+	"type":         "mod",
+    "name":         "Orders",
+    "description":  "OHMS core module",
+    "icon_url":     "icon.png",
+    "version":      "1.0.0"
+}

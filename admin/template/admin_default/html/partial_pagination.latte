@@ -1,0 +1,57 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{if ($list->pages > 1)}
+{var $currentPage = ($request->page ?? 1)}
+{var $paginator = $guest->system_paginator([total => $list->total, page => $currentPage, per_page => $list->per_page])}
+
+<div class="pagination">
+    <ul class="pages">
+        {if ($paginator->currentpage != 1)}
+        <li class="prev"><a href="{$url|alink:array_merge((array_merge([], $request)|slice:1, ($request|length)), [page => ($currentPage - 1)])}"><</a></li>
+        {/if}
+        {if ($paginator->range[0] != 1)}
+            <li><a href="{$url|alink:[page => 1]}" >1</a></li>
+        {/if}
+        {foreach range($paginator->start, $paginator->end) as $i}
+
+            {if (($paginator->range[0] > 2) && ($i == $paginator->range[0]))}
+                ...
+            {/if}
+
+            {if ($i == $paginator->currentpage)}
+                <li><a class="active" href="#" onclick="return false;">{$i}</a></li>
+            {else}
+                <li><a href="{$url|alink:array_merge((array_merge([], $request)|slice:1, ($request|length)), [page => $i])}"> {$i}</a></li>
+            {/if}
+        {/foreach}
+
+        {if (($paginator->range->{($paginator->midrange - 1)} < ($paginator->numpages - 1)) && ($paginator->end == $paginator->range->{($paginator->midrange - 1)}))}
+            ...
+            <li><a href="{$url|alink:array_merge((array_merge([], $request)|slice:1, ($request|length)), [page => $paginator->numpages])}"> {$paginator->numpages}</a></li>
+        {/if}
+
+        {if ($paginator->currentpage != $paginator->numpages)}
+        <li class="next"><a href="{$url|alink:array_merge((array_merge([], $request)|slice:1, ($request|length)), [page => ($currentPage + 1)])}">></a></li>
+        {/if}
+    </ul>
+</div>
+{/if}

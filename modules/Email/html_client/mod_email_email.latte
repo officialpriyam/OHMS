@@ -1,0 +1,110 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{block meta_title}{=Email|trans}{/block}
+
+{block breadcrumb}
+<li><a href="{=email|link}">{=Emails|trans}</a><span class="divider">/</span></li>
+{$email['subject']}
+{/block}
+
+{block content}
+<div class="row">
+    <article class="span12 data-block">
+        <div class="data-container">
+            <header>
+                <h1>{$email['subject']}</h1>
+                <div class="data-header-actions">
+                    <ul>
+                        <li>
+                            <a class="btn btn-small" href="{='/email'|link}">{='Back to emails list'|trans}</a>
+                        </li>
+                    </ul>
+                </div>
+            </header>
+            <section>
+                <div class="tab-pane {if $iterator->first}active{/if}" id="tab{$email['id']}">
+                    <div class="well well-small">
+                        <p><strong>{='From:'|trans}</strong> {$email['sender']}</p>
+                        <p><strong>{='To:'|trans}</strong> {$email['recipients']}</p>
+                        <p><strong>{='Created at:'|trans}</strong> {$email['created_at']|bb_date}</p>
+                    </div>
+                    <div class="well">
+                        <h3>{$email['subject']}</h3>
+                        <p> {$email['content_html']}</p>
+                    </div>
+                    <a class="btn btn-inverse email-resend" href="#" mail-id="{$email['id']}">{=Resend|trans}</a>
+                    <a class="btn btn-danger email-delete" href="#"  mail-id="{$email['id']}">{=Delete|trans}</a>
+                </div>
+            </section>
+        </div>
+    </article>
+</div>
+{/block}
+
+{block js}
+
+<script type="text/javascript">
+    $(function() {
+        $('.email-resend').click(function(e) {
+            e.preventDefault();
+            $('.wait').show();
+
+            var email_id = $(this).attr('mail-id');
+
+            bb.post(
+                'client/email/resend',
+                { id: email_id },
+                function(result) {
+                    $('.wait').hide();
+                    bb.msg('Email resent');
+
+                    return false;
+                }
+            );
+        });
+        $('.email-delete').click(function(e){
+            e.preventDefault();
+            
+            if (confirm('Are you sure?')){
+                $('.wait').show();
+                
+                var email_id = $(this).attr('mail-id');
+                
+                bb.post(
+                    'client/email/delete',
+                    { id: email_id },
+                    function(result) {
+                        bb.msg('Email deleted');
+                        bb.redirect({=json_encode(('email'|link))});
+
+                        return false;
+                    }
+                );
+            };
+        });
+
+    });
+</script>
+
+{/block}

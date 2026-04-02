@@ -1,0 +1,137 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{import 'macro_functions.latte'}
+
+{block meta_title}{='Counter-Strike 2 Server Hosting'|trans}{/block}
+
+{var $side_menu = hidden}
+
+{block content_banner}
+    <section class="game-hero">
+        <div class="game-hero-bg" style="background-image: url('https://media.tenor.com/images/72c83556174150806dd5bf8cc31206a0/tenor.gif');"></div>
+        <div class="container-md position-relative">
+            <div class="row align-items-center">
+                {* Left Side: Text *}
+                <div class="col-lg-7 my-5 py-5 text-lg-start text-center">
+                    <div class="game-badge">
+                        <img src="{var $img_cs2 = 'images/games/counter-strike-2-pin.jpg'}{$img_cs2|asset_url}" alt="counter-strike-2" class="me-2">
+                        <span>{='Ready in 60 seconds'|trans}</span>
+                    </div>
+                    <h1 class="game-hero-title text-white fw-bold mb-4" style="font-size: 3.5rem;">{='Counter-Strike 2 Server Hosting'|trans}</h1>
+                    <p class="game-hero-desc text-white-50 fs-5 mb-5">{='Competitive-ready tick servers with anti-DDoS protection.'|trans}</p>
+                    <div class="game-hero-actions d-flex flex-wrap gap-3 justify-content-lg-start justify-content-center">
+                        <a href="#pricing" class="btn btn-primary btn-lg fw-bold px-4 py-3 rounded-3">{='Create Server'|trans}</a>
+                        <a href="#features" class="btn btn-outline-light btn-lg fw-bold px-4 py-3 rounded-3 text-white">{='View Features'|trans}</a>
+                    </div>
+                </div>
+
+                {* Right Side: Large Logo *}
+                <div class="col-lg-5 d-none d-lg-flex justify-content-center align-items-center">
+                    <img src="{var $img_cs2 = 'images/games/counter-strike-2-pin.jpg'}{$img_cs2|asset_url}" alt="counter-strike-2" class="img-fluid hero-featured-logo animated-float" style="max-height: 320px; filter: drop-shadow(0 0 30px rgba(255,255,255,0.1));">
+                </div>
+            </div>
+        </div>
+    </section>
+{/block}
+
+{block content}
+    {* ==== CONFIGURE CATEGORY ID HERE ==== *}
+    {var $game_category_id = 1} 
+
+    {* Pricing Section *}
+    <section id="pricing" class="game-pricing py-5 mt-5">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold text-white fs-1">{='Choose Your Counter-Strike 2 Plan'|trans}</h2>
+            <p class="text-secondary fs-5">{='Instant setup, DDoS protection, and premium hardware.'|trans}</p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            {var $products = []}
+            {foreach ($guest->product_category_get_list(['per_page' => 100])['list'] ?? []) as $cat}
+                {if $cat['id'] == $game_category_id}
+                    {var $products = $cat['products']}
+                {/if}
+            {/foreach}
+
+            {if count($products) > 0}
+                {foreach $products as $product}
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card bg-dark border-secondary h-100 rounded-4 shadow-sm" style="transition: transform 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-10px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <div class="card-body p-4 d-flex flex-column">
+                                <div class="d-flex align-items-center mb-4">
+                                    <img src="{var $img_cs2 = 'images/games/counter-strike-2-pin.jpg'}{$img_cs2|asset_url}" alt="counter-strike-2" width="100" class="me-3">
+                                    <h3 class="card-title text-white fw-bold m-0 fs-4">{$product['title']}</h3>
+                                </div>
+                                <div class="mb-4 pb-4 border-bottom border-secondary">
+                                    <span class="fs-1 fw-bold text-primary">{$product['price_starting_from']|money_convert}</span>
+                                    <span class="text-secondary">/{='mo'|trans}</span>
+                                </div>
+                                
+                                <ul class="list-unstyled mb-4 flex-grow-1">
+                                    {if $product['description']}
+                                        <li class="mb-3 text-secondary">
+                                            <i class="fa fa-info-circle text-info me-2"></i>
+                                            {$product['description']|stripHtml|truncate:80}
+                                        </li>
+                                    {/if}
+                                    <li class="mb-3 text-white-50"><i class="fa fa-fighter-jet text-success me-2"></i> {='High-Freq CPU'|trans}</li>
+                                    <li class="mb-3 text-white-50"><i class="fa fa-shield text-success me-2"></i> {='Advanced DDoS Defense'|trans}</li>
+                                    <li class="mb-3 text-white-50"><i class="fa fa-hdd-o text-success me-2"></i> {='NVMe Storage'|trans}</li>
+                                    <li class="mb-3 text-white-50"><i class="fa fa-plug text-success me-2"></i> {='Mod Support'|trans}</li>
+                                </ul>
+                                
+                                <a href="{='/order'|link}/{$product['slug']}" class="btn btn-outline-primary btn-lg w-100 fw-bold rounded-3 mt-auto">{='Order Now'|trans}</a>
+                            </div>
+                        </div>
+                    </div>
+                {/foreach}
+            {else}
+                <div class="col-12 text-center py-5">
+                    <div class="alert alert-dark border-secondary d-inline-block p-4 rounded-4 shadow">
+                        <i class="fa fa-exclamation-triangle text-warning fa-3x mb-3"></i>
+                        <h4 class="text-white">{='No Products Configured'|trans}</h4>
+                        <p class="text-white-50 mb-0">{='Please update the $game_category_id variable at the top of mod_page_counter-strike-2.latte.'|trans}</p>
+                    </div>
+                </div>
+            {/if}
+        </div>
+    </section>
+
+    {* Features Section *}
+    <section id="features" class="game-features py-5 my-5">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold text-white fs-1">{='Why Host With Us?'|trans}</h2>
+            <p class="text-secondary fs-5">{='Premium features included with every game server.'|trans}</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card bg-dark bg-opacity-50 border-0 h-100 rounded-4 text-center p-4">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-25 rounded-circle mb-4 mx-auto" style="width: 80px; height: 80px;">
+                        <i class="fa fa-rocket fa-2x text-primary"></i>
+                    </div>
+                    <h4 class="text-white fw-bold mb-3">{='Ultra Fast NVMe'|trans}</h4>
+                    <p class="text-white-50">{='High-performance storage for rapid loading and backups.'|trans}</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-dark bg-opacity-50 border-0 h-100 rounded-4 text-center p-4">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-25 rounded-circle mb-4 mx-auto" style="width: 80px; height: 80px;">
+                        <i class="fa fa-microchip fa-2x text-primary"></i>
+                    </div>
+                    <h4 class="text-white fw-bold mb-3">{='Game-Tuned Hardware'|trans}</h4>
+                    <p class="text-white-50">{='High-frequency CPUs and optimized network routing.'|trans}</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-dark bg-opacity-50 border-0 h-100 rounded-4 text-center p-4">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-25 rounded-circle mb-4 mx-auto" style="width: 80px; height: 80px;">
+                        <i class="fa fa-shield fa-2x text-primary"></i>
+                    </div>
+                    <h4 class="text-white fw-bold mb-3">{='DDoS Shield'|trans}</h4>
+                    <p class="text-white-50">{='Game-specific filtering keeps your community online.'|trans}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+{/block}

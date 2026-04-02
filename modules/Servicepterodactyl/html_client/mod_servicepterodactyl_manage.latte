@@ -1,0 +1,91 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{if ($order['status'] == 'active')}
+{var $pterodactyl = $client->servicepterodactyl_get_details(['id' => $order['id']])}
+
+<div class="card mt-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">{='Manage Pterodactyl Server'|trans}</h5>
+        {if isset($pterodactyl['panel_url'])}
+            <a href="{$pterodactyl['panel_url']}" target="_blank" class="btn btn-primary btn-sm">
+                <i class="bi bi-box-arrow-up-right"></i> {='Open Control Panel'|trans}
+            </a>
+        {/if}
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h6>{='Credentials'|trans}</h6>
+                <table class="table table-sm table-borderless">
+                    <tr>
+                        <td style="width: 120px;"><strong>{='Username'|trans}:</strong></td>
+                        <td>{$pterodactyl['user']['username'] ?? 'N/A'}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>{='Email'|trans}:</strong></td>
+                        <td>{$pterodactyl['user']['email'] ?? 'N/A'}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-6 border-start">
+                <h6>{='Actions'|trans}</h6>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-warning btn-sm" data-bs-toggle="collapse" data-bs-target="#changePassCollapse">
+                        <i class="bi bi-key"></i> {='Change Password'|trans}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="collapse mt-3" id="changePassCollapse">
+            <div class="card card-body bg-light">
+                <h6>{='Change Panel Password'|trans}</h6>
+                <form class="api-form" data-api-url="client/servicepterodactyl/change_password" data-api-msg="{='Password has been changed'|trans}">
+                    <input type="hidden" name="id" value="{$order['id']}">
+                    <div class="mb-3">
+                        <label class="form-label">{='New Password'|trans}</label>
+                        <input type="password" name="password" class="form-control" required minlength="8">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{='Confirm Password'|trans}</label>
+                        <input type="password" name="password_confirm" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-warning btn-sm">{='Update Password'|trans}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function() {
+    $('#changePassCollapse form').on('submit', function() {
+        var p1 = $(this).find('input[name="password"]').val();
+        var p2 = $(this).find('input[name="password_confirm"]').val();
+        if (p1 !== p2) {
+            bb.msg('Passwords do not match', 'error');
+            return false;
+        }
+    });
+});
+</script>
+{/if}

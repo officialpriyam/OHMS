@@ -1,0 +1,67 @@
+{if $guest->extension_is_on(['mod' => 'formbuilder'])}
+
+{var $form = $guest->formbuilder_get(['id' => $product['form_id']])}
+
+{if ($form->style->show_title != 0)}
+    <h5>{$form->name}</h5>
+{/if}
+
+<div class="control-group form-group">
+    <div class="controls">
+    {foreach $form->fields as $field}
+        {if ($field->hide_label != 1)}<label {if ($form->style->type == 'horizontal')}class="control-label"{/if} for="{$field->name}">{$field->label}</label>{/if}
+
+        {if ($field->type == 'text')}
+            <input type="text" class="form-control" name="{$field->name}" value="{$field->default_value}" aria-describedby="help-{$field->name}"
+            {if ($field->required == 1)}required{/if}
+            {if ($field->readonly == 1)}readonly{/if}
+            />
+
+        {elseif ($field->type == 'select')}
+            <select class="form-control" name="{$field->name}" aria-describedby="help-{$field->name}"
+            {if ($field->required == 1)}required{/if}>
+            {foreach $field->options as $k => $v}
+                <option value="{$v}" {if ($v == $field->default_value)}selected="selected"{/if}>{$k}</option>
+            {/foreach}
+            </select>
+
+        {elseif ($field->type == 'checkbox')}
+            {foreach $field->options as $k => $v}
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="{$field->name}[]" value="{$v}" aria-describedby="help-{$field->name}"
+                    {if ($field->readonly == 1)}readonly="readonly"{/if}
+                    {if in_array($v, $field->default_value, true)}checked="checked"{/if}
+                    />{$k}
+                </label>
+            </div>
+            {/foreach}
+
+        {elseif ($field->type == 'radio')}
+            {foreach $field->options as $k => $v}
+            <div class="radio">
+                <label>
+                    <input type="radio" name="{$field->name}" value="{$v}" aria-describedby="help-{$field->name}"
+                    {if ($field->default_value == $v)}checked{/if}
+                    {if ($field->required == 1)}required{/if}
+                    {if ($field->readonly == 1)}readonly="readonly"{/if}
+                    />
+                    {$k}
+                </label>
+            </div>
+            {/foreach}
+
+        {elseif ($field->type == 'textarea')}
+            <textarea id="{$field->name}" class="form-control" name="{$field->name}" cols="{$field->options->cols}" rows="{$field->options->rows}" aria-describedby="help-{$field->name}"
+            {if ($field->required == 1)}required{/if}
+            {if ($field->readonly == 1)}readonly="readonly"{/if}
+            >{$field->default_value}</textarea>
+        {/if}
+
+        <span id="help-{$field->name}" class="help-block">{$field->description}</span><br>
+    {/foreach}
+    </div>
+</div>
+<input type="hidden" name="form_id" value="{$form->id}">
+<input type="hidden" name="id" value="{$product['id']}">
+{/if}

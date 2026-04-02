@@ -1,0 +1,254 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_public.latte'}
+
+{import 'macro_functions.latte'}
+
+{block meta_title}{=Register|trans}{/block}
+{var $redirect_to = ($request->return_to ?? '/client')}
+{if !str_starts_with($redirect_to, '/')}
+    {var $redirect_to = '/client'}
+{/if}
+{var $required_fields = $guest->client_required()}
+{var $custom_fields = $guest->client_custom_fields ?? []}
+
+{block head}
+<style>
+    .gm-register-shell {
+        max-width: 1120px;
+        margin: 0 auto;
+    }
+
+    .gm-register-panel {
+        background: rgba(11, 14, 26, 0.88);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 14px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(14px);
+    }
+
+    .gm-register-panel .card-body {
+        padding: 1.5rem;
+    }
+
+    .gm-register-panel h3,
+    .gm-register-panel h4 {
+        color: #fff;
+        font-weight: 700;
+    }
+
+    .gm-register-subtext {
+        color: rgba(255, 255, 255, 0.72);
+    }
+
+    .gm-register-section-title {
+        font-size: 1.4rem;
+        margin-bottom: 1.2rem;
+    }
+
+    .gm-register-panel .form-label {
+        color: rgba(255, 255, 255, 0.86);
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 0.45rem;
+    }
+
+    .gm-register-panel .form-control,
+    .gm-register-panel .form-select,
+    .gm-register-panel .input-group-text {
+        background: rgba(16, 20, 35, 0.92);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        color: #fff;
+    }
+
+    .gm-register-panel .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.45);
+    }
+
+    .gm-register-panel .form-control:focus,
+    .gm-register-panel .form-select:focus {
+        border-color: rgba(139, 124, 247, 0.8);
+        box-shadow: 0 0 0 0.2rem rgba(139, 124, 247, 0.22);
+    }
+
+    .gm-register-panel hr {
+        border-color: rgba(255, 255, 255, 0.1);
+        margin: 1.25rem 0 0;
+    }
+
+    .gm-register-mailing {
+        background: rgba(139, 124, 247, 0.1);
+        border: 1px solid rgba(139, 124, 247, 0.3);
+        border-radius: 12px;
+        padding: 1rem 1.1rem;
+    }
+
+    .gm-register-actions .btn {
+        min-height: 48px;
+    }
+
+    @media (max-width: 1199px) {
+        .gm-register-panel .card-body {
+            padding: 1.25rem;
+        }
+    }
+</style>
+{/block}
+
+{block content_before}
+    <div class="gm-register-shell mb-4">
+        <h1 class="mb-2">{=Register|trans}</h1>
+        <p class="gm-register-subtext mb-0">{='Create your account to manage services, invoices, and support from one dashboard.'|trans}</p>
+    </div>
+{/block}
+
+{block content}
+    <div class="gm-register-shell">
+        <div class="row g-4 align-items-start">
+            <div class="col-xl-3">
+                <div class="card gm-register-panel border-0">
+                    <div class="card-body">
+                        <h3 class="h5 mb-3">{='Already registered?'|trans}</h3>
+                        <p class="gm-register-subtext mb-4">{='Already registered with us? Login to manage your services, billing, and support.'|trans}</p>
+                        <div class="d-grid gap-2">
+                            <a class="btn btn-outline-light" href="{='/login'|link}{if $request->return_to}?return_to={$request->return_to}{/if}">{=Login|trans}</a>
+                            <a class="btn btn-link p-0 text-start text-decoration-none" href="{='reset-password'|link}">{='Lost Password Reset'|trans}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-9">
+                <form id="client-register-form" method="post" class="api-form" action="{='api/guest/client/create'|link}" data-api-redirect="{$redirect_to}">
+                    <input type="hidden" name="auto_login" value="1">
+
+                    <section class="card gm-register-panel border-0 mb-4">
+                        <div class="card-body">
+                            <h4 class="gm-register-section-title">{='Personal Information'|trans}</h4>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label" for="register-first-name">{='First name'|trans}</label>
+                                    <input class="form-control" id="register-first-name" type="text" name="first_name" value="{$request->first_name}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="register-last-name">{='Last name'|trans}</label>
+                                    <input class="form-control" id="register-last-name" type="text" name="last_name" value="{$request->last_name}" {if in_array('last_name', $required_fields ?? [], true)}required{/if}>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="register-email">{='Email address'|trans}</label>
+                                    <input class="form-control" id="register-email" type="email" name="email" value="{$request->email}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="register-company">{=Company|trans}</label>
+                                    <input class="form-control" id="register-company" type="text" name="company" value="{$request->company}" {if in_array('company', $required_fields ?? [], true)}required{/if}>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label" for="register-phone-cc">{='Phone code'|trans}</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">+</span>
+                                        <input class="form-control" id="register-phone-cc" type="text" name="phone_cc" value="{$request->phone_cc}" {if in_array('phone', $required_fields ?? [], true)}required{/if}>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <label class="form-label" for="register-phone">{='Phone number'|trans}</label>
+                                    <input class="form-control" id="register-phone" type="text" name="phone" value="{$request->phone}" {if in_array('phone', $required_fields ?? [], true)}required{/if}>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="card gm-register-panel border-0 mb-4">
+                        <div class="card-body">
+                            <h4 class="gm-register-section-title">{='Billing Address'|trans}</h4>
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label class="form-label" for="register-address-1">{='Street Address'|trans}</label>
+                                    <input class="form-control" id="register-address-1" type="text" name="address_1" value="{$request->address_1}" {if in_array('address_1', $required_fields ?? [], true)}required{/if}>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label" for="register-address-2">{='Address line 2'|trans}</label>
+                                    <input class="form-control" id="register-address-2" type="text" name="address_2" value="{$request->address_2}" {if in_array('address_2', $required_fields ?? [], true)}required{/if}>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label" for="register-city">{=City|trans}</label>
+                                    <input class="form-control" id="register-city" type="text" name="city" value="{$request->city}" {if in_array('city', $required_fields ?? [], true)}required{/if}>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label" for="register-state">{=State|trans}</label>
+                                    <input class="form-control" id="register-state" type="text" name="state" value="{$request->state}" {if in_array('state', $required_fields ?? [], true)}required{/if}>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label" for="register-postcode">{='Zip/Postal Code'|trans}</label>
+                                    <input class="form-control" id="register-postcode" type="text" name="postcode" value="{$request->postcode}" {if in_array('postcode', $required_fields ?? [], true)}required{/if}>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label" for="register-country">{=Country|trans}</label>
+                                    {include selectbox, country, $guest->system_countries, $request->country, in_array('country', $required_fields ?? [], true), 'Select country', 'register-country'}
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="card gm-register-panel border-0 mb-4">
+                        <div class="card-body">
+                            <h4 class="gm-register-section-title">{='Account Security'|trans}</h4>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label" for="register-password">{=Password|trans}</label>
+                                    <input class="form-control" id="register-password" type="password" name="password" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="register-password-confirm">{='Password confirm'|trans}</label>
+                                    <input class="form-control" id="register-password-confirm" type="password" name="password_confirm" required>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {if $custom_fields}
+                    <section class="card gm-register-panel border-0 mb-4">
+                        <div class="card-body">
+                            <h4 class="gm-register-section-title">{='Additional Information'|trans}</h4>
+                            <div class="row g-3">
+                                {foreach $custom_fields as $field_name => $field}
+                                    {if $field->active}
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="field-{$field_name}">{if !empty($field->title)}{$field->title}{else}{$field_name|capitalize}{/if}</label>
+                                        <input class="form-control" id="field-{$field_name}" type="text" name="{$field_name}" value="{$request->{$field_name}}" {if $field->required}required{/if}>
+                                    </div>
+                                    {/if}
+                                {/foreach}
+                            </div>
+                        </div>
+                    </section>
+                    {/if}
+
+                    <section class="card gm-register-panel border-0 mb-4">
+                        <div class="card-body">
+                            <div class="gm-register-mailing">
+                                <div class="form-check m-0">
+                                    <input type="hidden" name="marketing_opt_in" value="0">
+                                    <input class="form-check-input" id="register-marketing-opt-in" type="checkbox" name="marketing_opt_in" value="1" {if ($request->marketing_opt_in ?? null)}checked{/if}>
+                                    <label class="form-check-label" for="register-marketing-opt-in">
+                                        <strong>{='Join our mailing list'|trans}</strong><br>
+                                        <span class="gm-register-subtext">{='Receive occasional product news, announcements, and special offers by email.'|trans}</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                {include recaptcha}
+                            </div>
+
+                            <div class="d-grid gap-2 mt-4 gm-register-actions">
+                                <button class="btn btn-success btn-lg" type="submit">{=Register|trans}</button>
+                                <a class="btn btn-link" href="{='/login'|link}{if $request->return_to}?return_to={$request->return_to}{/if}">{=Login|trans}</a>
+                            </div>
+                        </div>
+                    </section>
+                </form>
+            </div>
+        </div>
+    </div>
+{/block}
+
+{block js}{/block}
+

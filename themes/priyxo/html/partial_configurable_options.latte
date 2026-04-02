@@ -1,0 +1,90 @@
+{var $configurable_options = ($product['configurable_options'] ?? [])}
+{var $default_period = $request->period ?? null}
+{if (!$default_period && (($product['pricing']['type'] ?? '') == 'recurrent'))}
+    {foreach $product['pricing']['recurrent'] as $code => $period_prices}
+        {if (!$default_period && $period_prices->enabled)}
+            {var $default_period = $code}
+        {/if}
+    {/foreach}
+{/if}
+
+{if (($configurable_options|length) > 0)}
+    {foreach $configurable_options as $group}
+        {foreach ($group['options'] ?? []) as $option}
+        <div class="mb-4">
+            <label class="form-label text-white fw-bold mb-3">
+                {$option['title']}{if $option['required']} <span class="text-danger">*</span>{/if} 
+                {if $option['description']}<i class="fa fa-info-circle ms-2 text-muted" data-bs-toggle="tooltip" title="{$option['description']}"></i>{/if}
+            </label>
+            
+            <div class="d-flex flex-wrap gap-2 gm-option-grid">
+            {if ($option['type'] === 'dropdown' || $option['type'] === 'radio')}
+                {foreach ($option['values'] ?? []) as $value}
+                <div class="gm-period-box {if $iterator->first}active{/if}" style="border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1rem; cursor: pointer; flex: 1; min-width: 140px; text-align: center; transition: all 0.3s; background: rgba(0,0,0,0.2);">
+                    <div class="fw-bold mb-1 text-white">{$value['label']}</div>
+                    <div class="text-muted small">
+                        {var $value_price = (($product['pricing']['type'] ?? '') == 'recurrent') ? ($value['pricing'][$default_period] ?? 0) : ($value['pricing']['once'] ?? 0)}
+                        {if $value_price > 0}
+                            +{$value_price|money_convert}
+                        {else}
+                            {='Included - Free'|trans}
+                        {/if}
+                    </div>
+                    <input type="radio" name="config_options[{$option['id']}]" value="{$value['id']}" class="d-none" {if $iterator->first}checked="checked"{/if}>
+                </div>
+                {/foreach}
+            {elseif ($option['type'] === 'yes_no')}
+                <input type="hidden" name="config_options[{$option['id']}]" value="0">
+                <div class="gm-period-box" style="border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1rem; cursor: pointer; display: inline-block; min-width: 200px; text-align: center; transition: all 0.3s; background: rgba(0,0,0,0.2);">
+                    <div class="fw-bold mb-1 text-white">{='Enable'|trans}</div>
+                    <div class="text-muted small">
+                        {var $option_price = (($product['pricing']['type'] ?? '') == 'recurrent') ? ($option['pricing'][$default_period] ?? 0) : ($option['pricing']['once'] ?? 0)}
+                        {if $option_price > 0}+ {$option_price|money_convert}{else}{='Included'|trans}{/if}
+                    </div>
+                    <input type="checkbox" name="config_options[{$option['id']}]" class="d-none" value="1">
+                </div>
+            {elseif ($option['type'] === 'quantity')}
+                <div class="d-flex align-items-center w-100">
+                    <input class="form-control" type="number" name="config_options[{$option['id']}]" value="0" min="{if $option['required']}1{else}0{/if}" step="1" style="max-width: 100px; background: rgba(15,18,35,0.85); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 0.8rem 1rem; border-radius: 12px;">
+                    <span class="ms-3 text-muted">
+                        {var $option_price = (($product['pricing']['type'] ?? '') == 'recurrent') ? ($option['pricing'][$default_period] ?? 0) : ($option['pricing']['once'] ?? 0)}
+                        {if $option_price > 0}+ {$option_price|money_convert} / {='unit'|trans}{else}{='No extra charge'|trans}{/if}
+                    </span>
+                </div>
+            {/if}
+            </div>
+        </div>
+        {/foreach}
+    {/foreach}
+{/if}
+
+<script>
+    $(function() {
+        // Shared logic with mod_order_product.latte uses .gm-period-box
+        $('.gm-option-grid .gm-period-box').on('click', function(e) {
+            // Prevent double firing if clicking directly on the input
+            if(e.target.tagName.toLowerCase() === 'input') return;
+
+            var grid = $(this).closest('.gm-option-grid');
+            var radio = $(this).find('input[type="radio"]');
+            var checkbox = $(this).find('input[type="checkbox"]');
+            
+            if(radio.length) {
+                grid.find('.gm-period-box').css('border-color', 'rgba(255,255,255,0.1)').removeClass('active');
+                $(this).css('border-color', 'var(--gm-accent)').addClass('active');
+                radio.prop('checked', true).trigger('change');
+            } else if (checkbox.length) {
+                $(this).toggleClass('active');
+                if($(this).hasClass('active')) {
+                    $(this).css('border-color', 'var(--gm-accent)');
+                } else {
+                    $(this).css('border-color', 'rgba(255,255,255,0.1)');
+                }
+                checkbox.prop('checked', !checkbox.prop('checked')).trigger('change');
+            }
+        });
+        
+        // Initialize checked options
+        $('.gm-option-grid .gm-period-box.active').css('border-color', 'var(--gm-accent)');
+    });
+</script>

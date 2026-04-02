@@ -1,0 +1,11 @@
+{
+    "id":           "kb",
+	"type":         "mod",
+    "name":         "Knowledge base",
+    "description":  "Knowledge base module for OHMS",
+    "homepage_url": "http://github.com/OHMS/",
+    "author":       "OHMS",
+    "author_url":   "http://extensions.OHMS.org/",
+    "license":      "http://www.OHMS.org/license.txt",
+    "version":      "1.0.0"
+}

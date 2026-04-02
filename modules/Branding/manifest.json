@@ -1,0 +1,11 @@
+{
+    "id":           "branding",
+    "type":         "mod",
+    "name":         "Branding",
+    "description":  "Show your support by voluntarily displaying references to OHMS.",
+    "homepage_url": "https://OHMS.org",
+    "author":       "OHMS",
+    "author_url":   "https://OHMS.org",
+    "license":      "https://www.OHMS.org/license.txt",
+    "version":      "4.22.0"
+}

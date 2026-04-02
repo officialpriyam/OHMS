@@ -1,0 +1,23 @@
+/**
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ */
+﻿CKEDITOR.plugins.setLang("wsc","af",{btnIgnore:"Ignoreer",btnIgnoreAll:"Ignoreer alles",btnReplace:"Vervang",btnReplaceAll:"vervang alles",btnUndo:"Ontdoen",changeTo:"Verander na",errorLoading:"Fout by inlaai van diens: %s.",ieSpellDownload:"Speltoetser is nie geïnstalleer nie. Wil u dit nou aflaai?",manyChanges:"Klaar met speltoets: %1 woorde verander",noChanges:"Klaar met speltoets: Geen woorde verander nie",noMispell:"Klaar met speltoets: Geen foute nie",noSuggestions:"- Geen voorstel -",notAvailable:"Jammer, hierdie diens is nie nou beskikbaar nie.",
+notInDic:"Nie in woordeboek nie",oneChange:"Klaar met speltoets: Een woord verander",progress:"Spelling word getoets...",title:"Speltoetser",toolbar:"Speltoets"});

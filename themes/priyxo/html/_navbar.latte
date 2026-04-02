@@ -1,0 +1,61 @@
+<div class="gm-navbar-anchor">
+    <nav class="gm-floating-navbar container-md">
+        {* Left Side: Logo / Site Name *}
+        <div class="gm-nav-section gm-nav-logo">
+            <a href="{='/'|link}" class="gm-nav-brand">
+                {var $final_logo = $company['logo_url'] ?? $settings->logo_url}
+                {if $final_logo}
+                    {var $logo_src = str_starts_with($final_logo, 'http') || str_starts_with($final_logo, '/') ? $final_logo : '/' . $final_logo}
+                    <img src="{$logo_src}" alt="{(isset($company) ? $company['name'] : 'Logo')}" style="max-height: 40px;">
+                {else}
+                    <span class="gm-site-name">{(isset($company) ? $company['name'] : 'Site Name')}</span>
+                {/if}
+            </a>
+        </div>
+
+        {* Middle: Configurable Links *}
+        <div class="gm-nav-section gm-nav-mid">
+            <a href="{='/'|link}" class="gm-nav-item"><i class="fa fa-home me-2"></i>{='Home'|trans}</a>
+            <a href="{='/order'|link}" class="gm-nav-item"><i class="fa fa-shopping-cart me-2"></i>{='Store'|trans}</a>
+            <a href="{='/contact-us'|link}" class="gm-nav-item"><i class="fa fa-envelope me-2"></i>{='Contact Us'|trans}</a>
+
+        </div>
+
+        {* Right Side: User Actions *}
+        <div class="gm-nav-section gm-nav-user d-flex align-items-center gap-3">
+            {* Cart Button *}
+            {var $cart = $guest->cart_get()}
+            {var $cart_count = count($cart['items'] ?? [])}
+            <a href="{='/cart'|link}" class="gm-nav-item position-relative p-2" title="{='Shopping Cart'|trans}">
+                <i class="fa fa-shopping-basket fs-5"></i>
+                {if $cart_count > 0}
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem; padding: 0.25em 0.5em;">
+                        {$cart_count}
+                    </span>
+                {/if}
+            </a>
+
+            {if count($profile) > 0}
+                <div class="dropdown">
+                    <button class="gm-nav-item dropdown-toggle d-flex align-items-center gap-2 border-0 bg-transparent" type="button" id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="gm-nav-avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 32px; height: 32px; font-size: 0.85rem;">
+                            {($profile['first_name'] ?? 'U')|first|upper}{($profile['last_name'] ?? '')|first|upper}
+                        </div>
+                        <span class="d-none d-md-inline text-white-50">{='Account'|trans}</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow border-secondary mt-2" aria-labelledby="userMenuButton">
+                        <li><a class="dropdown-item py-2" href="{='/client'|link}"><i class="fa fa-dashboard me-2 text-primary"></i>{='Client Area'|trans}</a></li>
+                        <li><a class="dropdown-item py-2" href="{='/client/profile'|link}"><i class="fa fa-user me-2 text-info"></i>{='Profile Settings'|trans}</a></li>
+                        <li><hr class="dropdown-divider border-secondary"></li>
+                        <li><a class="dropdown-item py-2 text-danger" href="{='/client/logout'|link}"><i class="fa fa-sign-out me-2"></i>{='Logout'|trans}</a></li>
+                    </ul>
+                </div>
+            {else}
+                <div class="d-flex gap-2">
+                    <a href="{='/login'|link}" class="gm-nav-item gm-nav-btn">{='Login'|trans}</a>
+                    <a href="{='/login#register'|link}" class="gm-nav-item gm-nav-btn gm-btn-register d-none d-sm-inline-block">{='Register'|trans}</a>
+                </div>
+            {/if}
+        </div>
+    </nav>
+</div>

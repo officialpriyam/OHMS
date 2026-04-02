@@ -1,0 +1,204 @@
+<?php
+$dbHostValue = !empty($db_host) ? $db_host : 'localhost';
+$dbPortValue = !empty($db_port) ? $db_port : '3306';
+?>
+<form action="" class="mainForm" method="get" id="installer">
+    <fieldset>
+        <div id="step-1" class="step-content">
+            <h2>Step 1: License Agreement</h2>
+            <p>Please review and agree to the Terms of Service to proceed.</p>
+
+            <?php if (!empty($tos)) : ?>
+            <textarea class="license" readonly><?= $this->e($tos) ?></textarea>
+            <div class="form-group">
+                <label>
+                    <input id="agree" type="checkbox" name="agree" value="1"<?= !empty($agree) ? ' checked="checked"' : '' ?>/> I agree to the terms and conditions
+                </label>
+            </div>
+            <?php endif; ?>
+
+            <h3 style="margin-top: 30px;">System Requirements Check</h3>
+            <ul class="requirements">
+                <li>
+                    <span>PHP Version (Min: <?= $this->e($php_ver_req) ?>)</span>
+                    <span class="<?= $php_ver_ok ? 'status-ok' : 'status-fail' ?>"><?= $this->e($php_ver) ?></span>
+                </li>
+                <?php foreach ($extensions as $ext => $loaded) : ?>
+                <li>
+                    <span>Extension: <?= $this->e($ext) ?></span>
+                    <span class="<?= $loaded ? 'status-ok' : 'status-fail' ?>"><?= $loaded ? 'Enabled' : 'Disabled' ?></span>
+                </li>
+                <?php endforeach; ?>
+                <?php foreach ($folders as $folder => $writable) : ?>
+                <li>
+                    <span>Folder: <?= $this->e(basename((string) $folder)) ?></span>
+                    <span class="<?= $writable ? 'status-ok' : 'status-fail' ?>"><?= $writable ? 'Writable' : 'Locked' ?></span>
+                </li>
+                <?php endforeach; ?>
+                <?php foreach ($files as $file => $writable) : ?>
+                <li>
+                    <span>File: <?= $this->e(basename((string) $file)) ?></span>
+                    <span class="<?= $writable ? 'status-ok' : 'status-fail' ?>"><?= $writable ? 'Writable' : 'Locked' ?></span>
+                </li>
+                <?php endforeach; ?>
+            </ul>
+
+            <div class="actions">
+                <button type="button" class="btn btn-primary" onclick="nextStep(2)">Next Step &raquo;</button>
+            </div>
+        </div>
+
+        <div id="step-2" class="step-content" style="display:none;">
+            <h2>Step 2: Database Setup</h2>
+            <p>Configure your SQL database connection details below.</p>
+
+            <div class="form-group">
+                <label>Database Host</label>
+                <input type="text" class="form-control" id="db_host" name="db_host" value="<?= $this->e($dbHostValue) ?>" required placeholder="localhost"/>
+            </div>
+            <div class="form-group">
+                <label>Database Port</label>
+                <input type="text" class="form-control" id="db_port" name="db_port" value="<?= $this->e($dbPortValue) ?>" required placeholder="3306"/>
+            </div>
+            <div class="form-group">
+                <label>Database Name</label>
+                <input type="text" class="form-control" id="db_name" name="db_name" value="<?= $this->e($db_name ?? '') ?>" required placeholder="ohms_db"/>
+            </div>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" class="form-control" id="db_user" name="db_user" value="<?= $this->e($db_user ?? '') ?>" required placeholder="root"/>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="form-control" id="db_pass" name="db_pass" value="<?= $this->e($db_pass ?? '') ?>" placeholder="******"/>
+            </div>
+
+            <div class="actions">
+                <button type="button" class="btn btn-default" onclick="prevStep(1)">&laquo; Back</button>
+                <button type="button" class="btn btn-primary" onclick="nextStep(3)">Next Step &raquo;</button>
+            </div>
+        </div>
+
+        <div id="step-3" class="step-content" style="display:none;">
+            <h2>Step 3: Admin Account</h2>
+            <p>Create your primary administrator account for the OHMS panel.</p>
+
+            <div class="form-group">
+                <label>Administrator Name</label>
+                <input type="text" class="form-control" name="admin_name" id="admin_name" value="<?= $this->e($admin_name ?? '') ?>" required placeholder="Full Name"/>
+            </div>
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" class="form-control" name="admin_email" id="admin_email" value="<?= $this->e($admin_email ?? '') ?>" required placeholder="admin@domain.com"/>
+            </div>
+            <div class="form-group">
+                <label>Administrator Password</label>
+                <input type="password" class="form-control" name="admin_pass" id="admin_pass" value="<?= $this->e($admin_pass ?? '') ?>" required placeholder="Choose a strong password"/>
+            </div>
+
+            <div class="actions">
+                <button type="button" class="btn btn-default" onclick="prevStep(2)">&laquo; Back</button>
+                <button type="button" class="btn btn-primary" onclick="nextStep(4)">Review &raquo;</button>
+            </div>
+        </div>
+
+        <div id="step-4" class="step-content" style="display:none;">
+            <h2>Step 4: Ready to Install</h2>
+            <p>Everything is configured and ready to go. Click below to begin the installation process.</p>
+
+            <div id="install-progress" style="display:none; text-align:center; padding: 20px;">
+                <p><strong>Installation in progress...</strong></p>
+                <p>Please wait while we set up your database and configuration.</p>
+            </div>
+
+            <div id="install-success" style="display:none; text-align:center; padding: 20px;">
+                <h3 class="status-ok">Installation Complete!</h3>
+                <p>OHMS has been successfully installed. You can now access your site.</p>
+                <div class="actions">
+                    <a href="<?= $this->e($live_site) ?>" class="btn btn-default">Client Area</a>
+                    <a href="<?= $this->e($admin_site) ?>" class="btn btn-primary">Admin Area</a>
+                </div>
+            </div>
+
+            <div class="actions" id="final-actions">
+                <button type="button" class="btn btn-default" onclick="prevStep(3)">&laquo; Back</button>
+                <button type="button" class="btn btn-primary" onclick="startInstallation()">Complete Setup &raquo;</button>
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+function nextStep(step) {
+    if (step > 1 && !validateCurrentStep(step - 1)) return;
+
+    $('.step-content').hide();
+    $('#step-' + step).fadeIn();
+}
+
+function prevStep(step) {
+    $('.step-content').hide();
+    $('#step-' + step).fadeIn();
+}
+
+function validateCurrentStep(step) {
+    if (step === 1) {
+        if (!$('#agree').is(':checked')) {
+            alert('Please agree to the Terms of Service to continue.');
+            return false;
+        }
+<?php if (empty($all_ok)) : ?>
+        alert('Your system does not meet all requirements. Please resolve the issues marked in red.');
+        return false;
+<?php endif; ?>
+    }
+
+    if (step === 2) {
+        if (!$('#db_host').val() || !$('#db_name').val() || !$('#db_user').val()) {
+            alert('Please fill in all database connectivity details.');
+            return false;
+        }
+        var ok = false;
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: 'install.php?a=check-db',
+            data: $('#installer').serialize(),
+            success: function(msg) {
+                if (msg == 'ok') ok = true;
+                else alert(msg);
+            }
+        });
+        return ok;
+    }
+
+    if (step === 3) {
+        if (!$('#admin_name').val() || !$('#admin_email').val() || !$('#admin_pass').val()) {
+            alert('Please provide administrator account details.');
+            return false;
+        }
+    }
+    return true;
+}
+
+function startInstallation() {
+    $('#final-actions').hide();
+    $('#install-progress').show();
+
+    $.ajax({
+        type: "POST",
+        url: 'install.php?a=install',
+        data: $('#installer').serialize(),
+        success: function(msg) {
+            $('#install-progress').hide();
+            if (msg == 'ok') {
+                $('#install-success').fadeIn();
+            } else {
+                alert("Installation Error: " + msg);
+                $('#final-actions').show();
+            }
+        }
+    });
+}
+</script>

@@ -1,0 +1,162 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{define q, $bool}
+{if $bool}
+    {='Yes'|trans}
+{else}
+    {='No'|trans}
+{/if}
+{/define}
+
+{define selectbox, $name, $options, $selected, $required, $nullOption}
+    <select name="{$name}" id="{$name}" {if $required}required="required"{/if}>
+        {if $nullOption}<option value="">-- {$nullOption} --</option>{/if}
+        {foreach ($options ?? []) as $val => $label}
+        <option value="{$val}" label="{$label}" {if ($selected == $val)}selected="selected"{/if}>{$label}</option>
+        {/foreach}
+    </select>
+{/define}
+
+{define selectboxtld, $name, $options, $selected, $required}
+    <select name="{$name}" {if $required}required="required"{/if} style="width:80px;">
+        {foreach ($options ?? []) as $data}
+        <option value="{$data->tld}" label="{$data->tld}" {if ($selected == $data->tld)}selected="selected"{/if}>{$data->tld}</option>
+        {/foreach}
+    </select>
+{/define}
+
+{define table_search}
+<div style="position: relative;">
+    <div class="dataTables_filter">
+        <form method="get" action="">
+            <input type="hidden" name="_url" value="{$request->_url}"/>
+            <label>{='Search:'|trans} <input type="text" name="search" placeholder="{='Enter search text..'|trans}" value="{$request->search}">
+                <div class="srch"></div>
+            </label>
+        </form>
+    </div>
+</div>
+{/define}
+
+{define build_form, $elements, $values}
+    {foreach $elements as $name => $element}
+    {var $element_meta = $element[1] ?? null}
+    {var $element_label = (is_object($element_meta) ? ($element_meta->label ?? '') : ($element_meta['label'] ?? ''))}
+    {var $element_desc = (is_object($element_meta) ? ($element_meta->description ?? null) : ($element_meta['description'] ?? null))}
+    <div class="rowElem">
+            {if ($element[0] == 'select')}
+            <label class="topLabel">{$element_label}{if $element_desc} - {$element_desc}{/if}</label>
+            <div class="formBottom">
+                <select name="config[{$name}]">
+                {foreach $element[1]->multiOptions as $k => $v}
+                    <option value="{$k}" {if ($k == $values->{$name})}selected="selected"{/if}/><label>{$v}</label>
+                {/foreach}
+                </select>
+            </div>
+            <div class="fix"></div>
+            {elseif ($element[0] == 'radio')}
+            <label>{$element_label}{if $element_desc} - {$element_desc}{/if}</label>
+            <div class="formRight">
+                {foreach $element[1]->multiOptions as $k => $v}
+                    <input id="el-{$name}" type="radio" name="config[{$name}]" value="{$k}" {if ($k == $values->{$name})}checked="checked"{/if}/><label>{$v}</label>
+                {/foreach}
+            </div>
+            <div class="fix"></div>
+            {elseif ($element[0] == 'textarea')}
+            <label class="topLabel" for="el-{$name}">{$element_label}{if $element_desc} - {$element_desc}{/if}</label>
+            <div class="formBottom">
+                <textarea id="el-{$name}" name="config[{$name}]" cols="5" rows="20" required="required">{$values->{$name}}</textarea>
+            </div>
+            <div class="fix"></div>
+            {else}
+            <label class="topLabel" for="el-{$name}">{$element_label}{if $element_desc} - {$element_desc}{/if}</label>
+            <div class="formBottom">
+                <input id="el-{$name}" type="{$element[0]}" name="config[{$name}]" value="{$values->{$name}}" {if (!isset($element[1]->required) && (!$element[1]->required == false))}required="required"{/if}/>
+            </div>
+            <div class="fix"></div>
+            {/if}
+    </div>
+    {/foreach}
+{/define}
+
+{define currency_format, $price, $currency}
+    {var $c = $guest->currency_get(['code' => $currency])}
+    {var $p = ($price|number)}
+    {if ($c->price_format == 1)}
+        {var $p = ($p|number:2, '.', '')}
+    {elseif ($c->price_format == 2)}
+        {var $p = ($p|number:2, '.', ',')}
+    {elseif ($c->price_format == 3)}
+        {var $p = ($p|number:2, ',', '.')}
+    {elseif ($c->price_format == 4)}
+        {var $p = ($p|number:0, '', ',')}
+    {elseif ($c->price_format == 5)}
+        {var $p = ($p|number:0, '', '')}
+    {/if}
+    {$c->format|replace:['{{price}}' => $p]}
+{/define}
+
+{define currency, $price, $currency}
+    {if ($currency == null)}
+        {var $c = $guest->cart_get_currency()}
+    {else}
+        {var $c = $guest->currency_get(['code' => $currency])}
+    {/if}
+
+    {var $p = ($price * $c->conversion_rate)}
+    
+    {if ($c->price_format == 1)}
+        {var $p = ($p|number:2, '.', '')}
+    {elseif ($c->price_format == 2)}
+        {var $p = ($p|number:2, '.', ',')}
+    {elseif ($c->price_format == 3)}
+        {var $p = ($p|number:2, ',', '.')}
+    {elseif ($c->price_format == 4)}
+        {var $p = ($p|number:0, '', ',')}
+    {elseif ($c->price_format == 5)}
+        {var $p = ($p|number:0, '', '')}
+    {/if}
+    
+    {$c->format|replace:['{{price}}' => $p]}
+{/define}
+
+{define status_name, $status}{if $status}{$status|replace:['_' => ' ']|capitalize|trans}{else}-{/if}{/define}
+
+{define period_name, $period}
+    {$guest->system_period_title(['code' => $period])}
+{/define}
+
+{define markdown_quote, $text}
+
+{foreach (($text ?? '')|split:"\n") as $line}
+> {$line}
+{/foreach}
+{/define}
+
+{define bb_editor, $selector}
+{if $guest->extension_is_on(['mod' => 'wysiwyg'])}
+{include 'mod_wysiwyg_js.latte', class: (($selector ?? '')|trim:'.#')}
+{else}
+<!-- No WYSIWYG, no fancy stuff. Enable the WYSIWYG extension for a better management experience. -->
+{/if}
+{/define}
+

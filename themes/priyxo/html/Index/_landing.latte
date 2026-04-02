@@ -1,0 +1,130 @@
+<div class="gm-landing" id="home">
+    <section class="gm-hero">
+        <div class="gm-hero-review">
+            <div class="gm-review-card">
+                <div class="gm-review-title">Google Reviews</div>
+                <div class="gm-review-stars">★★★★★</div>
+                <div class="gm-review-score">4.8/5 from 500+ reviews</div>
+            </div>
+        </div>
+        <h1>No-Lag. No Excuses.</h1>
+        <h2>Game Server Hosting</h2>
+        <h3>That Delivers</h3>
+        <p class="gm-hero-text">
+            {='Every second of downtime costs your players and damages your reputation.'|trans}
+            {$settings->company_name ?: ($company->name ?? 'Our Company')}
+            {='delivers ultra-fast performance, protection that actually works, and 24/7 support.'|trans}
+        </p>
+        <div class="gm-hero-actions">
+            <a class="gm-btn gm-btn-primary" href="{='/order'|link}">{='Find Game Servers'|trans}</a>
+            <a class="gm-btn gm-btn-ghost" href="{='/support/contact-us'|link}">{='Talk To Us'|trans}</a>
+        </div>
+    </section>
+
+    <section class="gm-trust" id="trust">
+        <div class="gm-glass-panel">
+            <h2>{='Trusted By The Best'|trans}</h2>
+            <p>{='Powering gaming communities worldwide'|trans}</p>
+            <div class="gm-logo-row">
+                <span>Google Reviews</span>
+                <span>Reddit</span>
+                <span>Gamers</span>
+                <span>Partners</span>
+                <span>Communities</span>
+            </div>
+            <div class="gm-stats">
+                <div>
+                    <strong>5,000+</strong>
+                    <span>{='Active Servers'|trans}</span>
+                </div>
+                <div>
+                    <strong>100K+</strong>
+                    <span>{='Players Online'|trans}</span>
+                </div>
+                <div>
+                    <strong>99.9%</strong>
+                    <span>{='Uptime'|trans}</span>
+                </div>
+                <div>
+                    <strong>24/7</strong>
+                    <span>{='Support'|trans}</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {include 'Index/_games-grid.latte'}
+
+    <section class="gm-features" id="features">
+        <div class="gm-glass-panel gm-glass-panel--wide">
+            <h2>{='Why Choose'|trans} {$settings->company_name ?: ($company->name ?? 'Our Company')}?</h2>
+            <h3>{='Game Server Hosting Made Simple'|trans}</h3>
+            <div class="gm-feature-grid">
+                <div class="gm-feature-card">
+                    <i class="fa fa-bolt"></i>
+                    <h4>{='Lag-Free Performance'|trans}</h4>
+                    <p>{='High-frequency CPUs and ultra-fast networking ensure smooth gameplay.'|trans}</p>
+                </div>
+                <div class="gm-feature-card">
+                    <i class="fa fa-rocket"></i>
+                    <h4>{='Instant Deployment'|trans}</h4>
+                    <p>{='Go live in under 60 seconds with automated setup.'|trans}</p>
+                </div>
+                <div class="gm-feature-card">
+                    <i class="fa fa-gamepad"></i>
+                    <h4>{='Supports 50+ Games'|trans}</h4>
+                    <p>{='Survival, FPS, sandbox, and MMO titles with mod support.'|trans}</p>
+                </div>
+                <div class="gm-feature-card">
+                    <i class="fa fa-cogs"></i>
+                    <h4>{='Full Control Panel'|trans}</h4>
+                    <p>{='Manage configs, backups, and files with zero coding required.'|trans}</p>
+                </div>
+                <div class="gm-feature-card">
+                    <i class="fa fa-shield-alt"></i>
+                    <h4>{='Advanced DDoS Protection'|trans}</h4>
+                    <p>{='Enterprise-grade protection keeps your community online.'|trans}</p>
+                </div>
+                <div class="gm-feature-card">
+                    <i class="fa fa-globe"></i>
+                    <h4>{='Worldwide Coverage'|trans}</h4>
+                    <p>{='Low ping globally with data centers in key regions.'|trans}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="gm-faq" id="faq">
+        <div class="gm-section-title">
+            <span class="gm-section-kicker">{='Game Server Hosting FAQ'|trans}</span>
+            <h2>{='Game Server Hosting FAQ'|trans}</h2>
+            <p>{='Find quick answers to common questions.'|trans}</p>
+        </div>
+        <div class="gm-faq-grid">
+            <div class="gm-faq-item">
+                <span>{='How fast is server setup?'|trans}</span>
+                <i class="fa fa-plus"></i>
+            </div>
+            <div class="gm-faq-item">
+                <span>{='Can I change my server location?'|trans}</span>
+                <i class="fa fa-plus"></i>
+            </div>
+            <div class="gm-faq-item">
+                <span>{='Is my server DDoS protected?'|trans}</span>
+                <i class="fa fa-plus"></i>
+            </div>
+            <div class="gm-faq-item">
+                <span>{='Do you offer automated backups?'|trans}</span>
+                <i class="fa fa-plus"></i>
+            </div>
+            <div class="gm-faq-item">
+                <span>{='Can I install mods and custom maps?'|trans}</span>
+                <i class="fa fa-plus"></i>
+            </div>
+            <div class="gm-faq-item">
+                <span>{='What control panel is used?'|trans}</span>
+                <i class="fa fa-plus"></i>
+            </div>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>OHMS setup</title>
+    <base href="<?= $this->e(PS_URL_INSTALL) ?>"/>
+    <link href="./assets/css/main.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Cuprum" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<div class="wrapper">
+    <div class="installer-container">
+        <div id="header">
+            <div class="logo">
+                <a href="<?= $this->e(PS_URL_INSTALL) ?>" title="OHMS">
+                    <img src="https://i.pinimg.com/736x/93/5a/70/935a704648fc2c4c87bfba552ba24759.jpg" alt="OHMS" style="max-height: 150px; width: auto;"/>
+                </a>
+            </div>
+            <div class="version-badge">
+                <?= $this->e($version ?? '') ?>
+            </div>
+        </div>
+
+        <div class="content" id="container">
+            <?= $content ?? '' ?>
+        </div>
+
+        <div class="footer">
+            &copy; Copyright <?= $this->e(date('Y')) ?>. All rights reserved. <br/>
+            Powered by <a href="http://www.ohms.com" title="OHMS" target="_blank">OHMS</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

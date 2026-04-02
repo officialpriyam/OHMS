@@ -1,0 +1,278 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+<div class="help">
+    <h5>{='Pterodactyl Service configuration'|trans}</h5>
+</div>
+
+<form method="post" action="{='api/admin/product/update_config'|link}" class="mainForm save api-form" data-api-reload="1">
+    <fieldset>
+        <legend>{='Pterodactyl Settings'|trans}</legend>
+        
+        <div class="rowElem noborder">
+            <label>{='Nest'|trans}:</label>
+            <div class="formRight">
+                <select name="config[nest_id]" id="nest_id" required="required">
+                    <option value="">{='Select Nest'|trans}</option>
+                    <option value="{$product['config']['nest_id'] ?? ''}" selected="selected">{$product['config']['nest_id'] ?? 'Loading...'}</option>
+                </select>
+                <div class="mt-2">
+                    <input type="checkbox" name="config[selectable_nest]" value="1" {if ($product['config']['selectable_nest'] ?? false)}checked="checked"{/if}>
+                    <label>{='User can select Nest in order'|trans}</label>
+                </div>
+            </div>
+            <div class="fix"></div>
+        </div>
+
+        <div class="rowElem">
+            <label>{='Egg'|trans}:</label>
+            <div class="formRight">
+                <select name="config[egg_id]" id="egg_id" required="required">
+                    <option value="">{='Select Egg'|trans}</option>
+                    <option value="{$product['config']['egg_id'] ?? ''}" selected="selected">{$product['config']['egg_id'] ?? 'Loading...'}</option>
+                </select>
+                <div class="mt-2">
+                    <input type="checkbox" name="config[selectable_egg]" value="1" {if ($product['config']['selectable_egg'] ?? false)}checked="checked"{/if}>
+                    <label>{='User can select Egg in order'|trans}</label>
+                </div>
+            </div>
+            <div class="fix"></div>
+        </div>
+
+        <div class="rowElem">
+            <label>{='Location'|trans}:</label>
+            <div class="formRight">
+                <select name="config[location_id]" id="location_id" required="required">
+                    <option value="">{='Select Location'|trans}</option>
+                    <option value="{$product['config']['location_id'] ?? ''}" selected="selected">{$product['config']['location_id'] ?? 'Loading...'}</option>
+                </select>
+                <div class="mt-2">
+                    <input type="checkbox" name="config[selectable_location]" value="1" {if ($product['config']['selectable_location'] ?? false)}checked="checked"{/if}>
+                    <label>{='User can select Location in order'|trans}</label>
+                </div>
+            </div>
+            <div class="fix"></div>
+        </div>
+
+        <div class="rowElem">
+            <label>{='Startup Command'|trans}:</label>
+            <div class="formRight">
+                <textarea name="config[startup]" rows="2">{$product['config']['startup'] ?? ''}</textarea>
+            </div>
+            <div class="fix"></div>
+        </div>
+
+        <div class="rowElem">
+            <label>{='Docker Image'|trans}:</label>
+            <div class="formRight">
+                <select name="config[image]" id="docker_image">
+                    <option value="">{='Select Image'|trans}</option>
+                    <option value="{$product['config']['image'] ?? ''}" selected="selected">{$product['config']['image'] ?? 'None'}</option>
+                </select>
+                <div class="mt-2">
+                    <input type="text" id="custom_docker_image" placeholder="{='Or enter custom image'|trans}" style="width: 100%; margin-top: 5px;">
+                </div>
+            </div>
+            <div class="fix"></div>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>{='Resources'|trans}</legend>
+        <div class="rowElem noborder" title="0 for unlimited">
+            <label>{='Memory (MB)'|trans}:</label>
+            <div class="formRight">
+                <input type="text" name="config[memory]" value="{$product['config']['memory'] ?? '1024'}">
+            </div>
+            <div class="fix"></div>
+        </div>
+        <div class="rowElem" title="0 for unlimited">
+            <label>{='Disk (MB)'|trans}:</label>
+            <div class="formRight">
+                <input type="text" name="config[disk]" value="{$product['config']['disk'] ?? '5120'}">
+            </div>
+            <div class="fix"></div>
+        </div>
+        <div class="rowElem" title="0 for unlimited">
+            <label>{='CPU (%)'|trans}:</label>
+            <div class="formRight">
+                <input type="text" name="config[cpu]" value="{$product['config']['cpu'] ?? '100'}">
+            </div>
+            <div class="fix"></div>
+        </div>
+        <div class="rowElem" title="-1 for unlimited">
+            <label>{='Swap (MB)'|trans}:</label>
+            <div class="formRight">
+                <input type="text" name="config[swap]" value="{$product['config']['swap'] ?? '0'}">
+            </div>
+            <div class="fix"></div>
+        </div>
+        <div class="rowElem">
+            <label>{='IO'|trans}:</label>
+            <div class="formRight">
+                <input type="text" name="config[io]" value="{$product['config']['io'] ?? '500'}">
+            </div>
+            <div class="fix"></div>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>{='Feature Limits'|trans}</legend>
+        <div class="rowElem noborder">
+            <label>{='Databases'|trans}:</label>
+            <div class="formRight">
+                <input type="text" name="config[databases]" value="{$product['config']['databases'] ?? '0'}">
+            </div>
+            <div class="fix"></div>
+        </div>
+        <div class="rowElem">
+            <label>{='Allocations'|trans}:</label>
+            <div class="formRight">
+                <input type="text" name="config[allocations]" value="{$product['config']['allocations'] ?? '0'}">
+            </div>
+            <div class="fix"></div>
+        </div>
+        <div class="rowElem">
+            <label>{='Backups'|trans}:</label>
+            <div class="formRight">
+                <input type="text" name="config[backups]" value="{$product['config']['backups'] ?? '0'}">
+            </div>
+            <div class="fix"></div>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <input type="submit" value="{='Update configuration'|trans}" class="greyishBtn submitForm" />
+        <input type="hidden" name="id" value="{$product['id']}"/>
+    </fieldset>
+</form>
+
+<script type="text/javascript">
+$(function() {
+    var eggs_cache = {};
+
+    function fetchNests() {
+        bb.post('admin/servicepterodactyl/get_nests', {}, function(result) {
+            var selected = $('#nest_id').val();
+            $('#nest_id').empty().append('<option value="">Select Nest</option>');
+            $.each(result, function(i, nest) {
+                var attr = nest.attributes;
+                $('#nest_id').append($('<option>', {
+                    value: attr.id,
+                    text: attr.name,
+                    selected: (attr.id == selected)
+                }));
+            });
+            if (selected) {
+                 fetchEggs(selected);
+            }
+        });
+    }
+
+    function fetchLocations() {
+        bb.post('admin/servicepterodactyl/get_locations', {}, function(result) {
+            var selected = $('#location_id').val();
+            $('#location_id').empty().append('<option value="">Select Location</option>');
+            $.each(result, function(i, loc) {
+                var attr = loc.attributes;
+                $('#location_id').append($('<option>', {
+                    value: attr.id,
+                    text: attr.short + ' (' + attr.long + ')',
+                    selected: (attr.id == selected)
+                }));
+            });
+        });
+    }
+
+    function fetchEggs(nestId) {
+        if (!nestId) return;
+        bb.post('admin/servicepterodactyl/get_eggs', { nest_id: nestId }, function(result) {
+            eggs_cache = {};
+            var selected = $('#egg_id').val();
+            $('#egg_id').empty().append('<option value="">Select Egg</option>');
+            $.each(result, function(i, egg) {
+                var attr = egg.attributes;
+                eggs_cache[attr.id] = attr;
+                $('#egg_id').append($('<option>', {
+                    value: attr.id,
+                    text: attr.name,
+                    selected: (attr.id == selected)
+                }));
+            });
+            if (selected && eggs_cache[selected]) {
+                updateDockerImages(eggs_cache[selected]);
+            }
+        });
+    }
+
+    function updateDockerImages(egg) {
+        var selected = $('#docker_image').val();
+        $('#docker_image').empty().append('<option value="">Select Image</option>');
+        
+        // Pterodactyl egg attributes contain docker_images which is an array or object
+        var images = egg.docker_images;
+        if (typeof images === 'object') {
+            $.each(images, function(key, val) {
+                // handle both array of strings and key-value mapping
+                var name = (typeof val === 'string') ? val : key;
+                var value = val;
+                $('#docker_image').append($('<option>', {
+                    value: value,
+                    text: name,
+                    selected: (value == selected)
+                }));
+            });
+        }
+    }
+
+    $('#nest_id').on('change', function() {
+        fetchEggs($(this).val());
+    });
+
+    $('#egg_id').on('change', function() {
+        var eggId = $(this).val();
+        if (eggs_cache[eggId]) {
+            updateDockerImages(eggs_cache[eggId]);
+            // Also update startup command if empty
+            var startup = $('textarea[name="config[startup]"]').val();
+            if(!startup || startup == "") {
+                $('textarea[name="config[startup]"]').val(eggs_cache[eggId].startup);
+            }
+        }
+    });
+
+    $('#docker_image').on('change', function() {
+        if($(this).val()) {
+            $('#custom_docker_image').val('');
+        }
+    });
+
+    $('#custom_docker_image').on('input', function() {
+        if($(this).val()) {
+            $('#docker_image').val('');
+        }
+    });
+
+    // Initial fetch
+    fetchNests();
+    fetchLocations();
+});
+</script>

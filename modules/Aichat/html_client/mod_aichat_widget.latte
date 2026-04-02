@@ -1,0 +1,102 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{if $guest->aichat_get_settings(['enabled' => 1])}
+<div id="ohms-ai-chat-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; font-family: sans-serif;">
+    <button id="ohms-ai-chat-toggle" style="width: 60px; height: 60px; border-radius: 50%; background: #4c8fd3; color: white; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+        <i class="fa fa-comments"></i>
+    </button>
+    
+    <div id="ohms-ai-chat-window" style="display: none; width: 350px; height: 450px; background: white; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); flex-direction: column; position: absolute; bottom: 80px; right: 0; overflow: hidden; border: 1px solid #eee;">
+        <div style="background: #4c8fd3; color: white; padding: 15px; font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+            <span>AI Support</span>
+            <button id="ohms-ai-chat-close" style="background: transparent; border: none; color: white; cursor: pointer; font-size: 18px;">&times;</button>
+        </div>
+        
+        <div id="ohms-ai-chat-messages" style="flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: #f9f9f9;">
+            <div style="background: #eef4fa; padding: 10px; border-radius: 8px; max-width: 85%; align-self: flex-start; font-size: 14px;">
+                Hello! How can I help you today?
+            </div>
+        </div>
+        
+        <div style="padding: 15px; border-top: 1px solid #eee; display: flex; gap: 8px;">
+            <input type="text" id="ohms-ai-chat-input" placeholder="Type your message..." style="flex: 1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 20px; outline: none; font-size: 14px;">
+            <button id="ohms-ai-chat-send" style="background: #4c8fd3; color: white; border: none; border-radius: 50%; width: 34px; height: 34px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                <i class="fa fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function() {
+    var history = [];
+    var $window = $('#ohms-ai-chat-window');
+    var $messages = $('#ohms-ai-chat-messages');
+    var $input = $('#ohms-ai-chat-input');
+
+    $('#ohms-ai-chat-toggle').on('click', function() {
+        $window.toggle().css('display', $window.is(':visible') ? 'flex' : 'none');
+    });
+
+    $('#ohms-ai-chat-close').on('click', function() {
+        $window.hide();
+    });
+
+    function appendMessage(role, content) {
+        var isUser = role === 'user';
+        var $msg = $('<div></div>').text(content).css({
+            'padding': '10px',
+            'border-radius': '8px',
+            'max-width': '85%',
+            'font-size': '14px',
+            'align-self': isUser ? 'flex-end' : 'flex-start',
+            'background': isUser ? '#4c8fd3' : '#eef4fa',
+            'color': isUser ? 'white' : '#333'
+        });
+        $messages.append($msg);
+        $messages.scrollTop($messages[0].scrollHeight);
+    }
+
+    $('#ohms-ai-chat-send').on('click', function() {
+        var text = $input.val().trim();
+        if (!text) return;
+
+        appendMessage('user', text);
+        $input.val('');
+
+        bb.post('guest/aichat/chat', { prompt: text, history: history }, function(response) {
+            appendMessage('assistant', response);
+            history.push({ role: 'user', content: text });
+            history.push({ role: 'assistant', content: response });
+            // Keep history reasonable
+            if (history.length > 20) history = history.slice(-20);
+        }, function(err) {
+            appendMessage('assistant', 'Sorry, an error occurred: ' + err.message);
+        });
+    });
+
+    $input.on('keypress', function(e) {
+        if (e.which === 13) $('#ohms-ai-chat-send').click();
+    });
+});
+</script>
+{/if}

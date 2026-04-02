@@ -1,0 +1,61 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{block meta_title}{=Blog|trans}{/block}
+{block breadcrumb}{=Blog|trans}{/block}
+
+{block content}
+<div class="row">
+    <article class="span12 data-block">
+        <div class="data-container">
+            <header>
+                <div class="row-fluid"></div>
+                <h1>{='News & Announcements'|trans}</h1>
+                <p>{='Track our latest information.'|trans}</p>
+            </header>
+            <section>
+                {var $posts = $guest->news_get_list([page => $request->page, per_page => 5])}
+                {foreach $posts->list as $i => $post}
+                <div class="article{if $iterator->last} last{/if} data-container">
+                    <header>
+                        <h2><a href="{='/news'|link}/{$post['slug']}">{$post['title']}</a></h2>
+                        <div class="pull-right"><h5>{$post['updated_at']|bb_date}</h5></div>
+                    </header>
+                   <section>
+                       {if $post['excerpt']}
+                            {$post['excerpt']|bbmd}
+                       {else}
+                            {$post['content']|bbmd}
+                       {/if}
+                   </section>
+                    <a class="btn btn-primary btn-small read_more" href="{='/news'|link}/{$post['slug']}">{='Read more ...'|trans}</a>
+                </div>
+                {else}
+                <p>The list is empty</p>
+                {/foreach}
+            </section>
+        </div>
+        {include 'partial_pagination.latte', list => $posts}
+    </article>
+</div>
+{/block}

@@ -1,0 +1,169 @@
+<?php
+/**
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ */
+
+
+
+class Priyx_Update
+{
+    /**
+     * @var \Priyx_Di
+     */
+    protected $di = null;
+
+    /**
+     * @param \Priyx_Di $di
+     */
+    public function setDi($di)
+    {
+        $this->di = $di;
+    }
+
+    /**
+     * @return \Priyx_Di
+     */
+    public function getDi()
+    {
+        return $this->di;
+    }
+    private $_url = 'https://api.github.com/repos/OHMS/OHMS/releases/latest';
+
+
+    /**
+     * Returns latest information
+     */
+    private function _getLatestVersionInfo()
+    {
+        return $this->di['tools']->cache_function(array($this, 'getJson'), array(), 86400);
+    }
+
+    /**
+     * Returns latest release notes
+     * @return string
+     */
+    public function getLatestReleaseNotes()
+    {
+        $response = $this->_getLatestVersionInfo();
+        if(!isset($response['body'])){
+            return "**Error: Release info unavailable**";
+        }
+        return $response['body'];
+    }
+
+    /**
+     * Returns latest version number
+     * @return string
+     */
+    public function getLatestVersion()
+    {
+        $response = $this->_getLatestVersionInfo();
+        if(!isset($response['tag_name'])){
+            return Priyx_Version::VERSION;
+        }
+        return $response['tag_name'];
+    }
+
+    /**
+     * Latest version link
+     * @return string
+     */
+    public function getLatestVersionDownloadLink()
+    {
+        $response = $this->_getLatestVersionInfo();
+        return $response['assets'][0]['browser_download_url'];
+    }
+
+    /**
+     * Check if we need to update current OHMS version
+     * @return bool
+     */
+    public function getCanUpdate()
+    {
+        $version = $this->getLatestVersion();
+        $result = Priyx_Version::compareVersion($version);
+        return ($result > 0);
+    }
+
+    /**
+     * Check if given file is same as original
+     * @param string $file - filepath
+     * @return bool
+     */
+    private function isHashValid($file)
+    {
+        if(!file_exists($file)) {
+            return false;
+        }
+        
+        $response = $this->_getLatestVersionInfo();
+        $hash = md5($response->version.filesize($file));
+        return ($hash == $response->hash);
+    }
+
+    public function getJson()
+    {
+        $url = $this->_url;
+        $curl = new Priyx_Curl($url);
+        $curl->request();
+        $response = $curl->getBody();
+        return json_decode($response, true);
+    }
+
+    /**
+     * Perform update
+     *
+     * @throws Exception
+     */
+    public function performUpdate()
+    {
+        if(!$this->getCanUpdate()) {
+            throw new LogicException('You have latest version of OHMS. You do not need to update.');
+        }
+
+        error_log('Started OHMS auto-update script');
+        $latest_version = $this->getLatestVersion();
+        $latest_version_archive = PS_PATH_CACHE.DIRECTORY_SEPARATOR.$latest_version.'.zip';
+
+        // download latest archive from link
+        $content = $this->di['tools']->file_get_contents($this->getLatestVersionDownloadLink(), false, null, null, false);
+        $f = fopen($latest_version_archive,'wb');
+        fwrite($f,$content,strlen($content));
+        fclose($f);
+
+        //@todo validate downloaded file hash
+
+        // Extract latest archive on top of current version
+        $ff = new Priyx_Zip($latest_version_archive);
+        $ff->decompress(PS_PATH_ROOT);
+
+        if(file_exists(PS_PATH_ROOT.'/update.php')) {
+            error_log('Calling update.php script from auto-updater');
+            $this->di['tools']->file_get_contents(PS_URL.'update.php');
+        }
+        
+        // clean up things
+        $this->di['tools']->emptyFolder(PS_PATH_CACHE);
+        $this->di['tools']->emptyFolder(PS_PATH_ROOT.'/install');
+        rmdir(PS_PATH_ROOT.'/install');
+        return true;
+    }
+}

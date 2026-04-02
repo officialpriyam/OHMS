@@ -1,0 +1,49 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{var $current_url = $guest->system_current_url()}
+{var $navigation = $admin->extension_get_navigation(['url' => $current_url])}
+
+<ul id="menu">
+{foreach ($navigation ?? []) as $location => $group}
+    {var $subpages = $group['subpages'] ?? []}
+    {if $subpages}
+        {var $group_label = $group['label'] ?? $location}
+        {var $group_active = ($group['active'] ?? false) || ($active_menu == $location) || ($active_menu == ($group['class'] ?? null))}
+        <li class="{$group['class'] ?? ''}" data-nav-index="{$group['index'] ?? ''}" data-nav-location="{$location}" data-nav-label="{$group_label|trans}">
+            <a class="exp corner"{if $group_active} id="current"{/if} href="#">
+                <strong class="admin-nav-label">
+                    {if $group['sprite_class'] ?? false}<i class="{$group['sprite_class']}"></i>{/if}
+                    {$group_label|trans}
+                </strong>
+            </a>
+            <ul class="sub"{if $group_active} style="display: block;"{else} style="display: none;"{/if}>
+            {foreach $subpages as $subpage}
+                {var $subpage_label = $subpage['label'] ?? ($subpage['uri'] ?? '')}
+                <li class="{if $iterator->last}last {/if}{if $subpage['active'] ?? false}active{/if}" data-nav-index="{$subpage['index'] ?? ''}" data-nav-label="{$subpage_label|trans}">
+                    <a class="{$subpage['class'] ?? ''}" href="{$subpage['uri'] ?? '#'}">{$subpage_label|trans}</a>
+                </li>
+            {/foreach}
+            </ul>
+        </li>
+    {/if}
+{/foreach}
+</ul>

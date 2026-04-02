@@ -1,0 +1,84 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{import 'macro_functions.latte'}
+
+{var $tickets = $client->support_ticket_get_list(['per_page' => 10, 'page' => $request->page])}
+{var $has_tickets = (($tickets['list'] ?? [])|length) > 0}
+
+{block meta_title}{='Help & Support'|trans}{/block}
+
+{block content_before}
+    <div class="gm-page-heading">
+        <h1>{='Help & Support'|trans}</h1>
+    </div>
+    <div class="gm-client-tabs">
+        <a href="{=kb|link}">{='General'|trans}</a>
+        <a class="active" href="{=support|link}">{='Support Tickets'|trans}</a>
+    </div>
+
+        {if !($has_tickets ?? false)}
+            <p class="gm-support-empty">{='You have no active support tickets'|trans}</p>
+        {/if}
+        <div class="gm-support-actions">
+            <a class="gm-support-card" data-bs-toggle="modal" data-bs-target="#ticket-order">
+                <i class="fa fa-desktop"></i>
+                <span>{='Open Ticket'|trans}</span>
+            </a>
+            <a class="gm-support-card" href="{=kb|link}">
+                <i class="fa fa-book"></i>
+                <span>{='Browse Help'|trans}</span>
+            </a>
+        </div>
+    </div>
+{/block}
+
+{block content}
+    {if ($has_tickets ?? false)}
+        <div class="list-group mb-3">
+            {foreach ($tickets['list'] ?? []) as $i => $ticket}
+                <a href="{='support/ticket'|link}/{$ticket['id']}" class="list-group-item {if ($ticket['status'] == 'closed')}list-group-item-success{elseif ($ticket['status'] == 'on_hold')}list-group-item-warning{elseif ($ticket['status'] == 'open')}list-group-item-danger{/if}">
+                    <span class="float-end badge {if ($ticket['status'] == 'open')}bg-danger{elseif ($ticket['status'] == 'on_hold')}bg-warning{elseif ($ticket['status'] == 'closed')}bg-success{else}bg-default{/if}">{include status_name, $ticket['status']}</span>
+                    <p class="mb-0">
+                        <span class="label label-default">{$ticket['helpdesk']['name']}</span> - {$ticket['subject']}<br>
+                        <span class="small text-secondary">{$ticket['created_at']|date:'Y-m-d h:i'} - {='Last post'|trans} {$ticket['updated_at']|timeago} {=ago|trans}</span>
+                    </p>
+                </a>
+            {/foreach}
+        </div>
+
+        <div class="text-center">
+            {include '_pagination.latte', list: $tickets}
+
+            {if $guest->extension_is_on(['mod' => 'kb'])}
+                <a class="btn btn-info" data-bs-toggle="collapse" data-bs-target="#kb" aria-expanded="false" aria-controls="kb">{='Knowledge base'|trans}</a>
+            {/if}
+            <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ticket-order">{='Submit new ticket'|trans}</a>
+        </div>
+
+        {if $guest->extension_is_on(['mod' => 'kb'])}
+        <div class="collapse" id="kb">
+            <h4>{='Knowledge base'|trans}</h4>
+            <div class="input-group my-3">
+                <input type="text" class="form-control">
+                <button class="btn btn-primary"><i class="fa fa-search"></i></button>
+            </div>
+            <hr>
+            <div class="list-group panel" id="kb">
+            {foreach ($guest->kb_category_get_list()['list'] ?? []) as $i => $category}
+                <a href="#category-{$category['id']}" class="list-group-item text-center" data-bs-toggle="collapse" data-bs-parent="#kb"><strong>{$category['title']}</strong></a>
+                <div class="collapse" id="category-{$category['id']}">
+                {foreach $category['articles'] as $i => $article}
+                    <a href="{='/kb'|link}/{$article['category']['slug']}/{$article['slug']}" class="list-group-item">{$article['title']}</a>
+                {/foreach}
+                </div>
+            {/foreach}
+            </div>
+        </div>
+        {/if}
+    {/if}
+
+{/block}
+
+{block modals}
+    {include 'Modal/_add-ticket.latte', id => ticket-order}
+{/block}

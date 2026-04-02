@@ -1,0 +1,15 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_public.latte'}
+
+{block meta_title}{='Register a domain'|trans}{/block}
+{block head}{include 'shared/_styles.latte'}{/block}
+
+{block content_before}
+    <div class="wh-page-header">
+        <h1 class="wh-page-title">{='Register a Domain'|trans}</h1>
+        <p class="wh-page-subtitle">{='Standalone WHMCS domain-registration screens are mapped here for orderform compatibility.'|trans}</p>
+    </div>
+{/block}
+
+{block content}
+    {include 'shared/_placeholder.latte', title: ('Use the domain product or hosting configuration page'|trans), description: ('Domain registration is already supported inside the active OHMS product-order flow.'|trans), note: ('Open a domain product or choose the register-new-domain path while configuring hosting.'|trans)}
+{/block}

@@ -1,0 +1,72 @@
+{var $req_path = $request->_url ?? ''}
+{var $request_path = ltrim($req_path, '/')}
+{var $srv_uri = $request->getServer('REQUEST_URI') ?? ''}
+{var $request_uri = ltrim($srv_uri, '/')}
+{var $active_path = (str_starts_with($request_path, 'client') || str_starts_with($request_uri, 'client')) ? '/client' : '/' . $request_path}
+
+<div class="client-sidebar" id="clientSidebar">
+    <a href="{='/'|link}" class="client-brand">
+        <i class="fa fa-th"></i> {$settings->company_name ?? 'Company Name'}
+    </a>
+    
+    <div class="client-nav">
+        <!-- Section: Navigation -->
+        <div class="nav-section-title">Navigation</div>
+        <a href="{='/client'|link}" class="client-nav-link {if $active_path == '/client'}active{/if}">
+            <i class="fa fa-home"></i> {=Dashboard|trans}
+        </a>
+        
+        {if ($settings->side_menu_services ?? true)}
+        <a href="{='order/service'|link}" class="client-nav-link {if str_starts_with($active_path, '/order/service')}active{/if}">
+            <i class="fa fa-server"></i> {=Servers|trans}
+        </a>
+        {/if}
+        
+        {if ($settings->side_menu_invoices ?? true)}
+        <a href="{=invoice|link}" class="client-nav-link {if str_starts_with($active_path, '/invoice')}active{/if}">
+            <i class="fa fa-file-invoice"></i> {=Orders|trans}
+        </a>
+        {/if}
+
+        <a href="{='/client/affiliates'|link}" class="client-nav-link {if str_starts_with($active_path, '/client/affiliates')}active{/if}">
+            <i class="fa fa-users"></i> {=Affiliate|trans}
+        </a>
+
+        <!-- Section: Support -->
+        <div class="nav-section-title mt-3">Help & Support</div>
+        {if ($settings->side_menu_support ?? true)}
+        <a href="{=support|link}" class="client-nav-link {if str_starts_with($active_path, '/support')}active{/if}">
+            <i class="fa fa-life-ring"></i> {='Tickets'|trans}
+        </a>
+        {/if}
+        
+        {if ($settings->side_menu_kb ?? true)}
+        <a href="{=kb|link}" class="client-nav-link {if str_starts_with($active_path, '/kb')}active{/if}">
+            <i class="fa fa-graduation-cap"></i> {='Knowledge Base'|trans}
+        </a>
+        {/if}
+
+        <!-- Section: Account -->
+        <div class="nav-section-title mt-3">Account</div>
+        <a href="{='client/profile'|link}" class="client-nav-link {if str_starts_with($active_path, '/client/profile')}active{/if}">
+            <i class="fa fa-user-cog"></i> {='Settings'|trans}
+        </a>
+        <a href="{='client/logout'|link}" class="client-nav-link text-danger-hover">
+            <i class="fa fa-sign-out-alt"></i> {='Logout'|trans}
+        </a>
+    </div>
+
+    <div class="client-sidebar-footer">
+        <div class="mb-2 text-uppercase" style="font-size: 0.65rem; letter-spacing: 1px; color: var(--text-secondary);">Follow us on</div>
+        <div class="social-icons-mini">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+            <a href="#"><i class="fab fa-discord"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+        <div class="mt-3">
+            <div style="font-size: 0.65rem; color: var(--text-secondary); margin-bottom: 4px;">Rate Us on Trustpilot</div>
+            <div class="trustpilot-stars"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></div>
+        </div>
+    </div>
+</div>

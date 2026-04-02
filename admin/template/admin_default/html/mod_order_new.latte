@@ -1,0 +1,166 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{var $active_menu = order}
+
+{import 'macro_functions.latte'}
+
+{block breadcrumbs}
+    <ul>
+        <li class="firstB"><a href="{='/'|alink}">{=Home|trans}</a></li>
+        <li><a href="{=order|alink}">{=Orders|trans}</a></li>
+        <li class="lastB">{='Create new order'|trans}</li>
+    </ul>
+{/block}
+
+{block meta_title}{='Create new order'|trans}{/block}
+
+{block content}
+<div class="widget">
+    <div class="head"><h5 class="iFrames">{='Create new order'|trans}</h5></div>
+            <div class="help">
+                <h2>"{$product['title']}" {=for|trans} {$client->first_name} {$client->last_name}</h2>
+            </div>
+    <form method="get" action="{='api/admin/order/create'|link}" class="mainForm api-form" data-api-jsonp="onAfterOrderPlaced" data-order-manage-url="{='order/manage/'|alink}" data-selected-price-message="{='Selected price is 0.00'|trans}" data-product-disabled-message="{='Product is disabled in configuration'|trans}">
+        <fieldset>
+
+            <div class="rowElem noborder">
+                <label>{='Invoice option'|trans}</label>
+                <div class="formRight noborder">
+                    {include selectbox, invoice_option, $admin->order_get_invoice_options, $order['invoice_option']}
+                </div>
+                <div class="fix"></div>
+            </div>
+            
+            <div class="rowElem">
+                <label>{='Activate order'|trans}:</label>
+                <div class="formRight">
+                    <input type="radio" name="activate" value="1" checked="checked"/><label>Yes</label>
+                    <input type="radio" name="activate" value="0" /><label>No</label>
+                </div>
+                <div class="fix"></div>
+            </div>
+            
+            {if ($product['pricing']['type'] == 'recurrent')}
+            <div class="rowElem">
+                <label>{=Period|trans}</label>
+                <div class="formRight">
+                    <select name="period" id="period" required="required">
+                        {foreach $guest->system_periods as $val => $label}
+                        <option value="{$val}" label="{$label}" data-price="{$product['pricing']['recurrent']->{$val}->price}" data-status="{$product['pricing']['recurrent']->{$val}->enabled}" {if ($request->period == $val)}selected="selected"{/if}>{$label}</option>
+                        {/foreach}
+                    </select>
+                    <span id="period-info" class="help"></span>
+                </div>
+                <div class="fix"></div>
+            </div>
+            {/if}
+            
+            {var $product_order = (('mod_service' . $product['type']) . '_order.latte')}
+            {if $admin->system_template_exists(['file' => $product_order])}
+                {include $product_order}
+            {/if}
+
+            {if (($product['configurable_options'] ?? [])|length)}
+            <div class="help">
+                <h3>{='Configurable options'|trans}</h3>
+                <p>{='Apply the same per-product option selections that clients can choose during checkout.'|trans}</p>
+            </div>
+
+            {foreach ($product['configurable_options'] ?? []) as $group}
+                <div class="rowElem">
+                    <label>{$group['title']}</label>
+                    <div class="formRight">
+                        {if $group['description']}
+                        <div class="small" style="margin-bottom: 8px;">{$group['description']}</div>
+                        {/if}
+
+                        {foreach ($group['options'] ?? []) as $option}
+                        <div style="margin-bottom: 12px;">
+                            <label style="display:block; font-weight:600;">{$option['title']}{if $option['required']} *{/if}</label>
+                            {if $option['description']}
+                            <div class="small" style="margin-bottom: 5px;">{$option['description']}</div>
+                            {/if}
+
+                            {if ($option['type'] === 'dropdown')}
+                                <select name="config[config_options][{$option['id']}]"{if $option['required']} required="required"{/if}>
+                                    <option value="">{='Please select'|trans}</option>
+                                    {foreach ($option['values'] ?? []) as $value}
+                                    <option value="{$value['id']}">{$value['label']}</option>
+                                    {/foreach}
+                                </select>
+                            {elseif ($option['type'] === 'radio')}
+                                {foreach ($option['values'] ?? []) as $value}
+                                <input type="radio" name="config[config_options][{$option['id']}]" value="{$value['id']}" id="admin-config-option-{$option['id']}-{$value['id']}">
+                                <label for="admin-config-option-{$option['id']}-{$value['id']}">{$value['label']}</label>
+                                {/foreach}
+                            {elseif ($option['type'] === 'yes_no')}
+                                <input type="hidden" name="config[config_options][{$option['id']}]" value="0">
+                                <input type="checkbox" name="config[config_options][{$option['id']}]" value="1" id="admin-config-option-{$option['id']}">
+                                <label for="admin-config-option-{$option['id']}">{='Enable'|trans}</label>
+                            {elseif ($option['type'] === 'quantity')}
+                                <input type="number" name="config[config_options][{$option['id']}]" value="0" min="{if $option['required']}1{else}0{/if}" step="1">
+                            {/if}
+                        </div>
+                        {/foreach}
+                    </div>
+                    <div class="fix"></div>
+                </div>
+            {/foreach}
+            {/if}
+            
+            <input type="submit" value="{='Place new order'|trans}" class="greyishBtn submitForm" />
+            <input type="hidden" name="client_id" value="{$client->id}" />
+            <input type="hidden" name="product_id" value="{$product['id']}" />
+        </fieldset>
+    </form>
+</div>
+{/block}
+
+{block js}
+<script>
+    var orderForm = $('form[data-order-manage-url]');
+
+    function onAfterOrderPlaced(id) {
+        bb.redirect(orderForm.data('order-manage-url') + id);
+    }
+
+    $('#period').on('change', function() {
+        var optionSelected = $("option:selected", this);
+        var periodNotification = $('#period-info');
+        var spanElem = $('<span />').css({'padding-left': '20px', 'line-height': '28px', 'float': 'left'});
+
+        periodNotification.text('');
+
+        if (optionSelected.data('price') == 0){
+            spanElem.clone().text(orderForm.data('selected-price-message')).appendTo(periodNotification);
+        }
+
+        if (optionSelected.data('status') == 0){
+            spanElem.clone().text(orderForm.data('product-disabled-message')).appendTo(periodNotification);
+        }
+    });
+</script>
+{/block}
+
+

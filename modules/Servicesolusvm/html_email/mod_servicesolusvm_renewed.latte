@@ -1,0 +1,42 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{block subject}[{$guest->system_company()->name}] {$order['title']} Renewed{/block}
+{block content}
+{block|markdown}
+
+Hello {$c->first_name} {$c->last_name},
+
+Your **{$order['title']}** has been renewed.
+
+{if $order['expires_at']}
+
+Next renewal date: {$order['expires_at']|bb_date}
+
+{/if}
+
+Login to members area: {=login|link:[email => $c->email]}
+Manage order: {='order/service/manage'|link}/{$order['id']}
+
+{$guest->system_company()->signature}
+
+{/block}
+{/block}

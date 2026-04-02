@@ -1,0 +1,379 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_public.latte'}
+{import 'macro_functions.latte'}
+
+{block meta_title}{='Shopping cart'|trans}{/block}
+{block head}{include 'shared/_styles.latte'}{/block}
+{block content_before}{/block}
+
+{block content}
+<div class="gm-order-page wh-checkout-shell">
+    <div class="container container-md">
+        <div class="wh-page-header wh-page-header--checkout text-center">
+            <h1 class="wh-page-title">{='Checkout'|trans}</h1>
+            <p class="wh-page-subtitle">{='Confirm your selection, sign in or register inline, then complete payment without leaving this screen.'|trans}</p>
+        </div>
+
+        <div class="wh-flow-steps mb-4">
+            <a class="wh-flow-step is-done" href="{='order'|link}">
+                <span class="wh-flow-step-index">1</span>
+                <span class="wh-flow-step-label">{='Select product'|trans}</span>
+            </a>
+            <div class="wh-flow-step is-done">
+                <span class="wh-flow-step-index">2</span>
+                <span class="wh-flow-step-label">{='Configure'|trans}</span>
+            </div>
+            <div class="wh-flow-step is-active">
+                <span class="wh-flow-step-index">3</span>
+                <span class="wh-flow-step-label">{='Confirm'|trans}</span>
+            </div>
+            <div class="wh-flow-step">
+                <span class="wh-flow-step-index">4</span>
+                <span class="wh-flow-step-label">{='Checkout'|trans}</span>
+            </div>
+        </div>
+
+        {var $cart = $guest->cart_get()}
+        {var $tax_amount = 0}
+        {var $required_fields = $guest->client_required()}
+        {if ($client && $client->client_is_taxable)}
+            {var $tax_rate = $client->invoice_get_tax_rate}
+            {var $tax_amount = (($cart->total * $tax_rate) / 100)}
+        {/if}
+        {var $enough_in_balance = ($client && $client->client_balance_get_total >= $cart->total)}
+        {var $gateway_count = 0}
+
+        {if (($cart->items|length) > 0)}
+            <div class="row gx-4">
+                <div class="col-xl-8 mb-4">
+                    {if !$client}
+                        <div class="wh-card mb-4" id="checkout-auth">
+                            <div class="wh-card-body">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                                    <h2 class="wh-section-title mb-0">{='You are not logged in'|trans}</h2>
+                                    <span class="wh-pill">{='Secure checkout'|trans}</span>
+                                </div>
+                                <p class="text-secondary mb-3">{='Use login or create an account right here. After success, the page refreshes and you can finish checkout immediately.'|trans}</p>
+
+                                <div class="wh-auth-tabs mb-3">
+                                    <button type="button" class="wh-auth-tab is-active" data-auth-target="login">{='Login'|trans}</button>
+                                    <button type="button" class="wh-auth-tab" data-auth-target="register">{='Register'|trans}</button>
+                                </div>
+
+                                <div class="wh-auth-panel is-active" data-auth-panel="login">
+                                    <form method="post" action="{='api/guest/client/login'|link}" class="api-form wh-auth-form" data-api-redirect="{='/cart'|link}">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="checkout-login-email">{='Email address'|trans}</label>
+                                                <input class="form-control" id="checkout-login-email" type="email" name="email" value="{$request->email}" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="checkout-login-password">{=Password|trans}</label>
+                                                <input class="form-control" id="checkout-login-password" type="password" name="password" required>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3">
+                                            <div class="form-check mb-0">
+                                                <input class="form-check-input" id="checkout-login-remember" type="checkbox" name="remember" checked>
+                                                <label class="form-check-label" for="checkout-login-remember">{='Remember me'|trans}</label>
+                                            </div>
+                                            <a class="small" href="{=reset-password|link}">{='Reset password'|trans}</a>
+                                        </div>
+                                        <button class="btn btn-gm-success mt-3 w-100" type="submit">{='Login and continue'|trans}</button>
+                                    </form>
+                                </div>
+
+                                <div class="wh-auth-panel" data-auth-panel="register">
+                                    <form method="post" action="{='api/guest/client/create'|link}" class="api-form wh-auth-form" data-api-redirect="{='/cart'|link}">
+                                        <input type="hidden" name="auto_login" value="1">
+
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="checkout-register-email">{='Email address'|trans}</label>
+                                                <input class="form-control" id="checkout-register-email" type="email" name="email" value="{$request->email}" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="checkout-register-company">{='Company'|trans}</label>
+                                                <input class="form-control" id="checkout-register-company" type="text" name="company" value="{$request->company}">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="checkout-register-first">{='First name'|trans}</label>
+                                                <input class="form-control" id="checkout-register-first" type="text" name="first_name" value="{$request->first_name}" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="checkout-register-last">{='Last name'|trans}</label>
+                                                <input class="form-control" id="checkout-register-last" type="text" name="last_name" value="{$request->last_name}" {if in_array('last_name', ($required_fields ?? []), true)}required{/if}>
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label" for="checkout-register-address1">{='Address line 1'|trans}</label>
+                                                <input class="form-control" id="checkout-register-address1" type="text" name="address_1" value="{$request->address_1}" {if in_array('address_1', ($required_fields ?? []), true)}required{/if}>
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label" for="checkout-register-address2">{='Address line 2'|trans}</label>
+                                                <input class="form-control" id="checkout-register-address2" type="text" name="address_2" value="{$request->address_2}">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label" for="checkout-register-city">{='City'|trans}</label>
+                                                <input class="form-control" id="checkout-register-city" type="text" name="city" value="{$request->city}" {if in_array('city', ($required_fields ?? []), true)}required{/if}>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label" for="checkout-register-state">{='State'|trans}</label>
+                                                <input class="form-control" id="checkout-register-state" type="text" name="state" value="{$request->state}" {if in_array('state', ($required_fields ?? []), true)}required{/if}>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label" for="checkout-register-postcode">{='Zip / Postal code'|trans}</label>
+                                                <input class="form-control" id="checkout-register-postcode" type="text" name="postcode" value="{$request->postcode}" {if in_array('postcode', ($required_fields ?? []), true)}required{/if}>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <label class="form-label" for="checkout-register-country">{='Country'|trans}</label>
+                                                {include selectbox, country, $guest->system_countries, $request->country, in_array('country', ($required_fields ?? []), true), 'Select country', 'checkout-register-country'}
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="form-label" for="checkout-register-phone-cc">{='Code'|trans}</label>
+                                                <input class="form-control" id="checkout-register-phone-cc" type="text" name="phone_cc" value="{$request->phone_cc}" placeholder="91">
+                                            </div>
+                                            <div class="col-md-5">
+                                                <label class="form-label" for="checkout-register-phone">{='Mobile number'|trans}</label>
+                                                <input class="form-control" id="checkout-register-phone" type="text" name="phone" value="{$request->phone}" {if in_array('phone', ($required_fields ?? []), true)}required{/if}>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="checkout-register-password">{=Password|trans}</label>
+                                                <input class="form-control" id="checkout-register-password" type="password" name="password" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="checkout-register-password-confirm">{='Password confirm'|trans}</label>
+                                                <input class="form-control" id="checkout-register-password-confirm" type="password" name="password_confirm" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-3">
+                                            {include recaptcha}
+                                        </div>
+                                        <button class="btn btn-gm-success mt-3 w-100" type="submit">{='Create account and continue'|trans}</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {else}
+                        <div class="wh-card mb-4">
+                            <div class="wh-card-body">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                                    <div>
+                                        <h2 class="wh-section-title mb-1">{='Signed in and ready'|trans}</h2>
+                                        <p class="text-secondary mb-0">
+                                            {$client->email}
+                                            {if ($client->phone ?? false)} | {$client->phone_cc ?? ''} {$client->phone}{/if}
+                                        </p>
+                                    </div>
+                                    <a class="btn btn-outline-primary" href="{='/logout'|link}">{='Use different account'|trans}</a>
+                                </div>
+                            </div>
+                        </div>
+                    {/if}
+
+                    <form method="post" action="{='api/client/cart/checkout'|link}" class="api-form" id="checkout-form" data-api-jsonp="onAfterCartCheckout">
+                        <div class="wh-card mb-4">
+                            <div class="wh-card-body">
+                                <h2 class="wh-section-title mb-3">{='Payment details'|trans}</h2>
+
+                                {if ($cart->total && !$enough_in_balance)}
+                                    <div class="wh-gateway-list">
+                                        {foreach $guest->invoice_gateways as $gtw}
+                                            {if in_array($cart->currency->code, $gtw->accepted_currencies, true)}
+                                                {var $gateway_count = $gateway_count + 1}
+                                                <label class="wh-gateway-item">
+                                                    <span class="wh-gateway-item-copy">
+                                                        <strong>{$gtw->title}</strong>
+                                                        <small>{='Pay securely via'|trans} {$gtw->title}</small>
+                                                    </span>
+                                                    <span class="wh-gateway-item-radio">
+                                                        <input type="radio" name="gateway_id" value="{$gtw->id}" {$iterator->first ? checked : ''}>
+                                                    </span>
+                                                </label>
+                                            {/if}
+                                        {/foreach}
+                                    </div>
+                                    {if $gateway_count === 0}
+                                        <p class="small text-danger mt-3 mb-0">{='No enabled payment gateway currently accepts this cart currency.'|trans}</p>
+                                    {/if}
+                                {else}
+                                    <div class="wh-balance-notice">
+                                        <i class="fa fa-check-circle me-2"></i>
+                                        {='Your account balance covers this order. No additional online gateway is required.'|trans}
+                                    </div>
+                                {/if}
+
+                                <label class="wh-tos-check mt-4" for="checkout-tos">
+                                    <input type="checkbox" id="checkout-tos" name="tos" value="1" required>
+                                    <span class="wh-tos-copy">
+                                        {='I agree with the'|trans}
+                                        <a href="{='/tos'|link}" target="_blank">{='Terms of Service'|trans}</a>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="wh-card mb-4">
+                            <div class="wh-card-body">
+                                <h2 class="wh-section-title mb-3">{='Additional notes'|trans}</h2>
+                                <textarea name="notes" class="form-control wh-notes-area" rows="3" placeholder="{='Tell us anything we should know about your order...'|trans}"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-xl-4 mb-4">
+                    <div class="wh-card position-sticky wh-summary-panel">
+                        <div class="wh-card-body">
+                            <h2 class="wh-section-title mb-3">{='Order summary'|trans}</h2>
+
+                            <div class="wh-summary-items mb-3">
+                                {var $total_discount = 0}
+                                {foreach $cart->items as $item}
+                                    {var $selected_config_options = ($item->config_options_data ?? [])}
+                                    <div class="wh-summary-item">
+                                        <div class="d-flex justify-content-between gap-2 mb-1">
+                                            <strong class="text-white">{$item->title|truncate:28}</strong>
+                                            <strong class="text-white">
+                                                {if $item->discount_price}
+                                                    {$item->price - $item->discount_price|money_convert}
+                                                {else}
+                                                    {$item->price|money_convert}
+                                                {/if}
+                                            </strong>
+                                        </div>
+                                        {if (($item->period|period_title) != '-')}
+                                            <div class="small text-secondary mb-1">{$item->period|period_title}</div>
+                                        {/if}
+                                        {if ($selected_config_options|length)}
+                                            {foreach $selected_config_options as $selection}
+                                                <div class="small text-secondary d-flex justify-content-between gap-2">
+                                                    <span>{$selection->option_title}</span>
+                                                    <span>{$selection->value_label}{if (($selection->type ?? '') === 'quantity')} x{$selection->quantity}{/if}</span>
+                                                </div>
+                                            {/foreach}
+                                        {/if}
+                                        {if ($item->discount_price || $item->discount_setup)}
+                                            {var $total_discount = (($total_discount + $item->discount_price) + $item->discount_setup)}
+                                        {/if}
+                                    </div>
+                                {/foreach}
+                            </div>
+
+                            <form action="{='api/guest/cart/apply_promo'|link}" method="post" class="api-form wh-promo-form mb-4" data-api-reload="1">
+                                <div class="wh-promo-row">
+                                    <input
+                                        type="text"
+                                        name="promocode"
+                                        class="form-control wh-promo-input"
+                                        placeholder="{='Promo code'|trans}"
+                                        value="{$request->promocode ?? $cart->promocode}"
+                                        {if $cart->promocode}readonly{/if}
+                                        required
+                                    >
+                                    {if $cart->promocode}
+                                        <button class="btn wh-promo-btn wh-promo-btn-danger" type="button" onclick="bb.post('guest/cart/remove_promo', {}, function(){ window.location.reload(); })">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                    {else}
+                                        <button class="btn wh-promo-btn" type="submit">
+                                            <i class="fa fa-check"></i>
+                                        </button>
+                                    {/if}
+                                </div>
+                            </form>
+
+                            <div class="wh-summary-list mb-4">
+                                <div class="wh-summary-row">
+                                    <span>{='Subtotal'|trans}</span>
+                                    <strong>{$cart->subtotal|money_convert}</strong>
+                                </div>
+                                {if ($total_discount > 0)}
+                                    <div class="wh-summary-row">
+                                        <span>{='Discount'|trans}</span>
+                                        <strong>-{$total_discount|money_convert}</strong>
+                                    </div>
+                                {/if}
+                                {if ($tax_amount > 0)}
+                                    <div class="wh-summary-row">
+                                        <span>{='VAT'|trans} ({$tax_rate}%)</span>
+                                        <strong>{$tax_amount|money_convert}</strong>
+                                    </div>
+                                {/if}
+                            </div>
+
+                            <div class="gm-order-price-label mb-1">{='Total price'|trans}</div>
+                            <div class="gm-order-price-value mb-3">{($cart->total + $tax_amount)|money_convert}</div>
+
+                            {if $client}
+                                <button
+                                    class="btn btn-gm-success w-100 wh-order-submit"
+                                    type="button"
+                                    onclick="$('#checkout-form').trigger('submit');"
+                                    {if (!$enough_in_balance && $cart->total && $gateway_count === 0)}disabled{/if}
+                                >
+                                    {='Place order'|trans}
+                                </button>
+                            {else}
+                                <button class="btn btn-gm-success w-100 wh-order-submit" type="button" data-open-auth="login">
+                                    {='Login to checkout'|trans}
+                                </button>
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {else}
+            <div class="wh-card text-center py-5">
+                <div class="wh-card-body">
+                    <h2 class="text-white mb-3" style="font-weight: 800;">{='Your cart is empty'|trans}</h2>
+                    <p class="text-muted mb-4">{='There are no items in your shopping cart.'|trans}</p>
+                    <a class="btn btn-gm-success px-5" href="{='order'|link}">{='Order new service'|trans}</a>
+                </div>
+            </div>
+        {/if}
+    </div>
+</div>
+{/block}
+
+{block js}
+<script>
+    function onAfterCartCheckout(result) {
+        if (result.invoice_hash) {
+            bb.redirect({=('invoice'|link) . '/'|noescape} + result.invoice_hash + '&auto_redirect=1');
+        } else {
+            bb.redirect({=('order/service/manage'|link) . '/'|noescape} + result.order_id);
+        }
+    }
+
+    (function() {
+        function setAuthPanel(mode) {
+            document.querySelectorAll('[data-auth-target]').forEach(function(button) {
+                button.classList.toggle('is-active', button.getAttribute('data-auth-target') === mode);
+            });
+            document.querySelectorAll('[data-auth-panel]').forEach(function(panel) {
+                panel.classList.toggle('is-active', panel.getAttribute('data-auth-panel') === mode);
+            });
+        }
+
+        document.querySelectorAll('[data-auth-target]').forEach(function(button) {
+            button.addEventListener('click', function() {
+                setAuthPanel(button.getAttribute('data-auth-target'));
+            });
+        });
+
+        document.querySelectorAll('[data-open-auth]').forEach(function(button) {
+            button.addEventListener('click', function() {
+                setAuthPanel(button.getAttribute('data-open-auth') || 'login');
+                var authCard = document.getElementById('checkout-auth');
+                if (authCard) {
+                    authCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        if (window.location.hash === '#register') {
+            setAuthPanel('register');
+        }
+    })();
+</script>
+{/block}

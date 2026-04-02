@@ -1,0 +1,86 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+        body { margin: 0 }
+        form {
+            border: 1px solid #D1D1D1;
+        }
+        fieldset {
+            border: 0px;
+        }
+        legend {
+            padding-top: 15px;
+        }
+        p {
+            margin-top: 0px;
+        }
+        textarea, select, input {
+            border: 1px solid #D1D1D1;
+            padding: 5px;
+            -webkit-border-radius: 2px;
+            -moz-border-radius: 2px;
+            border-radius: 2px;
+            background-color: white;
+        }
+    </style>
+</head>
+
+<body>
+<form action="" method="post" id="client-login">
+    <fieldset>
+        <legend>Login to client area</legend>
+        <p>
+            <input type="email" name="email" value="" required="required" placeholder="Your email">
+        </p>
+        <p>
+            <input type="password" name="password" value="" required="required" placeholder="Your password">
+        </p>
+        <input type="submit" value="Login">
+    </fieldset>
+</form>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script type="text/javascript">
+$(function() {
+    $('#client-login').bind('submit', function(event) {
+        $.post({=json_encode(constant('PS_URL_API') . 'guest/client/login')},
+            $(this).serialize(),
+            function(json) {
+                if(json.error) {
+                    alert(json.error.message);
+                } else {
+                    parent.window.location = {=json_encode(constant('PS_URL'))};
+                }
+            }, 'json')
+        ;
+
+        return false;
+    });
+});
+</script>
+</body>
+</html>

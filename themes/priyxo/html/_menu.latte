@@ -1,0 +1,68 @@
+<div class="list-group">
+    {if $settings->side_menu_home}
+    <a href="{='/'|link}" title="{=Home|trans}" class="list-group-item list-group-item-action{if $request->_url === null} active{/if}">
+        <i class="fa fa-home me-2"></i> {=Home|trans}</a>
+    {/if}
+    {if $settings->side_menu_order}
+    <a href="{='/order'|link}" title="{=Order|trans}" class="list-group-item list-group-item-action{if str_starts_with($request->_url ?? '', '/order/service')}{elseif str_starts_with($request->_url ?? '', '/order')} active{/if}">
+        <i class="fa fa-shopping-cart me-2"></i>{=Order|trans}</a>
+    {/if}
+
+    {if $client}
+        {if $settings->side_menu_services}
+        <a href="{='order/service'|link}" title="{=Services|trans}" class="list-group-item d-flex justify-content-between align-items-center{if str_starts_with($request->_url ?? '', '/order/service')} list-group-item-success{/if}">
+            <span class="text-success"><i class="fa fa-cog me-2"></i>{=Services|trans}</span>
+
+            {var $suspendedServicesList = $client->order_get_list(['status' => 'suspended'])}
+            {var $suspendedServices = is_array($suspendedServicesList) ? ($suspendedServicesList['total'] ?? 0) : ($suspendedServicesList->total ?? 0)}
+
+            {if ($suspendedServices > 0)}
+                <span class="badge bg-danger rounded-pill">{$suspendedServices}</span>
+            {/if}
+        </a>
+        {/if}
+        {if $settings->side_menu_invoices}
+        <a href="{=invoice|link}" title="{=Invoices|trans}" class="list-group-item d-flex justify-content-between align-items-center{if str_starts_with($request->_url ?? '', '/invoice')} list-group-item-danger{/if}">
+            <span class="text-danger"><i class="fa fa-credit-card me-2"></i>{=Invoices|trans}</span>
+            {var $unpaidList = $client->invoice_get_list(['status' => 'unpaid'])}
+            {var $unpaidCount = is_array($unpaidList) ? ($unpaidList['total'] ?? 0) : ($unpaidList->total ?? 0)}
+            {if ($unpaidCount > 0)}
+                <span class="badge bg-danger rounded-pill">{$unpaidCount}</span>
+            {/if}
+        </a>
+        {/if}
+        {if $settings->side_menu_support}
+        <a href="{=support|link}" title="{=Tickets|trans}" class="list-group-item d-flex justify-content-between align-items-center{if ($request->_url == '/support')} list-group-item-info{/if}">
+            <span class="text-info"><i class="fa fa-life-ring me-2"></i>{=Support|trans}</span>
+            {var $openedList = $client->support_ticket_get_list(['status' => 'open'])}
+            {var $openedTickets = is_array($openedList) ? (($openedList['list'] ?? [])|length) : (($openedList->list ?? [])|length)}
+
+            {if ($openedTickets > 0)}
+                <span class="badge bg-danger rounded-pill">{$openedTickets}</span>
+            {/if}
+        </a>
+        {/if}
+        <!--<a href="{='/client/balance'|link}" title="{='Payment history'|trans}" class="list-group-item" ><i class="fa fa-archive"></i> {='Payment history'|trans}</a>-->
+    {/if}
+
+    {if ($settings->side_menu_blog && $guest->extension_is_on(['mod' => 'news']))}
+    <a href="{='/news'|link}" title="{=Blog|trans}" class="list-group-item list-group-item-action{if str_starts_with($request->_url ?? '', '/news')} active{/if}">
+        <i class="fa fa-bullhorn me-2"></i>{=Blog|trans}</a>
+    {/if}
+    {if ($settings->side_menu_forum && $guest->extension_is_on(['mod' => 'forum']))}
+    <a href="{='/forum'|link}" class="list-group-item list-group-item-action{if str_starts_with($request->_url ?? '', '/forum')} active{/if}">
+        <i class="fa fa-comments me-2"></i>{=Forum|trans}</a>
+    {/if}
+    {if ($settings->side_menu_kb && $guest->extension_is_on(['mod' => 'kb']))}
+    <a href="{=kb|link}" title="{='Knowledge base'|trans}" class="list-group-item{if str_starts_with($request->_url ?? '', '/kb')} active{/if}">
+        <i class="fa fa-graduation-cap me-2"></i>{='Knowledge base'|trans}</a>
+    {/if}
+    {if $settings->side_menu_contact}
+    <a href="{='/support/contact-us'|link}" class="list-group-item list-group-item-action{if str_starts_with($request->_url ?? '', '/support/contact-us')} active{/if}">
+        <i class="fa fa-envelope me-2"></i>{='Contact us'|trans}</a>
+    {/if}
+
+    {if (!$client && $settings->side_menu_register)}
+        <a class="list-group-item list-group-item-success" href="{='/login'|link}" title="{=Login|trans} / {=Register|trans}">{=Login|trans} / {=Register|trans}</a>
+    {/if}
+</div>

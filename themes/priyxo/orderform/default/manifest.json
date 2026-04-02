@@ -1,0 +1,30 @@
+{
+  "code": "default",
+  "name": "Default",
+  "description": "OHMS native orderform storefront flow.",
+  "thumbnail": null,
+  "supports": [
+    "products",
+    "configureproduct",
+    "configureproductdomain",
+    "viewcart",
+    "checkout",
+    "ordersummary",
+    "complete",
+    "error",
+    "fraudcheck",
+    "linkedaccounts",
+    "marketconnect-promo",
+    "recommendations-modal",
+    "domain-renewals",
+    "service-renewals",
+    "service-renewal-item",
+    "configuredomains",
+    "domainregister",
+    "domaintransfer",
+    "domainoptions",
+    "sidebar-categories",
+    "sidebar-categories-selector",
+    "sidebar-categories-collapsed"
+  ]
+}

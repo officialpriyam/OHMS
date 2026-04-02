@@ -1,0 +1,197 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{import 'macro_functions.latte'}
+<div class="help">
+    <h5>{='Hosting settings'|trans}</h5>
+</div>
+
+<form method="post" action="{='api/admin/product/update_config'|link}" class="mainForm api-form save" data-api-msg="Hosting settings updated">
+<fieldset>
+    <div class="rowElem">
+        <label>{=Server|trans}:</label>
+        <div class="formRight noborder">
+            {include selectbox, 'config[server_id]', $admin->servicehosting_server_get_pairs, $product['config']['server_id'], 0, 'Select server'}
+        </div>
+        <div class="fix"></div>
+    </div>
+    <div class="rowElem">
+        <label>{='Hosting plan'|trans}:</label>
+        <div class="formRight">
+            {include selectbox, 'config[hosting_plan_id]', $admin->servicehosting_hp_get_pairs, $product['config']['hosting_plan_id'], 0, 'Select hosting plan'}
+        </div>
+        <div class="fix"></div>
+    </div>
+    <div class="rowElem">
+        <label>{='Reseller hosting'|trans}:</label>
+        <div class="formRight">
+            <input type="radio" name="config[reseller]" value="1"{if $product['config']['reseller']} checked="checked"{/if}/><label>Yes</label>
+            <input type="radio" name="config[reseller]" value="0"{if !$product['config']['reseller']} checked="checked"{/if} /><label>No</label>
+        </div>
+        <div class="fix"></div>
+    </div>
+    <div class="rowElem">
+        <label>{='Free domain registration'|trans}:</label>
+        <div class="formRight">
+            <input type="radio" name="config[free_domain]" value="1"{if $product['config']['free_domain']} checked="checked"{/if}/><label>Yes</label>
+            <input type="radio" name="config[free_domain]" value="0"{if !$product['config']['free_domain']} checked="checked"{/if} /><label>No</label>
+        </div>
+        <div class="fix"></div>
+    </div>
+    <div class="rowElem free-tlds-row">
+        <label>{='Select free tlds'|trans}</label>
+        <div class="formRight">
+            {var $tlds = $guest->serviceDomain_tlds(['allow_register' => 1])}
+            {var $free_tlds = $product['config']['free_tlds'] ?? []}
+            <select name="config[free_tlds][]" multiple="multiple" class="multiple" size="{$tlds|length}" {if $product['config']['free_domain']}required{/if}>
+                {foreach $tlds as $id => $tld}
+                <option value="{$tld->tld}" {if in_array($tld->tld, $free_tlds, true)}selected="selected"{/if}>{$tld->tld}</option>
+                {/foreach}
+            </select>
+        </div>
+        <div class="fix"></div>
+    </div>
+		<!-- Select periods to offer free domains -->
+	    <div class="rowElem free-periods-row">
+        <label>{='Select free periods'|trans}</label>
+        <div class="formRight">
+            {var $free_domain_periods = $product['config']['free_domain_periods'] ?? []}
+            <select name="config[free_domain_periods][]" multiple="multiple" class="multiple" size="8" {if $product['config']['free_domain']}required{/if}>
+                <option value="1M" {if in_array('1M', $free_domain_periods, true)}selected="selected"{/if}>1M</option>
+				<option value="3M" {if in_array('3M', $free_domain_periods, true)}selected="selected"{/if}>3M</option>
+				<option value="6M" {if in_array('6M', $free_domain_periods, true)}selected="selected"{/if}>6M</option>
+				<option value="1Y" {if in_array('1Y', $free_domain_periods, true)}selected="selected"{/if}>1Y</option>
+				<option value="2Y" {if in_array('2Y', $free_domain_periods, true)}selected="selected"{/if}>2Y</option>
+				<option value="3Y" {if in_array('3Y', $free_domain_periods, true)}selected="selected"{/if}>3Y</option>
+            </select>
+        </div>
+        <div class="fix"></div>
+    </div>
+	
+    <div class="rowElem">
+        <label>{='Free domain transfer'|trans}:</label>
+        <div class="formRight">
+            <input type="radio" name="config[free_transfer]" value="1"{if $product['config']['free_transfer']} checked="checked"{/if}/><label>Yes</label>
+            <input type="radio" name="config[free_transfer]" value="0"{if !$product['config']['free_transfer']} checked="checked"{/if} /><label>No</label>
+        </div>
+        <div class="fix"></div>
+    </div>
+
+    <input type="submit" value="{=Update|trans}" class="greyishBtn submitForm" />
+</fieldset>
+        
+<input type="hidden" name="id" value="{$product['id']}" />
+</form>
+
+<div class="help">
+    <h5>{='Hosting plans'|trans}</h5>
+</div>
+
+<table class="tableStatic wide">
+    <thead>
+        <tr>
+            <td>Title</td>
+            <td style="width:5%">&nbsp;</td>
+        </tr>
+    </thead>
+    <tbody>
+        {foreach $admin->servicehosting_hp_get_pairs as $id => $plan}
+        <tr>
+            <td>{$plan}</td>
+            <td class="actions"><a class="bb-button btn14" href="{='/servicehosting/plan'|alink}/{$id}"><img src="{$theme->url}images/icons/dark/pencil.png" alt=""></a></td>
+        </tr>
+        {else}
+        <tr>
+            <td colspan="2">{='The list is empty'|trans}</td>
+        </tr>
+        {/foreach}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="2">
+                <a href="{='servicehosting#tab-new-plan'|alink}" title="" class="btnIconLeft mr10 mt5"><img src="{$theme->url}images/icons/dark/settings2.png" alt="" class="icon"><span>New hosting plan</span></a>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+<div class="help">
+    <h5>{=Servers|trans}</h5>
+</div>
+
+<table class="tableStatic wide">
+    <thead>
+        <tr>
+            <td>Title</td>
+            <td style="width:5%">&nbsp;</td>
+        </tr>
+    </thead>
+    <tbody>
+        {foreach $admin->servicehosting_server_get_pairs as $id => $server}
+        <tr>
+            <td>{$server}</td>
+            <td class="actions"><a class="bb-button btn14" href="{='/servicehosting/server'|alink}/{$id}"><img src="{$theme->url}images/icons/dark/pencil.png" alt=""></a></td>
+        </tr>
+        {else}
+        <tr>
+            <td colspan="7">{='The list is empty'|trans}</td>
+        </tr>
+        {/foreach}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="2">
+                <a href="{='servicehosting#tab-new-server'|alink}" title="" class="btnIconLeft mr10 mt5"><img src="{$theme->url}images/icons/dark/computer.png" alt="" class="icon"><span>New server</span></a>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+<script>
+    var free_domain_radios = $('input:radio[name="config[free_domain]"]');
+    var freeTldsRow = $('.free-tlds-row');
+	var freePerdsRow = $('.free-periods-row');
+
+    free_domain_radios.on('click', function(){
+        if ($(this).val() == 1){
+            freeTldsRow.fadeIn('slow');
+			freePerdsRow.fadeIn('slow');
+            $('select[name="config[free_tlds][]"]').prop('required', true);
+            $('select[name="config[free_domain_periods][]"]').prop('required', true);
+        }
+        if ($(this).val() == 0){
+            $('select[name="config[free_domain_periods][]"]').prop('required', false);
+            $('select[name="config[free_tlds][]"]').prop('required', false);
+            $('select[name="config[free_tlds][]"] option:selected').prop('selected', false);
+            $('select[name="config[free_domain_periods][]"] option:selected').prop('selected', false);
+            freeTldsRow.fadeOut('slow');
+			freePerdsRow.fadeOut('slow');
+        }
+    });
+
+    if (free_domain_radios.filter('[value=0]:checked').length > 0){
+        freeTldsRow.hide();
+		freePerdsRow.hide();
+    }
+
+
+</script>
+

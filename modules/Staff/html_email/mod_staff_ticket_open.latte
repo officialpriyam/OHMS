@@ -1,0 +1,44 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{block subject}[{$guest->system_company()->name}] {$ticket['subject']}{/block}
+{block content}
+{block|markdown}
+Hi {$staff->name},
+
+ **{$ticket['client']['first_name']} {$ticket['client']['last_name']}** opened a new support ticket #{$ticket['id']}
+
+***
+
+{$ticket['messages'][0]->content}
+
+***
+
+Ticket ID: #{$ticket['id']}   
+Department: {$ticket['helpdesk']['name']}   
+Status: {$ticket['status']|capitalize}
+
+Reply at {='support/ticket'|alink}/{$ticket['id']}
+
+{$guest->system_company()->signature}
+
+{/block}
+{/block}

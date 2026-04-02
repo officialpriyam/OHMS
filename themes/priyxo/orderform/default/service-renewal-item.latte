@@ -1,0 +1,15 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_public.latte'}
+
+{block meta_title}{='Renewal item'|trans}{/block}
+{block head}{include 'shared/_styles.latte'}{/block}
+
+{block content_before}
+    <div class="wh-page-header">
+        <h1 class="wh-page-title">{='Renewal Item'|trans}</h1>
+        <p class="wh-page-subtitle">{='Single-item renewal screens are available here for themes that expect WHMCS-style renewal subviews.'|trans}</p>
+    </div>
+{/block}
+
+{block content}
+    {include 'shared/_placeholder.latte', title: ('Renew individual services from the current OHMS client workflows'|trans), description: ('The active OHMS billing flow already handles renewals through invoices, service management, and service-specific logic.'|trans), note: ('This placeholder keeps the orderform screen map complete for future theme work.'|trans)}
+{/block}

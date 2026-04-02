@@ -1,0 +1,12 @@
+{
+    "id":           "servicesolusvm",
+	"type":         "mod",
+    "name":         "SolusVM product",
+    "description":  "Sell virtual servers using SolusVM extension for OHMS",
+    "icon_url":     "icon.png",
+    "homepage_url": "http://github.com/OHMS/",
+    "author":       "OHMS",
+    "author_url":   "http://extensions.OHMS.org/",
+    "license":      "http://www.OHMS.org/license.txt",
+    "version":      "1.0.0"
+}

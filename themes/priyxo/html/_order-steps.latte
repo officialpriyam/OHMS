@@ -1,0 +1,35 @@
+{if isset($lemon_style) && $lemon_style}
+    <ul class="lemon-progress-list p-0 m-0">
+        <li class="lemon-progress-item active">
+            <div class="lemon-progress-circle"><i class="fa fa-check"></i></div>
+            <span>{='Configure Order'|trans}</span>
+        </li>
+        <li class="lemon-progress-item {if ($selected >= 3)}active{/if}">
+            <div class="lemon-progress-circle">{if ($selected >= 3)}<i class="fa fa-check"></i>{else}2{/if}</div>
+            <span>{='Order View'|trans}</span>
+        </li>
+        <li class="lemon-progress-item {if ($selected >= 4)}active{/if}">
+            <div class="lemon-progress-circle">{if ($selected >= 4)}<i class="fa fa-check"></i>{else}3{/if}</div>
+            <span>{='Checkout'|trans}</span>
+        </li>
+    </ul>
+{else}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            {if ($selected == 1)}
+                <li class="breadcrumb-item active">1. {='Select product'|trans}</li>
+            {else}
+                <li class="breadcrumb-item">
+                    <a href="{=order|link}">1. {='Select product'|trans}</a>
+                </li>
+            {/if}
+            {if ($selected == 2)}
+                <li class="breadcrumb-item active">2. {=Configure|trans} {if $product}- {$product['title']}{/if}</li>
+            {else}
+                <li class="breadcrumb-item">2. {=Configure|trans}</li>
+            {/if}
+            <li class="breadcrumb-item{if ($selected == 3)} active{/if}">3. {=Confirm|trans}</li>
+            <li class="breadcrumb-item{if ($selected == 4)} active{/if}">4. {=Checkout|trans}</li>
+        </ol>
+    </nav>
+{/if}

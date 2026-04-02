@@ -1,0 +1,20 @@
+{if ($list->pages > 1)}
+    {var $page = $list->page}
+
+    <hr>
+    <nav aria-label="{='Page navigation'|trans}">
+        <ul class="pagination justify-content-center">
+        {foreach range(1, $list->pages) as $i}
+            {if ($i == $page)}
+                <li class="page-item active">
+                    <a href="#" class="page-link" onclick="return false;">{$i}</a>
+                </li>
+            {else}
+                <li class="page-item">
+                    <a href="?{foreach array_merge(array_merge([], $request), [page => $i]) as $k => $v}{$k}={$v}{if ($iterator->last == false)}&{/if}{/foreach}" class="page-link">{$i}</a>
+                </li>
+            {/if}
+        {/foreach}
+        </ul>
+    </nav>
+{/if}

@@ -1,0 +1,188 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{import 'macro_functions.latte'}
+
+{block meta_title}{='Profile details'|trans}{/block}
+
+{var $profile = $client->client_get()}
+{var $initials = substr($profile['first_name'], 0, 1) . substr($profile['last_name'], 0, 1)}
+
+{block content_before}
+    <div class="client-profile-header">
+        <h1 class="text-white fw-bold mb-1">{='Profile details'|trans}</h1>
+        <p class="text-white-50 mb-0">{='Manage your account settings and security'|trans}</p>
+    </div>
+{/block}
+
+{block content}
+    <section class="row g-4">
+        <div class="col-lg-4">
+            <div class="glass-card text-center h-100 py-5">
+                <div class="profile-avatar-initials">{$initials|upper}</div>
+                <h3 class="text-white fw-bold">{$profile['first_name']} {$profile['last_name']}</h3>
+                <p class="text-neon-blue mb-4">{$profile['email']}</p>
+                
+                <div class="d-flex justify-content-center gap-3">
+                    <div class="text-center px-3 border-end border-secondary border-opacity-25">
+                        <div class="text-white fw-bold small text-uppercase">Currency</div>
+                        <div class="text-neon-blue">{$profile['currency'] ?? 'USD'}</div>
+                    </div>
+                     <div class="text-center px-3">
+                        <div class="text-white fw-bold small text-uppercase">Status</div>
+                        <div class="text-success small">Active</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-8">
+            <div class="client-tabs">
+                <ul id="tabProfile" class="nav nav-tabs border-0" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#details">
+                            <i class="fa fa-user me-2"></i>{=Details|trans}</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#password">
+                            <i class="fa fa-key me-2"></i>{=Password|trans}</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#currency">
+                            <i class="fa fa-coins me-2"></i>{=Currency|trans}</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#api">
+                            <i class="fa fa-plug me-2"></i>{='API'|trans}</button>
+                    </li>
+                </ul>
+            </div>
+
+            <div id="myTabContent" class="tab-content mt-4">
+                <!-- Tab: Details -->
+                <div class="tab-pane fade show active" id="details">
+                    <div class="glass-card">
+                        <h4 class="text-white mb-4"><i class="fa fa-id-card me-2 text-primary"></i>{='Update profile'|trans}</h4>
+                        <form class="api-form" method="post" data-api-url="client/client/update" data-api-msg="{='Profile updated'|trans}">
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <label class="form-label" for="inputEmail">{='Email Address'|trans}</label>
+                                    <input type="email" class="form-control" id="inputEmail" name="email" value="{$profile['email']}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="inputFirstName">{='First name'|trans}</label>
+                                    <input type="text" class="form-control" id="inputFirstName" name="first_name" value="{$profile['first_name']}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="inputLastName">{='Last name'|trans}</label>
+                                    <input type="text" class="form-control" id="inputLastName" name="last_name" value="{$profile['last_name']}" required>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label" for="inputCompany">{='Company name'|trans}</label>
+                                    <input type="text" class="form-control" id="inputCompany" name="company" value="{$profile['company']}">
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label" for="inputPhone">{=Phone|trans}</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-dark border-secondary text-white">+</span>
+                                        <input type="text" class="form-control" style="max-width: 80px;" name="phone_cc" value="{$profile['phone_cc']}" placeholder="CC" required>
+                                        <input type="text" class="form-control" id="inputPhone" name="phone" value="{$profile['phone']}" placeholder="Number" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="inputAddress1">{=Address|trans}</label>
+                                    <input type="text" class="form-control" id="inputAddress1" name="address_1" value="{$profile['address_1']}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="inputAddress2">{='Address 2'|trans}</label>
+                                    <input type="text" class="form-control" id="inputAddress2" name="address_2" value="{$profile['address_2']}">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label" for="inputCity">{=City|trans}</label>
+                                    <input type="text" class="form-control" id="inputCity" name="city" value="{$profile['city']}" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label" for="inputState">{=State|trans}</label>
+                                    <input type="text" class="form-control" id="inputState" name="state" value="{$profile['state']}">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label" for="inputZip">{=Zip|trans}</label>
+                                    <input type="text" class="form-control" id="inputZip" name="postcode" value="{$profile['postcode']}" required>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label" for="selectCountry">{=Country|trans}</label>
+                                    <div class="cyber-select-wrapper">
+                                        {include selectbox, country, $guest->system_countries, $profile['country'], 1, 'Select country', selectCountry}
+                                    </div>
+                                </div>
+                                <div class="col-12 mt-4">
+                                    <button class="btn btn-primary w-100 py-3 fw-bold text-uppercase" type="submit">{=Update|trans}</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Tab: Password -->
+                <div class="tab-pane fade" id="password">
+                    <div class="glass-card">
+                        <h4 class="text-white mb-4"><i class="fa fa-shield-alt me-2 text-primary"></i>{='Change password'|trans}</h4>
+                        <form method="post" class="api-form mx-auto" style="max-width: 450px;" data-api-url="client/client/change_password" data-api-msg="{='Password changed'|trans}">
+                            <div class="mb-3">
+                                <label class="form-label" for="inputPassword">{=Password|trans}</label>
+                                <input type="password" class="form-control" id="inputPassword" name="password" required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label" for="inputPasswordRepeat">{='Password confirm'|trans}</label>
+                                <input type="password" class="form-control" id="inputPasswordRepeat" name="password_confirm" required>
+                            </div>
+                            <button class="btn btn-primary w-100 py-3 fw-bold text-uppercase" type="submit">{='Change password'|trans}</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Tab: Currency -->
+                <div class="tab-pane fade" id="currency">
+                    <div class="glass-card">
+                        <h4 class="text-white mb-4"><i class="fa fa-coins me-2 text-primary"></i>{=Currency|trans}</h4>
+                        <div class="p-4 border border-secondary border-opacity-10 rounded-3 bg-dark bg-opacity-25">
+                            {if $profile['currency']}
+                                <h5 class="text-white mb-2">{='Current Currency'|trans}: <span class="text-neon-blue">{$profile['currency']}</span></h5>
+                                <p class="text-white-50 small mb-0">{='Create new client profile if you want to manage your money in other currency.'|trans}</p>
+                            {else}
+                                <p class="text-white-50 mb-0">{='Your profile currency will be defined after your first order.'|trans}</p>
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: API -->
+                <div class="tab-pane fade" id="api">
+                    <div class="glass-card">
+                        <h4 class="text-white mb-4"><i class="fa fa-plug me-2 text-primary"></i>{='API key'|trans}</h4>
+                        <p class="text-white-50 small mb-4">{='API key allows integration with external applications. Resetting the key will break existing applications using it.'|trans}</p>
+                        
+                        {var $key = $client->client_api_key_get()}
+                        {if $key}
+                            <div class="alert alert-info border-0 bg-primary bg-opacity-10 text-center mb-4 p-4">
+                                <label class="text-white-50 small text-uppercase fw-bold d-block mb-2">{='Your Secure API Key'|trans}</label>
+                                <code class="fs-5 d-block py-2 text-neon-blue">{$key}</code>
+                            </div>
+                            <form method="post" class="api-form text-center" data-api-url="client/client/api_key_reset" data-api-msg="{='API key was changed. Please refresh the page.'|trans}">
+                                <button class="btn btn-outline-danger px-5" type="submit"><i class="fa fa-undo-alt me-2"></i>{='Reset key'|trans}</button>
+                            </form>
+                        {else}
+                            <div class="text-center p-5 border border-dashed border-secondary border-opacity-25 rounded-3 mb-4">
+                                <i class="fa fa-key fa-3x text-white-50 mb-3 opacity-25"></i>
+                                <h5 class="text-white-50">{='No API key generated yet'|trans}</h5>
+                            </div>
+                            <form method="post" class="api-form text-center" data-api-url="client/client/api_key_reset" data-api-msg="{='API key was changed. Please refresh the page.'|trans}">
+                                <button class="btn btn-primary px-5" type="submit">{=Create|trans} {='API Key'|trans}</button>
+                            </form>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{/block}
+

@@ -1,0 +1,23 @@
+/**
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ */
+﻿CKEDITOR.plugins.setLang("wsc","bn",{btnIgnore:"ইগনোর কর",btnIgnoreAll:"সব ইগনোর কর",btnReplace:"বদলে দাও",btnReplaceAll:"সব বদলে দাও",btnUndo:"আন্ডু",changeTo:"এতে বদলাও",errorLoading:"Error loading application service host: %s.",ieSpellDownload:"বানান পরীক্ষক ইনস্টল করা নেই। আপনি কি এখনই এটা ডাউনলোড করতে চান?",manyChanges:"বানান পরীক্ষা শেষ: %1 গুলো শব্দ বদলে গ্যাছে",noChanges:"বানান পরীক্ষা শেষ: কোন শব্দ পরিবর্তন করা হয়নি",noMispell:"বানান পরীক্ষা শেষ: কোন ভুল বানান পাওয়া যায়নি",noSuggestions:"- কোন সাজেশন নেই -",
+notAvailable:"Sorry, but service is unavailable now.",notInDic:"শব্দকোষে নেই",oneChange:"বানান পরীক্ষা শেষ: একটি মাত্র শব্দ পরিবর্তন করা হয়েছে",progress:"বানান পরীক্ষা চলছে...",title:"Spell Checker",toolbar:"বানান চেক"});

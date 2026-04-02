@@ -1,0 +1,11 @@
+{
+    "id":           "queue",
+    "type":         "mod",
+    "name":         "Queue manager",
+    "description":  "Execute long running tasks in queue",
+    "homepage_url": "http://github.com/OHMS/",
+    "author":       "OHMS",
+    "author_url":   "http://extensions.OHMS.org/",
+    "license":      "http://www.OHMS.org/license.txt",
+    "version":      "1.0.0"
+}

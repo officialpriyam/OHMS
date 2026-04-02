@@ -1,0 +1,201 @@
+{extends 'layout_login.latte'}
+
+{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+
+{block meta_title}{=Login|trans}{/block}
+
+{block content}
+<div class="setup-card">
+    <div class="setup-card-header">
+        <div class="setup-brand">
+            {if $guest->system_company()->logo_url}
+                <img src="{$guest->system_company()->logo_url}" alt="OHMS" />
+            {else}
+                <img src="{$theme->url}images/loginLogo.png" alt="OHMS" />
+            {/if}
+        </div>
+        <div class="setup-version-badge">V{$guest->system_version() ?: '8.7'}</div>
+    </div>
+
+    {if $create_admin}
+    <div class="setup-step is-active" data-setup-step="1">
+        <h1>New Installation</h1>
+        <p>No existing installation was detected.</p>
+        <p class="setup-muted">Do you want to perform an upgrade? Do not continue. Instead, click here for help.</p>
+
+        <div class="setup-requirements">
+            <div class="setup-requirements-title">System Requirements Check Passed</div>
+            <div>Your system meets the requirements to run this version of OHMS.</div>
+            <a href="#" class="setup-link-like">View detailed check results</a>
+        </div>
+
+        <div class="setup-actions">
+            <button type="button" class="setup-btn setup-btn-danger" data-next-step="2">Begin Installation</button>
+        </div>
+    </div>
+
+    <div class="setup-step" data-setup-step="2">
+        <h1>End User License Agreement</h1>
+        <p>Please review the license terms before installing or upgrading OHMS.</p>
+
+        <div class="setup-license-box">
+            <p>This software end-user license agreement is a legal agreement between you and OHMS.</p>
+            <p>By installing, copying, or otherwise using the software, you agree to be bound by the terms of this agreement.</p>
+            <p>You may install and use one copy of this software for each valid installation licensed to you.</p>
+            <p>Modification, reverse engineering, sublicensing, resale, or distribution of the software without permission is prohibited.</p>
+            <p>To the maximum extent permitted by law, the software is provided "as is", without warranties of any kind.</p>
+            <p>If you do not agree to these terms, click "I Disagree" and do not continue installation.</p>
+        </div>
+
+        <div class="setup-actions">
+            <button type="button" class="setup-btn setup-btn-success" data-next-step="3">I AGREE</button>
+            <button type="button" class="setup-btn setup-btn-secondary" data-next-step="1">I DISAGREE</button>
+        </div>
+    </div>
+
+    <div class="setup-step" data-setup-step="3">
+        <h1>Set Up Administrator Account</h1>
+        <p>You now need to set up your administrator account.</p>
+
+        <div id="setup-error" class="setup-error"></div>
+
+        <form id="create-admin-form" class="api-form setup-form" action="{='api/guest/staff/create'|link}" method="post" data-api-redirect="{='index'|alink}">
+            <div class="setup-field-row">
+                <label for="setup-first-name">First Name:</label>
+                <input id="setup-first-name" type="text" name="first_name" value="" placeholder="Admin" />
+            </div>
+            <div class="setup-field-row">
+                <label for="setup-last-name">Last Name:</label>
+                <input id="setup-last-name" type="text" name="last_name" value="" placeholder="User" />
+            </div>
+            <div class="setup-field-row">
+                <label for="setup-email">Email:</label>
+                <input id="setup-email" type="email" name="email" value="{$request->email}" placeholder="admin@example.com" required="required" />
+            </div>
+            <div class="setup-field-row">
+                <label for="setup-username">Username:</label>
+                <input id="setup-username" type="text" name="username" value="admin" />
+            </div>
+            <div class="setup-field-row">
+                <label for="setup-password">Password:</label>
+                <input id="setup-password" type="password" name="password" value="{$request->password}" required="required" />
+            </div>
+            <div class="setup-field-row">
+                <label for="setup-password-confirm">Confirm Password:</label>
+                <input id="setup-password-confirm" type="password" name="password_confirm" value="" required="required" />
+            </div>
+
+            <div class="setup-actions">
+                <button type="submit" class="setup-btn setup-btn-primary">Complete Setup &raquo;</button>
+            </div>
+        </form>
+    </div>
+    {else}
+    <div class="setup-step is-active">
+        <h1>Administrator Login</h1>
+        <p>Please log in to access your OHMS administration area.</p>
+
+        <form class="api-form setup-form" action="{='api/guest/staff/login'|link}" method="post" data-api-redirect="{='index'|alink}">
+            <div class="setup-field-row">
+                <label for="login-email">{=Email|trans}:</label>
+                <input id="login-email" type="email" name="email" value="{$request->email}" placeholder="{='Enter your email address'|trans}" autofocus="autofocus" required="required" />
+            </div>
+            <div class="setup-field-row">
+                <label for="login-password">{=Password|trans}:</label>
+                <input id="login-password" type="password" name="password" value="{$request->password}" placeholder="{='Enter your password'|trans}" required="required" />
+            </div>
+
+            <div class="setup-actions setup-actions-login">
+                <label class="setup-remember-me" for="remember">
+                    <input type="checkbox" id="remember" name="remember" value="1" checked="checked" />
+                    {='Remember me'|trans}
+                </label>
+                <button type="submit" class="setup-btn setup-btn-primary">{='Log me in'|trans}</button>
+            </div>
+        </form>
+    </div>
+    {/if}
+
+    <div class="setup-card-footer">
+        <div>Copyright &copy; OHMS 2005-2023</div>
+        <div>www.ohms.org</div>
+    </div>
+</div>
+{/block}
+
+{block js}
+{if $create_admin}
+<script type="text/javascript">
+    (function () {
+        var stepNodes = document.querySelectorAll("[data-setup-step]");
+        var setupError = document.getElementById("setup-error");
+        var form = document.getElementById("create-admin-form");
+
+        function showStep(step) {
+            for (var i = 0; i < stepNodes.length; i++) {
+                if (stepNodes[i].getAttribute("data-setup-step") === step) {
+                    stepNodes[i].classList.add("is-active");
+                } else {
+                    stepNodes[i].classList.remove("is-active");
+                }
+            }
+        }
+
+        var switchButtons = document.querySelectorAll("[data-next-step]");
+        for (var i = 0; i < switchButtons.length; i++) {
+            switchButtons[i].addEventListener("click", function () {
+                showStep(this.getAttribute("data-next-step"));
+            });
+        }
+
+        if (form) {
+            form.addEventListener("submit", function (event) {
+                var password = document.getElementById("setup-password");
+                var confirmPassword = document.getElementById("setup-password-confirm");
+
+                if (!password || !confirmPassword) {
+                    return true;
+                }
+
+                if (password.value !== confirmPassword.value) {
+                    event.preventDefault();
+                    if (setupError) {
+                        setupError.classList.add("is-visible");
+                        setupError.innerHTML = "Password and Confirm Password must match.";
+                    }
+                    confirmPassword.focus();
+                    return false;
+                }
+
+                if (setupError) {
+                    setupError.classList.remove("is-visible");
+                    setupError.innerHTML = "";
+                }
+
+                return true;
+            });
+        }
+    })();
+</script>
+{/if}
+{/block}

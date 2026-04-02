@@ -1,0 +1,15 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_public.latte'}
+
+{block meta_title}{='Order complete'|trans}{/block}
+{block head}{include 'shared/_styles.latte'}{/block}
+
+{block content_before}
+    <div class="wh-page-header">
+        <h1 class="wh-page-title">{='Order Complete'|trans}</h1>
+        <p class="wh-page-subtitle">{='This completion screen is available for themes that want a dedicated post-checkout success page.'|trans}</p>
+    </div>
+{/block}
+
+{block content}
+    {include 'shared/_placeholder.latte', title: ('OHMS currently redirects to invoice or service management'|trans), description: ('Successful checkout already continues into the invoice view or the created service order page.'|trans), note: ('A future theme can replace this placeholder with a richer success experience without changing the backend.'|trans)}
+{/block}

@@ -1,0 +1,23 @@
+/**
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ */
+﻿CKEDITOR.plugins.setLang("wsc","sr",{btnIgnore:"Игнориши",btnIgnoreAll:"Игнориши све",btnReplace:"Замени",btnReplaceAll:"Замени све",btnUndo:"Врати акцију",changeTo:"Измени",errorLoading:"Error loading application service host: %s.",ieSpellDownload:"Провера спеловања није инсталирана. Да ли желите да је скинете са Интернета?",manyChanges:"Провера спеловања завршена:  %1 реч(и) је измењено",noChanges:"Провера спеловања завршена: Није измењена ниједна реч",noMispell:"Провера спеловања завршена: грешке нису пронађене",
+noSuggestions:"- Без сугестија -",notAvailable:"Sorry, but service is unavailable now.",notInDic:"Није у речнику",oneChange:"Провера спеловања завршена: Измењена је једна реч",progress:"Провера спеловања у току...",title:"Spell Checker",toolbar:"Провери спеловање"});

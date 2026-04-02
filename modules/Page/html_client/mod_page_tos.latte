@@ -1,0 +1,49 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends 'layout_public.latte'}
+
+{block meta_title}{='Terms and Conditions'|trans}{/block}
+
+{var $company = $guest->system_company()}
+
+{block body}
+<br/>
+<section class="container" role="main">
+    <div class="content-block">
+        <div class="row">
+            <article class="span12 data-block">
+                <div class="data-container">
+                    <header>
+                        <h1>{$company['name']} {='Terms and Conditions'|trans}</h1>
+                        <p>{$company['signature']}</p>
+                    </header>
+                    <section>
+                        {$company['tos']|bbmd}
+                    </section>
+                </div>
+            </article>
+        </div>
+    </div>
+    <div class="offset5">
+        <a href="{='/'|link}" class="btn btn-alt btn-primary btn-large" title="Back to Homepage">{='Back to Homepage'|trans}</a></div>
+</section>
+{/block}

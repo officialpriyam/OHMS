@@ -1,0 +1,23 @@
+/**
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ */
+﻿CKEDITOR.plugins.setLang("wsc","fr",{btnIgnore:"Ignorer",btnIgnoreAll:"Ignorer tout",btnReplace:"Remplacer",btnReplaceAll:"Remplacer tout",btnUndo:"Annuler",changeTo:"Modifier pour",errorLoading:"Erreur du chargement du service depuis l'hôte : %s.",ieSpellDownload:"La vérification d'orthographe n'est pas installée. Voulez-vous la télécharger maintenant?",manyChanges:"Vérification de l'orthographe terminée : %1 mots corrigés.",noChanges:"Vérification de l'orthographe terminée : Aucun mot corrigé.",
+noMispell:"Vérification de l'orthographe terminée : aucune erreur trouvée.",noSuggestions:"- Aucune suggestion -",notAvailable:"Désolé, le service est indisponible actuellement.",notInDic:"N'existe pas dans le dictionnaire.",oneChange:"Vérification de l'orthographe terminée : Un seul mot corrigé.",progress:"Vérification de l'orthographe en cours...",title:"Vérifier l'orthographe",toolbar:"Vérifier l'orthographe"});

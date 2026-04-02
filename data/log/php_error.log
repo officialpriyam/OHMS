@@ -1,0 +1,487 @@
+[14-Mar-2026 09:53:28 UTC] Unexpected ')' (on line 2 at column 68)
+[14-Mar-2026 09:53:28 UTC] Unexpected ')' (on line 2 at column 68)
+[14-Mar-2026 10:06:15 UTC] Module servicepterodactyl does not have service class 5898
+[14-Mar-2026 10:06:52 UTC] Page /admin/template/admin_default/favicon.ico not found
+[14-Mar-2026 10:17:40 UTC] Service pterodactyl does not support action activate
+[14-Mar-2026 10:17:40 UTC] Page /"http:////localhost:8000//order//service//manage//"4 not found
+[14-Mar-2026 10:17:41 UTC] Page /"http:////localhost:8000//order//service//manage//favicon.ico not found
+[14-Mar-2026 10:18:03 UTC] Cannot include undefined block 'status_name'.
+[14-Mar-2026 10:18:03 UTC] Cannot include undefined block 'status_name'.
+[14-Mar-2026 10:18:21 UTC] Page /"http:////localhost:8000//order//service//manage//"4 not found
+[14-Mar-2026 10:18:31 UTC] 2 Undefined variable $upgradables C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php 315
+[14-Mar-2026 10:18:31 UTC] PHP Warning:  Undefined variable $upgradables in C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php on line 315
+[14-Mar-2026 10:18:31 UTC] 2 Undefined variable $upgradables C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php 380
+[14-Mar-2026 10:18:31 UTC] PHP Warning:  Undefined variable $upgradables in C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php on line 380
+[14-Mar-2026 10:18:31 UTC] 2 Undefined variable $service_partial C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php 410
+[14-Mar-2026 10:18:31 UTC] PHP Warning:  Undefined variable $service_partial in C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php on line 410
+[14-Mar-2026 10:18:31 UTC] 2 Undefined variable $upgradables C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php 471
+[14-Mar-2026 10:18:31 UTC] PHP Warning:  Undefined variable $upgradables in C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php on line 471
+[14-Mar-2026 10:19:22 UTC] 2 Undefined variable $service_partial C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 120
+[14-Mar-2026 10:19:22 UTC] PHP Warning:  Undefined variable $service_partial in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 120
+[14-Mar-2026 10:19:22 UTC] 2 Undefined variable $addons C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 134
+[14-Mar-2026 10:19:22 UTC] PHP Warning:  Undefined variable $addons in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 134
+[14-Mar-2026 10:19:22 UTC] 2 Undefined variable $config_options_data C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 314
+[14-Mar-2026 10:19:22 UTC] PHP Warning:  Undefined variable $config_options_data in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 314
+[14-Mar-2026 10:19:22 UTC] 2 Attempt to read property "suspend_reason_list" on array C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 419
+[14-Mar-2026 10:19:22 UTC] PHP Warning:  Attempt to read property "suspend_reason_list" on array in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 419
+[14-Mar-2026 10:19:22 UTC] Latte\Essential\Filters::trim(): Argument #2 ($s) must be of type string, null given, called in C:\Users\User\Desktop\OHMS\ps-vendor\latte\latte\src\Latte\Runtime\FilterExecutor.php on line 138
+[14-Mar-2026 10:21:20 UTC] Cannot include undefined block 'status_name'.
+[14-Mar-2026 10:21:20 UTC] Cannot include undefined block 'status_name'.
+[14-Mar-2026 10:21:21 UTC] 2 Undefined variable $upgradables C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php 315
+[14-Mar-2026 10:21:21 UTC] PHP Warning:  Undefined variable $upgradables in C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php on line 315
+[14-Mar-2026 10:21:21 UTC] 2 Undefined variable $upgradables C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php 380
+[14-Mar-2026 10:21:21 UTC] PHP Warning:  Undefined variable $upgradables in C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php on line 380
+[14-Mar-2026 10:21:21 UTC] 2 Undefined variable $service_partial C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php 410
+[14-Mar-2026 10:21:21 UTC] PHP Warning:  Undefined variable $service_partial in C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php on line 410
+[14-Mar-2026 10:21:21 UTC] 2 Undefined variable $upgradables C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php 471
+[14-Mar-2026 10:21:21 UTC] PHP Warning:  Undefined variable $upgradables in C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php on line 471
+[14-Mar-2026 10:21:28 UTC] 2 Undefined variable $upgradables C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php 315
+[14-Mar-2026 10:21:28 UTC] PHP Warning:  Undefined variable $upgradables in C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php on line 315
+[14-Mar-2026 10:21:28 UTC] 2 Undefined variable $upgradables C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php 380
+[14-Mar-2026 10:21:28 UTC] PHP Warning:  Undefined variable $upgradables in C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php on line 380
+[14-Mar-2026 10:21:28 UTC] 2 Undefined variable $service_partial C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php 410
+[14-Mar-2026 10:21:28 UTC] PHP Warning:  Undefined variable $service_partial in C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php on line 410
+[14-Mar-2026 10:21:28 UTC] 2 Undefined variable $upgradables C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php 471
+[14-Mar-2026 10:21:28 UTC] PHP Warning:  Undefined variable $upgradables in C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php on line 471
+[14-Mar-2026 10:24:58 UTC] 2 Trying to access array offset on null C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_product_addons.latte--16eedd8ab2.php 198
+[14-Mar-2026 10:24:58 UTC] PHP Warning:  Trying to access array offset on null in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_product_addons.latte--16eedd8ab2.php on line 198
+[14-Mar-2026 10:24:58 UTC] 2 Trying to access array offset on null C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_product_addons.latte--16eedd8ab2.php 209
+[14-Mar-2026 10:24:58 UTC] PHP Warning:  Trying to access array offset on null in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_product_addons.latte--16eedd8ab2.php on line 209
+[14-Mar-2026 10:24:58 UTC] 2 Trying to access array offset on null C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_product_addons.latte--16eedd8ab2.php 220
+[14-Mar-2026 10:24:58 UTC] PHP Warning:  Trying to access array offset on null in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_product_addons.latte--16eedd8ab2.php on line 220
+[14-Mar-2026 10:34:33 UTC] Service pterodactyl does not support action create
+[14-Mar-2026 10:34:33 UTC] Error creating pterodactyl service for order 5
+[14-Mar-2026 10:34:43 UTC] Can not checkout empty cart. 0
+[14-Mar-2026 10:34:59 UTC] Service pterodactyl does not support action create
+[14-Mar-2026 10:34:59 UTC] Error creating pterodactyl service for order 6
+[14-Mar-2026 10:35:01 UTC] Can not checkout empty cart. 0
+[14-Mar-2026 10:35:01 UTC] Can not checkout empty cart. 0
+[14-Mar-2026 10:35:03 UTC] Cannot include undefined block 'status_name'.
+[14-Mar-2026 10:35:03 UTC] Cannot include undefined block 'status_name'.
+[14-Mar-2026 10:35:14 UTC] Order not found
+[14-Mar-2026 10:35:21 UTC] 2 Undefined variable $upgradables C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php 315
+[14-Mar-2026 10:35:21 UTC] PHP Warning:  Undefined variable $upgradables in C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php on line 315
+[14-Mar-2026 10:35:21 UTC] 2 Undefined variable $upgradables C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php 380
+[14-Mar-2026 10:35:21 UTC] PHP Warning:  Undefined variable $upgradables in C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php on line 380
+[14-Mar-2026 10:35:21 UTC] 2 Undefined variable $service_partial C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php 410
+[14-Mar-2026 10:35:21 UTC] PHP Warning:  Undefined variable $service_partial in C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php on line 410
+[14-Mar-2026 10:35:21 UTC] 2 Undefined variable $upgradables C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php 471
+[14-Mar-2026 10:35:21 UTC] PHP Warning:  Undefined variable $upgradables in C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php on line 471
+[14-Mar-2026 10:35:31 UTC] 2 Undefined variable $service_partial C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 120
+[14-Mar-2026 10:35:31 UTC] PHP Warning:  Undefined variable $service_partial in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 120
+[14-Mar-2026 10:35:31 UTC] 2 Undefined variable $addons C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 134
+[14-Mar-2026 10:35:31 UTC] PHP Warning:  Undefined variable $addons in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 134
+[14-Mar-2026 10:35:31 UTC] 2 Undefined variable $config_options_data C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 314
+[14-Mar-2026 10:35:31 UTC] PHP Warning:  Undefined variable $config_options_data in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 314
+[14-Mar-2026 10:35:31 UTC] 2 Undefined variable $addons C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 777
+[14-Mar-2026 10:35:31 UTC] PHP Warning:  Undefined variable $addons in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 777
+[14-Mar-2026 10:35:31 UTC] 2 foreach() argument must be of type array|object, null given C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 777
+[14-Mar-2026 10:35:31 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 777
+[14-Mar-2026 10:35:31 UTC] 2 Undefined variable $service_partial C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 814
+[14-Mar-2026 10:35:31 UTC] PHP Warning:  Undefined variable $service_partial in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 814
+[14-Mar-2026 10:35:31 UTC] Latte render error: Unexpected ')' (on line 1 at column 62)
+[14-Mar-2026 10:35:31 UTC] Unexpected ')' (on line 1 at column 62)
+[14-Mar-2026 10:35:40 UTC] 2 Undefined variable $service_partial C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 120
+[14-Mar-2026 10:35:40 UTC] PHP Warning:  Undefined variable $service_partial in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 120
+[14-Mar-2026 10:35:40 UTC] 2 Undefined variable $addons C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 134
+[14-Mar-2026 10:35:40 UTC] PHP Warning:  Undefined variable $addons in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 134
+[14-Mar-2026 10:35:40 UTC] 2 Undefined variable $config_options_data C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 314
+[14-Mar-2026 10:35:40 UTC] PHP Warning:  Undefined variable $config_options_data in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 314
+[14-Mar-2026 10:35:40 UTC] 2 Undefined variable $addons C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 777
+[14-Mar-2026 10:35:40 UTC] PHP Warning:  Undefined variable $addons in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 777
+[14-Mar-2026 10:35:40 UTC] 2 foreach() argument must be of type array|object, null given C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 777
+[14-Mar-2026 10:35:40 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 777
+[14-Mar-2026 10:35:40 UTC] 2 Undefined variable $service_partial C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 814
+[14-Mar-2026 10:35:40 UTC] PHP Warning:  Undefined variable $service_partial in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 814
+[14-Mar-2026 10:35:40 UTC] Latte render error: Unexpected ')' (on line 1 at column 62)
+[14-Mar-2026 10:35:40 UTC] Unexpected ')' (on line 1 at column 62)
+[14-Mar-2026 10:39:45 UTC] Service pterodactyl does not support action delete
+[14-Mar-2026 10:39:48 UTC] 2 Undefined variable $service_partial C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 120
+[14-Mar-2026 10:39:48 UTC] PHP Warning:  Undefined variable $service_partial in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 120
+[14-Mar-2026 10:39:48 UTC] 2 Undefined variable $addons C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 134
+[14-Mar-2026 10:39:48 UTC] PHP Warning:  Undefined variable $addons in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 134
+[14-Mar-2026 10:39:48 UTC] 2 Undefined variable $config_options_data C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 314
+[14-Mar-2026 10:39:48 UTC] PHP Warning:  Undefined variable $config_options_data in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 314
+[14-Mar-2026 10:39:48 UTC] 2 Undefined variable $addons C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 777
+[14-Mar-2026 10:39:48 UTC] PHP Warning:  Undefined variable $addons in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 777
+[14-Mar-2026 10:39:48 UTC] 2 foreach() argument must be of type array|object, null given C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 777
+[14-Mar-2026 10:39:48 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 777
+[14-Mar-2026 10:39:48 UTC] 2 Undefined variable $service_partial C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 814
+[14-Mar-2026 10:39:48 UTC] PHP Warning:  Undefined variable $service_partial in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 814
+[14-Mar-2026 10:39:48 UTC] Latte render error: Unexpected ')' (on line 1 at column 62)
+[14-Mar-2026 10:39:48 UTC] Unexpected ')' (on line 1 at column 62)
+[14-Mar-2026 10:49:05 UTC] 2 Undefined variable $service_partial C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 120
+[14-Mar-2026 10:49:05 UTC] PHP Warning:  Undefined variable $service_partial in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 120
+[14-Mar-2026 10:49:05 UTC] 2 Undefined variable $addons C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 134
+[14-Mar-2026 10:49:05 UTC] PHP Warning:  Undefined variable $addons in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 134
+[14-Mar-2026 10:49:05 UTC] 2 Undefined variable $config_options_data C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 314
+[14-Mar-2026 10:49:05 UTC] PHP Warning:  Undefined variable $config_options_data in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 314
+[14-Mar-2026 10:49:05 UTC] 2 Undefined variable $addons C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 777
+[14-Mar-2026 10:49:05 UTC] PHP Warning:  Undefined variable $addons in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 777
+[14-Mar-2026 10:49:05 UTC] 2 foreach() argument must be of type array|object, null given C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 777
+[14-Mar-2026 10:49:05 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 777
+[14-Mar-2026 10:49:05 UTC] 2 Undefined variable $service_partial C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 814
+[14-Mar-2026 10:49:05 UTC] PHP Warning:  Undefined variable $service_partial in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 814
+[14-Mar-2026 10:49:05 UTC] Latte render error: Unexpected '"', expecting end of HTML tag (on line 36 at column 92)
+[14-Mar-2026 10:49:05 UTC] Unexpected '"', expecting end of HTML tag (on line 36 at column 92)
+[14-Mar-2026 10:49:25 UTC] 2 Undefined variable $service_partial C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 120
+[14-Mar-2026 10:49:25 UTC] PHP Warning:  Undefined variable $service_partial in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 120
+[14-Mar-2026 10:49:25 UTC] 2 Undefined variable $addons C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 134
+[14-Mar-2026 10:49:25 UTC] PHP Warning:  Undefined variable $addons in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 134
+[14-Mar-2026 10:49:25 UTC] 2 Undefined variable $config_options_data C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 314
+[14-Mar-2026 10:49:25 UTC] PHP Warning:  Undefined variable $config_options_data in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 314
+[14-Mar-2026 10:49:25 UTC] 2 Undefined variable $addons C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 777
+[14-Mar-2026 10:49:25 UTC] PHP Warning:  Undefined variable $addons in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 777
+[14-Mar-2026 10:49:25 UTC] 2 foreach() argument must be of type array|object, null given C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 777
+[14-Mar-2026 10:49:25 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 777
+[14-Mar-2026 10:49:25 UTC] 2 Undefined variable $service_partial C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 814
+[14-Mar-2026 10:49:25 UTC] PHP Warning:  Undefined variable $service_partial in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 814
+[14-Mar-2026 10:49:25 UTC] 2 Undefined array key "product_id" C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_formbuilder_manage.latte--2c1b74a76e.php 28
+[14-Mar-2026 10:49:25 UTC] PHP Warning:  Undefined array key "product_id" in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_formbuilder_manage.latte--2c1b74a76e.php on line 28
+[14-Mar-2026 10:49:32 UTC] Service pterodactyl does not support action create
+[14-Mar-2026 10:49:32 UTC] Error creating pterodactyl service for order 6 0
+[14-Mar-2026 10:49:49 UTC] Service pterodactyl does not support action create
+[14-Mar-2026 10:49:49 UTC] Error creating pterodactyl service for order 6 0
+[14-Mar-2026 10:55:38 UTC] syntax error, unexpected token "public"
+[14-Mar-2026 10:57:28 UTC] Priyx\Mod\Servicepterodactyl\Service::create(): Argument #1 ($order) must be of type Model_ClientOrder, RedBeanPHP\OODBBean given, called in C:\Users\User\Desktop\OHMS\modules\Order\Service.php on line 796
+[14-Mar-2026 10:59:12 UTC] Attempt to assign property "client_id" on null
+[14-Mar-2026 11:00:10 UTC] SQLSTATE[42S02]: Base table or view not found: 1146 Table 'ohms_db.service_pterodactyl' doesn't exist 0
+[14-Mar-2026 11:01:26 UTC] Page /Wysiwyg/icon.png not found
+[14-Mar-2026 11:01:26 UTC] Page /Servicesolusvm/icon.png not found
+[14-Mar-2026 11:01:26 UTC] Page /Spamchecker/icon.png not found
+[14-Mar-2026 11:01:38 UTC] Page /Servicecentovacast/icon.png not found
+[14-Mar-2026 11:01:38 UTC] Page /Custompages/icon.png not found
+[14-Mar-2026 11:01:39 UTC] Page /Affiliate/icon.png not found
+[14-Mar-2026 11:01:39 UTC] Page /Massmailer/icon.png not found
+[14-Mar-2026 11:01:40 UTC] Page /Example/icon.png not found
+[14-Mar-2026 11:01:40 UTC] Page /Servicepterodactyl/icon.png not found
+[14-Mar-2026 11:01:40 UTC] Page /Paidsupport/icon.png not found
+[14-Mar-2026 11:01:40 UTC] Page /Seo/icon.png not found
+[14-Mar-2026 11:01:59 UTC] Page /Wysiwyg/icon.png not found
+[14-Mar-2026 11:02:00 UTC] Page /Servicesolusvm/icon.png not found
+[14-Mar-2026 11:02:00 UTC] Page /Spamchecker/icon.png not found
+[14-Mar-2026 11:02:00 UTC] Page /Servicecentovacast/icon.png not found
+[14-Mar-2026 11:02:00 UTC] Page /Custompages/icon.png not found
+[14-Mar-2026 11:02:00 UTC] Page /Servicepterodactyl/icon.png not found
+[14-Mar-2026 11:02:00 UTC] Page /Affiliate/icon.png not found
+[14-Mar-2026 11:02:01 UTC] Page /Example/icon.png not found
+[14-Mar-2026 11:02:01 UTC] Page /Massmailer/icon.png not found
+[14-Mar-2026 11:02:01 UTC] Page /Paidsupport/icon.png not found
+[14-Mar-2026 11:02:01 UTC] Page /Seo/icon.png not found
+[14-Mar-2026 11:02:52 UTC] Error while retrieving cPanel url: Server manager "Pterodactyl" was not found
+[14-Mar-2026 11:02:52 UTC] 8192 json_decode(): Passing null to parameter #1 ($json) of type string is deprecated C:\Users\User\Desktop\OHMS\modules\Servicehosting\Service.php 822
+[14-Mar-2026 11:02:52 UTC] PHP Deprecated:  json_decode(): Passing null to parameter #1 ($json) of type string is deprecated in C:\Users\User\Desktop\OHMS\modules\Servicehosting\Service.php on line 822
+[14-Mar-2026 11:02:52 UTC] 2 Attempt to read property "label" on array C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_servicehosting_index.latte--c4deb1ac1b.php 365
+[14-Mar-2026 11:02:52 UTC] PHP Warning:  Attempt to read property "label" on array in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_servicehosting_index.latte--c4deb1ac1b.php on line 365
+[14-Mar-2026 11:02:55 UTC] Error while retrieving cPanel url: Server manager "Pterodactyl" was not found
+[14-Mar-2026 11:02:56 UTC] 2 Attempt to read property "label" on array C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_servicehosting_server.latte--86663001db.php 167
+[14-Mar-2026 11:02:56 UTC] PHP Warning:  Attempt to read property "label" on array in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_servicehosting_server.latte--86663001db.php on line 167
+[14-Mar-2026 11:04:57 UTC] 2 Undefined variable $service_partial C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 121
+[14-Mar-2026 11:04:57 UTC] PHP Warning:  Undefined variable $service_partial in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 121
+[14-Mar-2026 11:04:57 UTC] 2 Undefined variable $addons C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 135
+[14-Mar-2026 11:04:57 UTC] PHP Warning:  Undefined variable $addons in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 135
+[14-Mar-2026 11:04:57 UTC] 2 Undefined variable $config_options_data C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 315
+[14-Mar-2026 11:04:57 UTC] PHP Warning:  Undefined variable $config_options_data in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 315
+[14-Mar-2026 11:04:57 UTC] 2 Undefined variable $addons C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 778
+[14-Mar-2026 11:04:57 UTC] PHP Warning:  Undefined variable $addons in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 778
+[14-Mar-2026 11:04:57 UTC] 2 foreach() argument must be of type array|object, null given C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 778
+[14-Mar-2026 11:04:57 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 778
+[14-Mar-2026 11:04:57 UTC] 2 Undefined variable $service_partial C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 815
+[14-Mar-2026 11:04:57 UTC] PHP Warning:  Undefined variable $service_partial in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 815
+[14-Mar-2026 11:04:57 UTC] 2 Undefined array key "product_id" C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_formbuilder_manage.latte--2c1b74a76e.php 28
+[14-Mar-2026 11:04:57 UTC] PHP Warning:  Undefined array key "product_id" in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_formbuilder_manage.latte--2c1b74a76e.php on line 28
+[14-Mar-2026 11:05:01 UTC] SQLSTATE[42S02]: Base table or view not found: 1146 Table 'ohms_db.service_pterodactyl' doesn't exist 0
+[14-Mar-2026 11:07:40 UTC] Failed to create user on Pterodactyl 0
+[14-Mar-2026 11:10:23 UTC] Pterodactyl API Error (422) on servers: {"errors":[{"code":"ValidationException","status":"422","detail":"The environment field must be present.","meta":{"source_field":"environment","rule":"present"}}]}
+[14-Mar-2026 11:10:23 UTC] Failed to create server on Pterodactyl 0
+[14-Mar-2026 11:11:27 UTC] Pterodactyl API Error (422) on servers: {"errors":[{"code":"ValidationException","status":"422","detail":"The Server Jar File variable field is required.","meta":{"source_field":"environment.SERVER_JARFILE","rule":"required"}},{"code":"ValidationException","status":"422","detail":"The Build Number variable field is required.","meta":{"source_field":"environment.BUILD_NUMBER","rule":"required"}}]}
+[14-Mar-2026 11:11:27 UTC] Failed to create server on Pterodactyl 0
+[14-Mar-2026 11:11:46 UTC] Pterodactyl API Error (422) on servers: {"errors":[{"code":"ValidationException","status":"422","detail":"The Server Jar File variable field is required.","meta":{"source_field":"environment.SERVER_JARFILE","rule":"required"}},{"code":"ValidationException","status":"422","detail":"The Build Number variable field is required.","meta":{"source_field":"environment.BUILD_NUMBER","rule":"required"}}]}
+[14-Mar-2026 11:11:46 UTC] Failed to create server on Pterodactyl 0
+[14-Mar-2026 11:12:02 UTC] Pterodactyl API Error (422) on servers: {"errors":[{"code":"ValidationException","status":"422","detail":"The Server Jar File variable field is required.","meta":{"source_field":"environment.SERVER_JARFILE","rule":"required"}},{"code":"ValidationException","status":"422","detail":"The Build Number variable field is required.","meta":{"source_field":"environment.BUILD_NUMBER","rule":"required"}}]}
+[14-Mar-2026 11:12:02 UTC] Failed to create server on Pterodactyl 0
+[14-Mar-2026 11:13:41 UTC] 2 Undefined variable $service_partial C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 121
+[14-Mar-2026 11:13:41 UTC] PHP Warning:  Undefined variable $service_partial in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 121
+[14-Mar-2026 11:13:41 UTC] 2 Undefined variable $addons C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 135
+[14-Mar-2026 11:13:41 UTC] PHP Warning:  Undefined variable $addons in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 135
+[14-Mar-2026 11:13:41 UTC] 2 Undefined variable $config_options_data C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 315
+[14-Mar-2026 11:13:41 UTC] PHP Warning:  Undefined variable $config_options_data in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 315
+[14-Mar-2026 11:13:41 UTC] 2 Undefined variable $addons C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 778
+[14-Mar-2026 11:13:41 UTC] PHP Warning:  Undefined variable $addons in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 778
+[14-Mar-2026 11:13:41 UTC] 2 foreach() argument must be of type array|object, null given C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 778
+[14-Mar-2026 11:13:41 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 778
+[14-Mar-2026 11:13:41 UTC] 2 Undefined variable $service_partial C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 815
+[14-Mar-2026 11:13:41 UTC] PHP Warning:  Undefined variable $service_partial in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 815
+[14-Mar-2026 11:13:41 UTC] 2 Undefined array key "product_id" C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_formbuilder_manage.latte--2c1b74a76e.php 28
+[14-Mar-2026 11:13:41 UTC] PHP Warning:  Undefined array key "product_id" in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_formbuilder_manage.latte--2c1b74a76e.php on line 28
+[14-Mar-2026 11:13:50 UTC] 2 Undefined variable $service_partial C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 121
+[14-Mar-2026 11:13:50 UTC] PHP Warning:  Undefined variable $service_partial in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 121
+[14-Mar-2026 11:13:50 UTC] 2 Undefined variable $addons C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 135
+[14-Mar-2026 11:13:50 UTC] PHP Warning:  Undefined variable $addons in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 135
+[14-Mar-2026 11:13:50 UTC] 2 Undefined variable $config_options_data C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 315
+[14-Mar-2026 11:13:50 UTC] PHP Warning:  Undefined variable $config_options_data in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 315
+[14-Mar-2026 11:13:50 UTC] 2 Attempt to read property "suspend_reason_list" on array C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 420
+[14-Mar-2026 11:13:50 UTC] PHP Warning:  Attempt to read property "suspend_reason_list" on array in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 420
+[14-Mar-2026 11:13:50 UTC] Latte\Essential\Filters::trim(): Argument #2 ($s) must be of type string, null given, called in C:\Users\User\Desktop\OHMS\ps-vendor\latte\latte\src\Latte\Runtime\FilterExecutor.php on line 138
+[14-Mar-2026 11:14:06 UTC] 2 Undefined variable $upgradables C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php 316
+[14-Mar-2026 11:14:06 UTC] PHP Warning:  Undefined variable $upgradables in C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php on line 316
+[14-Mar-2026 11:14:07 UTC] 2 Undefined variable $upgradables C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php 381
+[14-Mar-2026 11:14:07 UTC] PHP Warning:  Undefined variable $upgradables in C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php on line 381
+[14-Mar-2026 11:14:07 UTC] 2 Undefined variable $service_partial C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php 411
+[14-Mar-2026 11:14:07 UTC] PHP Warning:  Undefined variable $service_partial in C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php on line 411
+[14-Mar-2026 11:14:07 UTC] 2 Undefined variable $upgradables C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php 472
+[14-Mar-2026 11:14:07 UTC] PHP Warning:  Undefined variable $upgradables in C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php on line 472
+[14-Mar-2026 11:30:18 UTC] 2 Undefined variable $service_partial C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 122
+[14-Mar-2026 11:30:18 UTC] PHP Warning:  Undefined variable $service_partial in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 122
+[14-Mar-2026 11:30:18 UTC] 2 Undefined variable $addons C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 136
+[14-Mar-2026 11:30:18 UTC] PHP Warning:  Undefined variable $addons in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 136
+[14-Mar-2026 11:30:18 UTC] 2 Undefined variable $config_options_data C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 316
+[14-Mar-2026 11:30:18 UTC] PHP Warning:  Undefined variable $config_options_data in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 316
+[14-Mar-2026 11:30:18 UTC] 2 Undefined variable $addons C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 779
+[14-Mar-2026 11:30:18 UTC] PHP Warning:  Undefined variable $addons in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 779
+[14-Mar-2026 11:30:18 UTC] 2 foreach() argument must be of type array|object, null given C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 779
+[14-Mar-2026 11:30:18 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 779
+[14-Mar-2026 11:30:18 UTC] 2 Undefined variable $service_partial C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php 816
+[14-Mar-2026 11:30:18 UTC] PHP Warning:  Undefined variable $service_partial in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_order_manage.latte--1314b3e1e0.php on line 816
+[14-Mar-2026 11:34:49 UTC] 2 Undefined variable $upgradables C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php 473
+[14-Mar-2026 11:34:49 UTC] PHP Warning:  Undefined variable $upgradables in C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php on line 473
+[14-Mar-2026 11:35:03 UTC] 2 Undefined variable $upgradables C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php 473
+[14-Mar-2026 11:35:03 UTC] PHP Warning:  Undefined variable $upgradables in C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php on line 473
+[14-Mar-2026 11:36:11 UTC] service #pterodactyl method toApiArray is missing
+[14-Mar-2026 11:36:12 UTC] 2 Undefined variable $upgradables C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php 473
+[14-Mar-2026 11:36:12 UTC] PHP Warning:  Undefined variable $upgradables in C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php on line 473
+[14-Mar-2026 11:37:56 UTC] service #pterodactyl method toApiArray is missing
+[14-Mar-2026 11:37:56 UTC] 2 Undefined variable $upgradables C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php 473
+[14-Mar-2026 11:37:56 UTC] PHP Warning:  Undefined variable $upgradables in C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php on line 473
+[14-Mar-2026 11:37:59 UTC] Order #5 has no active service
+[14-Mar-2026 11:37:59 UTC] 2 Undefined variable $upgradables C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php 468
+[14-Mar-2026 11:37:59 UTC] PHP Warning:  Undefined variable $upgradables in C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_order_manage.latte--d7675f0199.php on line 468
+[14-Mar-2026 11:38:15 UTC] Service pterodactyl does not support action delete
+[14-Mar-2026 11:38:19 UTC] Service pterodactyl does not support action delete
+[14-Mar-2026 11:38:23 UTC] Page /product/manage7 not found
+[14-Mar-2026 11:38:30 UTC] 2 Attempt to read property "7" on array C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_product_manage.latte--94d734d1cf.php 438
+[14-Mar-2026 11:38:30 UTC] PHP Warning:  Attempt to read property "7" on array in C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_product_manage.latte--94d734d1cf.php on line 438
+[14-Mar-2026 11:38:58 UTC] Can not checkout empty cart. 0
+[14-Mar-2026 11:38:58 UTC] Can not checkout empty cart. 0
+[14-Mar-2026 11:40:31 UTC] Can not checkout empty cart. 0
+[14-Mar-2026 11:40:36 UTC] Cannot include undefined block 'status_name'.
+[14-Mar-2026 11:40:36 UTC] Cannot include undefined block 'status_name'.
+[14-Mar-2026 11:45:45 UTC] Cannot include undefined block 'status_name'.
+[14-Mar-2026 11:45:45 UTC] Cannot include undefined block 'status_name'.
+[14-Mar-2026 11:48:57 UTC] Cannot include undefined block 'status_name'.
+[14-Mar-2026 11:48:57 UTC] Cannot include undefined block 'status_name'.
+[23-Mar-2026 06:32:28 UTC] Latte render error: {extends} must be placed in template head (in '...\html\mod_staff_login.latte' on line 22 at column 1)
+[23-Mar-2026 06:32:28 UTC] {extends} must be placed in template head (in '...\html\mod_staff_login.latte' on line 22 at column 1)
+[23-Mar-2026 06:34:54 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 37
+[23-Mar-2026 06:34:54 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 42
+[23-Mar-2026 06:34:54 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 49
+[23-Mar-2026 06:34:54 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 54
+[23-Mar-2026 06:35:02 UTC] Check your login details 403
+[23-Mar-2026 06:35:09 UTC] Page /admin/template/admin_default/favicon.ico not found
+[23-Mar-2026 06:35:25 UTC] Module images Admin controller class was not found
+[23-Mar-2026 06:35:25 UTC] Page /Wysiwyg/icon.png not found
+[23-Mar-2026 06:35:25 UTC] Page /Affiliate/icon.png not found
+[23-Mar-2026 06:35:26 UTC] Page /Custompages/icon.png not found
+[23-Mar-2026 06:35:26 UTC] Page /Example/icon.png not found
+[23-Mar-2026 06:35:26 UTC] Page /Filemanager/icon.png not found
+[23-Mar-2026 06:35:26 UTC] Page /Massmailer/icon.png not found
+[23-Mar-2026 06:35:26 UTC] Page /Paidsupport/icon.png not found
+[23-Mar-2026 06:35:27 UTC] 2 Attempt to read property "first_name" on array C:\Users\User\Desktop\OHMS\data\cache\latte\html-client-_topbar_client.latte--dbd3c7ce13.php 77
+[23-Mar-2026 06:35:27 UTC] 2 Attempt to read property "last_name" on array C:\Users\User\Desktop\OHMS\data\cache\latte\html-client-_topbar_client.latte--dbd3c7ce13.php 79
+[23-Mar-2026 06:35:27 UTC] Page /Seo/icon.png not found
+[23-Mar-2026 06:35:27 UTC] Page /Servicecentovacast/icon.png not found
+[23-Mar-2026 06:35:27 UTC] Page /Servicepterodactyl/icon.png not found
+[23-Mar-2026 06:35:27 UTC] Page /Servicesolusvm/icon.png not found
+[23-Mar-2026 06:35:27 UTC] Page /Spamchecker/icon.png not found
+[23-Mar-2026 06:37:31 UTC] Years parameter is missing for domain configuration. 0
+[23-Mar-2026 06:44:51 UTC] Template not found: mod_page_orde.latte
+[23-Mar-2026 06:46:09 UTC] Product not found
+[23-Mar-2026 06:49:43 UTC] 2 Attempt to read property "2" on array C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_product_manage.latte--94d734d1cf.php 442
+[23-Mar-2026 06:49:44 UTC] Page /product/manage/undefinedindex.php not found
+[23-Mar-2026 06:49:44 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 37
+[23-Mar-2026 06:49:44 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 42
+[23-Mar-2026 06:49:44 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 49
+[23-Mar-2026 06:49:44 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 54
+[23-Mar-2026 06:49:44 UTC] Page /product/manage/undefinedindex.php not found
+[23-Mar-2026 06:49:44 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 37
+[23-Mar-2026 06:49:44 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 42
+[23-Mar-2026 06:49:44 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 49
+[23-Mar-2026 06:49:44 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 54
+[23-Mar-2026 06:49:57 UTC] Latte render error: Unexpected ')' (in '...\html_admin\mod_formbuilder_settings.latte' on line 134 at column 66)
+[23-Mar-2026 06:49:57 UTC] Unexpected ')' (in '...\html_admin\mod_formbuilder_settings.latte' on line 134 at column 66)
+[23-Mar-2026 06:50:01 UTC] 2 Attempt to read property "2" on array C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_product_manage.latte--94d734d1cf.php 442
+[23-Mar-2026 06:50:02 UTC] Page /product/manage/undefinedindex.php not found
+[23-Mar-2026 06:50:02 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 37
+[23-Mar-2026 06:50:02 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 42
+[23-Mar-2026 06:50:02 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 49
+[23-Mar-2026 06:50:02 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 54
+[23-Mar-2026 06:50:02 UTC] Page /product/manage/undefinedindex.php not found
+[23-Mar-2026 06:50:02 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 37
+[23-Mar-2026 06:50:02 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 42
+[23-Mar-2026 06:50:02 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 49
+[23-Mar-2026 06:50:02 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 54
+[23-Mar-2026 06:50:55 UTC] Page /product/manage/undefinedindex.php not found
+[23-Mar-2026 06:50:55 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 37
+[23-Mar-2026 06:50:55 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 42
+[23-Mar-2026 06:50:55 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 49
+[23-Mar-2026 06:50:55 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 54
+[23-Mar-2026 06:51:01 UTC] 2 Attempt to read property "2" on array C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_product_manage.latte--94d734d1cf.php 442
+[23-Mar-2026 06:51:02 UTC] Page /product/manage/undefinedindex.php not found
+[23-Mar-2026 06:51:02 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 37
+[23-Mar-2026 06:51:02 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 42
+[23-Mar-2026 06:51:02 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 49
+[23-Mar-2026 06:51:02 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 54
+[23-Mar-2026 06:51:03 UTC] Page /product/manage/undefinedindex.php not found
+[23-Mar-2026 06:51:03 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 37
+[23-Mar-2026 06:51:03 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 42
+[23-Mar-2026 06:51:03 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 49
+[23-Mar-2026 06:51:03 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 54
+[23-Mar-2026 07:02:53 UTC] Call to a member function getTable() on null
+[23-Mar-2026 07:02:53 UTC] Call to a member function getTable() on null
+[23-Mar-2026 07:02:55 UTC] Call to a member function getTable() on null
+[23-Mar-2026 07:03:02 UTC] Call to a member function getTable() on null
+[23-Mar-2026 07:03:03 UTC] Call to a member function getTable() on null
+[23-Mar-2026 07:03:05 UTC] Call to a member function getTable() on null
+[23-Mar-2026 07:03:05 UTC] Call to a member function getTable() on null
+[23-Mar-2026 07:03:06 UTC] Call to a member function getTable() on null
+[23-Mar-2026 07:03:07 UTC] Call to a member function getTable() on null
+[23-Mar-2026 07:03:09 UTC] Call to a member function getTable() on null
+[23-Mar-2026 07:03:20 UTC] 2 Attempt to read property "2" on array C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_product_manage.latte--94d734d1cf.php 442
+[23-Mar-2026 07:03:21 UTC] Page /product/manage/undefinedindex.php not found
+[23-Mar-2026 07:03:21 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 37
+[23-Mar-2026 07:03:21 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 42
+[23-Mar-2026 07:03:21 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 49
+[23-Mar-2026 07:03:21 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 54
+[23-Mar-2026 07:03:21 UTC] Page /product/manage/undefinedindex.php not found
+[23-Mar-2026 07:03:21 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 37
+[23-Mar-2026 07:03:21 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 42
+[23-Mar-2026 07:03:21 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 49
+[23-Mar-2026 07:03:21 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 54
+[23-Mar-2026 07:03:27 UTC] Call to a member function getTable() on null
+[23-Mar-2026 07:12:09 UTC] Product #1 no longer exists and was removed from your cart.
+[23-Mar-2026 07:12:20 UTC] Template not found: mod_page_store.latte
+[23-Mar-2026 07:12:51 UTC] 2 Undefined variable $redirect_to C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_page_login.latte--6fa4080b93.php 95
+[23-Mar-2026 07:12:56 UTC] 2 Undefined variable $redirect_to C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_page_register.latte--19cbadb009.php 101
+[23-Mar-2026 07:20:20 UTC] 2 Trying to access array offset on null C:\Users\User\Desktop\OHMS\di.php 263
+[23-Mar-2026 07:20:20 UTC] Model not found
+[23-Mar-2026 07:20:23 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 37
+[23-Mar-2026 07:20:23 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 42
+[23-Mar-2026 07:20:23 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 49
+[23-Mar-2026 07:20:23 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 54
+[23-Mar-2026 07:20:35 UTC] Page /admin/template/admin_default/favicon.ico not found
+[23-Mar-2026 07:20:57 UTC] Page /extension/settings/images/loaders/loader7.gif not found
+[23-Mar-2026 07:20:57 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 37
+[23-Mar-2026 07:20:57 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 42
+[23-Mar-2026 07:20:57 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 49
+[23-Mar-2026 07:20:57 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 54
+[23-Mar-2026 07:21:28 UTC] 8192 json_decode(): Passing null to parameter #1 ($json) of type string is deprecated C:\Users\User\Desktop\OHMS\modules\Product\Service.php 407
+[23-Mar-2026 07:26:52 UTC] Page /Invoice/icon.png not found
+[23-Mar-2026 07:26:52 UTC] Page /Email/icon.png not found
+[23-Mar-2026 07:26:52 UTC] Page /Currency/icon.png not found
+[23-Mar-2026 07:26:52 UTC] Page /Cron/icon.png not found
+[23-Mar-2026 07:26:52 UTC] Page /Client/icon.png not found
+[23-Mar-2026 07:26:52 UTC] Module images Admin controller class was not found
+[23-Mar-2026 07:26:52 UTC] Page /Support/icon.png not found
+[23-Mar-2026 07:26:53 UTC] Page /Order/icon.png not found
+[23-Mar-2026 07:26:53 UTC] Page /Theme/icon.png not found
+[23-Mar-2026 07:26:53 UTC] Page /Staff/icon.png not found
+[23-Mar-2026 07:26:53 UTC] Page /System/icon.png not found
+[23-Mar-2026 07:26:53 UTC] Page /Wysiwyg/icon.png not found
+[23-Mar-2026 07:26:54 UTC] Page /Servicepterodactyl/icon.png not found
+[23-Mar-2026 07:26:54 UTC] Theme admin_default does not have settings page
+[23-Mar-2026 07:26:54 UTC] Theme admin_default does not have settings page
+[23-Mar-2026 07:26:54 UTC] Page /theme/css/spectrum.css not found
+[23-Mar-2026 07:26:55 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 37
+[23-Mar-2026 07:26:55 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 42
+[23-Mar-2026 07:26:55 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 49
+[23-Mar-2026 07:26:55 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 54
+[23-Mar-2026 07:26:55 UTC] Page /theme/js/jquery.spectrum.js not found
+[23-Mar-2026 07:26:55 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 37
+[23-Mar-2026 07:26:55 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 42
+[23-Mar-2026 07:26:55 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 49
+[23-Mar-2026 07:26:55 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 54
+[23-Mar-2026 07:26:55 UTC] Page /theme/css/spectrum.css not found
+[23-Mar-2026 07:26:55 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 37
+[23-Mar-2026 07:26:55 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 42
+[23-Mar-2026 07:26:55 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 49
+[23-Mar-2026 07:26:55 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 54
+[23-Mar-2026 07:26:57 UTC] Theme was not found in path C:\Users\User\Desktop\OHMS/themes\admin_default
+[23-Mar-2026 07:26:59 UTC] 2 DOMDocument::loadHTML(): htmlParseEntityRef: no name in Entity, line: 509 C:\Users\User\Desktop\OHMS\modules\Theme\Model\Theme.php 94
+[23-Mar-2026 07:26:59 UTC] Page /theme/css/spectrum.css not found
+[23-Mar-2026 07:26:59 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 37
+[23-Mar-2026 07:26:59 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 42
+[23-Mar-2026 07:26:59 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 49
+[23-Mar-2026 07:26:59 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 54
+[23-Mar-2026 07:26:59 UTC] Page /theme/js/jquery.spectrum.js not found
+[23-Mar-2026 07:26:59 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 37
+[23-Mar-2026 07:26:59 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 42
+[23-Mar-2026 07:26:59 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 49
+[23-Mar-2026 07:26:59 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 54
+[23-Mar-2026 07:26:59 UTC] Page /theme/css/spectrum.css not found
+[23-Mar-2026 07:27:00 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 37
+[23-Mar-2026 07:27:00 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 42
+[23-Mar-2026 07:27:00 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 49
+[23-Mar-2026 07:27:00 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 54
+[23-Mar-2026 07:27:26 UTC] 2 DOMDocument::loadHTML(): htmlParseEntityRef: no name in Entity, line: 509 C:\Users\User\Desktop\OHMS\modules\Theme\Model\Theme.php 94
+[23-Mar-2026 07:27:26 UTC] 2 DOMDocument::loadHTML(): htmlParseEntityRef: no name in Entity, line: 509 C:\Users\User\Desktop\OHMS\modules\Theme\Model\Theme.php 94
+[23-Mar-2026 07:27:26 UTC] Page /theme/js/jquery.spectrum.js not found
+[23-Mar-2026 07:27:26 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 37
+[23-Mar-2026 07:27:26 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 42
+[23-Mar-2026 07:27:26 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 49
+[23-Mar-2026 07:27:26 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 54
+[23-Mar-2026 07:27:26 UTC] Page /theme/css/spectrum.css not found
+[23-Mar-2026 07:27:26 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 37
+[23-Mar-2026 07:27:26 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 42
+[23-Mar-2026 07:27:26 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 49
+[23-Mar-2026 07:27:26 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 54
+[23-Mar-2026 07:27:27 UTC] Page /theme/css/spectrum.css not found
+[23-Mar-2026 07:27:27 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 37
+[23-Mar-2026 07:27:27 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 42
+[23-Mar-2026 07:27:27 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 49
+[23-Mar-2026 07:27:27 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 54
+[23-Mar-2026 07:29:46 UTC] Template not found: mod_page_store.latte
+[23-Mar-2026 07:30:05 UTC] Template not found: mod_page_store.latte
+[23-Mar-2026 07:30:11 UTC] Do not place print statement {...} inside quotes in JavaScript (on line 65 at column 33)
+[23-Mar-2026 07:30:11 UTC] Do not place print statement {...} inside quotes in JavaScript (on line 65 at column 33)
+[23-Mar-2026 07:30:28 UTC] 2 Undefined variable $redirect_to C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_page_login.latte--6fa4080b93.php 95
+[23-Mar-2026 07:30:36 UTC] Please check your login details 403
+[23-Mar-2026 07:30:41 UTC] Please check your login details 403
+[23-Mar-2026 07:31:23 UTC] Please check your login details 403
+[23-Mar-2026 07:31:24 UTC] 2 Undefined variable $redirect_to C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_page_register.latte--19cbadb009.php 101
+[23-Mar-2026 07:42:08 UTC] Template not found: mod_client_affiliates.latte
+[23-Mar-2026 07:42:08 UTC] Page not found
+[23-Mar-2026 07:42:18 UTC] 2 Undefined variable $initials C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_client_profile.latte--dcebb188d2.php 88
+[23-Mar-2026 07:44:04 UTC] Module images Admin controller class was not found
+[23-Mar-2026 07:44:04 UTC] Page /Client/icon.png not found
+[23-Mar-2026 07:44:04 UTC] Page /Cron/icon.png not found
+[23-Mar-2026 07:44:04 UTC] Page /Currency/icon.png not found
+[23-Mar-2026 07:44:04 UTC] Page /Email/icon.png not found
+[23-Mar-2026 07:44:05 UTC] Page /Invoice/icon.png not found
+[23-Mar-2026 07:44:05 UTC] Page /System/icon.png not found
+[23-Mar-2026 07:44:05 UTC] Page /Support/icon.png not found
+[23-Mar-2026 07:44:05 UTC] Page /Order/icon.png not found
+[23-Mar-2026 07:44:05 UTC] Page /Staff/icon.png not found
+[23-Mar-2026 07:44:05 UTC] Page /Theme/icon.png not found
+[23-Mar-2026 07:44:05 UTC] Page /Wysiwyg/icon.png not found
+[23-Mar-2026 07:44:05 UTC] Page /Servicepterodactyl/icon.png not found
+[23-Mar-2026 07:44:10 UTC] 2 Trying to access array offset on null C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_product_addons.latte--16eedd8ab2.php 202
+[23-Mar-2026 07:44:10 UTC] 2 Trying to access array offset on null C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_product_addons.latte--16eedd8ab2.php 213
+[23-Mar-2026 07:44:10 UTC] 2 Trying to access array offset on null C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-mod_product_addons.latte--16eedd8ab2.php 224
+[23-Mar-2026 07:50:53 UTC] 2 Undefined variable $redirect_to C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_page_login.latte--6fa4080b93.php 95
+[23-Mar-2026 07:50:56 UTC] 2 Undefined variable $redirect_to C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_page_register.latte--19cbadb009.php 216
+[23-Mar-2026 07:50:56 UTC] 2 Undefined variable $custom_fields C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_page_register.latte--19cbadb009.php 397
+[23-Mar-2026 07:52:18 UTC] 2 Undefined variable $redirect_to C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_page_login.latte--6fa4080b93.php 95
+[23-Mar-2026 07:52:20 UTC] 2 Undefined variable $redirect_to C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_page_register.latte--19cbadb009.php 216
+[23-Mar-2026 07:52:20 UTC] 2 Undefined variable $custom_fields C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_page_register.latte--19cbadb009.php 397
+[23-Mar-2026 07:58:09 UTC] 2 Undefined variable $redirect_to C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_page_login.latte--6fa4080b93.php 95
+[23-Mar-2026 07:58:11 UTC] 2 Undefined variable $redirect_to C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_page_register.latte--19cbadb009.php 216
+[23-Mar-2026 07:58:11 UTC] 2 Undefined variable $custom_fields C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_page_register.latte--19cbadb009.php 397
+[31-Mar-2026 04:15:57 UTC] License verification skipped due to unexpected response from http://priyxstudio.in/license/api/verify (HTTP 200).
+[31-Mar-2026 04:16:17 UTC] 2 Undefined variable $redirect_to C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_page_login.latte--6fa4080b93.php 95
+[31-Mar-2026 04:16:21 UTC] 2 Undefined variable $redirect_to C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_page_register.latte--19cbadb009.php 216
+[31-Mar-2026 04:16:21 UTC] 2 Undefined variable $custom_fields C:\Users\User\Desktop\OHMS\data\cache\latte\priyxo-html-mod_page_register.latte--19cbadb009.php 397
+[31-Mar-2026 04:16:32 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 37
+[31-Mar-2026 04:16:32 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 42
+[31-Mar-2026 04:16:32 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 49
+[31-Mar-2026 04:16:32 UTC] 2 Undefined variable $version C:\Users\User\Desktop\OHMS\data\cache\latte\admin_default-html-layout_login.latte--cb9428a8e6.php 54
+[31-Mar-2026 04:16:45 UTC] Page /admin/template/admin_default/favicon.ico not found

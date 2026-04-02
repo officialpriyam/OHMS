@@ -1,0 +1,48 @@
+{if (($product['addons']|length) > 0)}
+<div class="d-flex flex-wrap gap-2 gm-option-grid">
+{foreach $product['addons'] as $addon}
+    <div class="gm-period-box" style="border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1rem; cursor: pointer; flex: 1; min-width: 200px; transition: all 0.3s; background: rgba(0,0,0,0.2);">
+        <label class="d-block m-0 cursor-pointer w-100">
+            <input type="hidden" name="addons[{$addon->id}]" value="0">
+            <input type="checkbox" name="addons[{$addon->id}]" value="1" class="d-none">
+            
+            <div class="d-flex justify-content-between align-items-center mb-1">
+                <div class="fw-bold text-white">{$addon->title}</div>
+                <div class="text-success small fw-bold">
+                    {var $addon_pricing = $addon->pricing}
+                    {if $addon_pricing->type === 'recurrent'}
+                        {var $default_period = $request->period ?? null}
+                        {if (!$default_period)}
+                            {foreach $addon_pricing->recurrent as $code => $period_prices}
+                                {if (!$default_period && $period_prices->enabled)}
+                                    {var $default_period = $code}
+                                {/if}
+                            {/foreach}
+                        {/if}
+                        {var $addon_price = ($addon_pricing->recurrent[$default_period]->price ?? 0)}
+                        {if $addon_price > 0}
+                            + {$addon_price|money_convert}
+                        {else}
+                            {='FREE'|trans}
+                        {/if}
+                    {else}
+                        {var $addon_price = ($addon_pricing->once->price ?? 0)}
+                        {if $addon_price > 0}
+                            + {$addon_price|money_convert}
+                        {else}
+                            {='FREE'|trans}
+                        {/if}
+                    {/if}
+                </div>
+            </div>
+            
+            {if $addon->description}
+                <div class="text-muted" style="font-size: 0.8rem; line-height: 1.3;">
+                    {$addon->description|truncate:60}
+                </div>
+            {/if}
+        </label>
+    </div>
+{/foreach}
+</div>
+{/if}

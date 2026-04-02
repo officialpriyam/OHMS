@@ -1,0 +1,55 @@
+{var $req_path = $request->_url ?? ''}
+{var $request_path = ltrim($req_path, '/')}
+{var $srv_uri = $request->getServer('REQUEST_URI') ?? ''}
+{var $request_uri = ltrim($srv_uri, '/')}
+{var $active_path = (str_starts_with($request_path, 'client') || str_starts_with($request_uri, 'client')) ? '/client' : '/' . $request_path}
+
+<div class="client-topbar sticky-top">
+    <div class="d-flex align-items-center">
+        <a class="mobile-menu-toggle d-lg-none me-3" onclick="document.getElementById('clientSidebar').classList.toggle('show')">
+            <i class="fa fa-bars"></i>
+        </a>
+        <h1 class="topbar-title">
+            {if str_starts_with($active_path, '/client')}
+                {=Dashboard|trans}
+            {elseif str_starts_with($active_path, '/order/service')}
+                {=Servers|trans}
+            {elseif str_starts_with($active_path, '/invoice')}
+                {=Orders|trans}
+            {elseif str_starts_with($active_path, '/support')}
+                {='Help & Support'|trans}
+            {else}
+                {='Client Area'|trans}
+            {/if}
+        </h1>
+    </div>
+
+    <div class="topbar-actions">
+        <!-- Credits -->
+        <span class="credits-display d-none d-md-inline">
+            Your Credits: <span class="credits-amount">{$profile->currency ?? '$'}{$profile->balance ?? '0.00'}</span>
+        </span>
+        
+        <!-- Help -->
+        <a href="{=support|link}" class="action-icon">
+            <i class="fa-regular fa-circle-question"></i>
+        </a>
+        
+        <!-- Notifications -->
+        <a href="#" class="action-icon position-relative">
+            <i class="fa-regular fa-bell"></i>
+        </a>
+        
+        <!-- User Dropdown -->
+        <div class="dropdown">
+            <div class="user-avatar" data-bs-toggle="dropdown" aria-expanded="false" title="{$profile->first_name} {$profile->last_name}">
+                {($profile->first_name ?? 'U')|first|upper}{($profile->last_name ?? 'ser')|first|upper}
+            </div>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" style="background-color: var(--nav-bg); border-color: var(--glass-border);">
+                <li><a class="dropdown-item text-white" href="{='client/profile'|link}"><i class="fa fa-user me-2"></i>{='Profile'|trans}</a></li>
+                <li><hr class="dropdown-divider" style="border-color: var(--glass-border);"></li>
+                <li><a class="dropdown-item text-danger" href="{='client/logout'|link}"><i class="fa fa-sign-out-alt me-2"></i>{='Logout'|trans}</a></li>
+            </ul>
+        </div>
+    </div>
+</div>

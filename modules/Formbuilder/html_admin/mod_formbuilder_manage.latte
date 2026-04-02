@@ -1,0 +1,104 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{var $form = $guest->formbuilder_get(['id' => $order['form_id']])}
+{var $config = $order['config']}
+<form class="api-form"  action="{='api/admin/order/update_config'|link}" data-api-msg="Order was updated">
+        <input type="hidden" name="config[form_id]" value="{$config['form_id'] ?? ''}" />
+        <input type="hidden" name="config[id]" value="{$config['id'] ?? ''}" />
+        <input type="hidden" name="config[product_id]" value="{$form['product_id'] ?? ''}" />
+        <input type="hidden" name="config[type]" value="{$config['type'] ?? ''}" />
+        <input type="hidden" name="config[quantity]" value="{$config['quantity'] ?? ''}" />
+        <input type="hidden" name="config[price]" value="{$config['price'] ?? ''}" />
+        <input type="hidden" name="config[setup_price]" value="{$config['setup_price'] ?? ''}" />
+        <input type="hidden" name="config[discount]" value="{$config['discount'] ?? ''}" />
+        <input type="hidden" name="config[discount_price]" value="{$config['discount_price'] ?? ''}" />
+        <input type="hidden" name="config[discount_setup]" value="{$config['discount_setup'] ?? ''}" />
+        <input type="hidden" name="config[total]" value="{$config['total'] ?? ''}" />
+
+        {foreach ($form['fields'] ?? []) as $field}
+        <div class="rowElem">
+            {if (($field['hide_label'] ?? 0) != 1)}<label for="{$field['name']}">{$field['label'] ?? ''}</label>{/if}
+            <div class="formRight">
+                {if (($field['type'] ?? '') == 'text')}
+                    <input type="text" name="config[{$field['name']}]" value="{$order['config'][$field['name']] ?? ''}"
+                {if (($field['required'] ?? 0) == 1)}required="required"{/if}
+                {if (($field['readonly'] ?? 0) == 1)}readonly="readonly"{/if}
+                style="height: 20px; width: 30%;"
+                />
+                {elseif (($field['type'] ?? '') == 'select')}
+                <select name="config[{$field['name']}]" required="required">
+                    {foreach ($field['options'] ?? []) as $k => $v}
+                        <option value="{$v}" {if ($v == ($order['config'][$field['name']] ?? ''))}selected="selected"{/if}>{$k}</option>
+                    {/foreach}
+                </select>
+
+                {elseif (($field['type'] ?? '') == 'checkbox')}
+                    {foreach ($field['options'] ?? []) as $k => $v}
+                    <label class="checkbox" style="padding-right: 20px"><input type="checkbox" name="config[{$field['name']}][]" value="{$v}"
+                    {if in_array($v, (array)($config[$field['name']] ?? []), true)}checked="checked"{/if}
+                    style="margin-right: 10px;"
+                        />{$k}
+                    </label>
+                    {/foreach}
+
+                {elseif (($field['type'] ?? '') == 'radio')}
+                {foreach ($field['options'] ?? []) as $k => $v}
+                <label class="radio" style="padding-right: 20px">
+                    <input type="radio" name="config[{$field['name']}]" value="{$v}"
+                    {if (($order['config'][$field['name']] ?? '') == $v)}checked{/if}
+                    style="margin-right: 10px;"
+                    />
+                    {$k}
+                </label>
+                {/foreach}
+
+                {elseif (($field['type'] ?? '') == 'textarea')}
+                <div style="width: auto; max-width:50%;">
+                    <textarea id="{$field['name']}" name="config[{$field['name']}]" style="width: {$field['options']['width'] ?? '100%'}; height: {$field['options']['height'] ?? '100px'}; overflow: scroll;"
+                        {if (($field['required'] ?? 0) == 1)}required="required"{/if}
+                        {if (($field['readonly'] ?? 0) == 1)}readonly="readonly"{/if}
+                    >{$order['config'][$field['name']] ?? ''}</textarea>
+                </div>
+                {/if}
+                </div>
+            <div class="fix"></div>
+        </div>
+        {/foreach}
+
+        <input type="hidden" name="id" value="{$order['id']}" />
+        <div class="rowElem">
+            <label></label>
+            <div class="formRight">
+                <button type="submit" class="btn blueBtn pull-right">{=Update|trans}</button>
+            </div>
+            <div class="fix"></div>
+        </div>
+</form>
+
+<script type="text/javascript">
+    $(function () {
+        $("form").submit( function () {
+                $(':checkbox:not(:checked)').removeAttr('checked');
+            }
+        )
+    });
+</script>

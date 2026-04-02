@@ -1,0 +1,91 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends 'layout_default.latte'}
+
+{block meta_title}Client area languages{/block}
+
+{var $active_menu = 'extensions'}
+
+{block content}
+<div class="widget simpleTabs">
+    <ul class="tabs">
+        <li><a href="#tab-index">{='Client area languages'|trans}</a></li>
+        <li><a href="#tab-new">{='New language'|trans}</a></li>
+    </ul>
+
+    <div class="tabs_container">
+        <div class="fix"></div>
+        <div class="tab_content nopadding" id="tab-index">
+            <table class="tableStatic wide">
+                <thead>
+                    <tr>
+                        <td>{='Language'|trans}</td>
+                        <td>{='Code'|trans}</td>
+                    </tr>
+                </thead>
+
+                <tbody>
+                {foreach $admin->extension_languages as $language}
+                <tr>
+                    <td>{$language->title}</td>
+                    <td style="width: 10%">{$language->locale}</td>
+                </tr>
+                </tbody>
+
+                {else}
+                <tbody>
+                    <tr>
+                        <td colspan="2">
+                            {='The list is empty'|trans}
+                        </td>
+                    </tr>
+                </tbody>
+                {/foreach}
+            </table>
+        </div>
+        
+        <div class="tab_content nopadding" id="tab-new">
+            {include 'partial_extensions.latte', type: 'translation', header: 'List of translations on extensions site'}
+            <div class="body">
+                <h1 class="pt10">{='OHMS in your language'|trans}</h1>
+                <p>{='Although OHMS displays in U.S. English by default, the software has the built-in capability to be used in any language. Follow instructions bellow to install new language.'|trans}</p>
+                
+                <div class="pt20 list arrowGrey">
+                    <ul>
+                        <li>{='Check if your language translation file is available at'|trans} <a href="https://www.transifex.com/projects/p/OHMS/" target="_blank">{='OHMS translations repository'|trans}</a></li>
+                        <li>{='Download language files and place them to'|trans} <strong>{constant('PS_PATH_LANGS')}</strong></li>
+                        <li>{='Language will be automatically available and can be changed in client area'|trans}</li>
+                        <li>{='Read'|trans} <a href="http://docs.OHMS.org/en/latest/reference/language.html" title="Installing OHMS in Your Language" target="_blank">{='Installing OHMS in Your Language'|trans}</a> {='to learn how to install files that will transform OHMS so it displays in your language.'|trans}</li>
+                        <li>{='Translations can be made with'|trans} <a href="http://www.poedit.net/" target="_blank">http://www.poedit.net/</a> {='software'|trans}</li>
+                    </ul>
+                </div>
+
+                <h5 class="pt20">{='Changing default language'|trans}</h5>
+                <p>{='Default language can be set in'|trans} <em>config.php</em> parameter <strong>define('BB_LOCALE', 'en_US');</strong></p>
+
+                <h5 class="pt20">{='Removing language'|trans}</h5>
+                <p>{='Removing languages from OHMS is really simple. Just delete language folder you wish from'|trans} <strong>{constant('PS_PATH_LANGS')}</strong></p>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

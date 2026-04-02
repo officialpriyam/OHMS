@@ -1,0 +1,109 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{import 'macro_functions.latte'}
+
+{block meta_title}{='Affiliate Program'|trans}{/block}
+
+{block content_before}
+    <div class="gm-page-heading">
+        <h1>{='Affiliate Program'|trans}</h1>
+    </div>
+{/block}
+
+{block content}
+<div class="glass-card mb-4">
+    <div class="row align-items-center">
+        <div class="col-lg-8">
+            <h2 class="text-white fw-bold mb-3">{='Earn with OHMS'|trans}</h2>
+            <p class="text-white-50 mb-4">{='Join our affiliate program and earn commissions for every successful referral you bring to OHMS. It is simple, fast, and rewarding.'|trans}</p>
+            
+            <div class="input-group mb-3 glass-input-group" style="max-width: 500px;">
+                <span class="input-group-text bg-dark border-secondary text-secondary"><i class="fa fa-link"></i></span>
+                <input type="text" class="form-control bg-dark border-secondary text-white" value="{constant('PS_URL')}/?aff=123" readonly id="affLink">
+                <button class="btn btn-primary" onclick="copyAffLink()">{='Copy Link'|trans}</button>
+            </div>
+        </div>
+        <div class="col-lg-4 text-center d-none d-lg-block">
+            <i class="fa fa-users-viewfinder fa-6x text-primary opacity-25"></i>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="widget-box">
+            <div class="widget-title">
+                <span>{='Total Clicks'|trans}</span>
+                <i class="fa fa-mouse-pointer"></i>
+            </div>
+            <div class="widget-value text-white">{$stats['clicks']}</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="widget-box">
+            <div class="widget-title">
+                <span>{='Total Signups'|trans}</span>
+                <i class="fa fa-user-plus"></i>
+            </div>
+            <div class="widget-value text-white">{$stats['signups']}</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="widget-box">
+            <div class="widget-title">
+                <span>{='Total Commissions'|trans}</span>
+                <i class="fa fa-wallet"></i>
+            </div>
+            <div class="widget-value text-primary">{$profile->currency ?? '$'}{$stats['commissions']}</div>
+        </div>
+    </div>
+</div>
+
+<div class="glass-table">
+    <div class="table-responsive">
+        <table class="table table-borderless table-glass m-0">
+            <thead>
+                <tr>
+                    <th>{='Referral ID'|trans}</th>
+                    <th>{='Date'|trans}</th>
+                    <th>{='Status'|trans}</th>
+                    <th>{='Commission'|trans}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="4" class="text-center text-secondary py-5">
+                        <i class="fa fa-info-circle mb-3 fa-2x"></i><br>
+                        {='You have no referrals yet. Share your link to start earning!'|trans}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+function copyAffLink() {
+    var copyText = document.getElementById("affLink");
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(copyText.value);
+    
+    // Simple toast or alert
+    alert("Affiliate link copied!");
+}
+</script>
+
+<style>
+.glass-input-group .form-control:focus {
+    box-shadow: none;
+    border-color: var(--neon-blue);
+}
+.widget-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 20px;
+}
+</style>
+{/block}

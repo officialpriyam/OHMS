@@ -1,0 +1,55 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{import 'macro_functions.latte'}
+
+{block meta_title}{='Order'|trans}{/block}
+
+{var $periods = $guest->system_periods}
+{var $side_menu = hidden}
+
+{block content_before}
+    <section class="gm-hero gm-hero--compact">
+        <h1>{='Supported Games'|trans}</h1>
+        <h3>{='Choose from our popular game server hosting options with instant setup.'|trans}</h3>
+        <div class="gm-hero-actions">
+            <a class="gm-btn gm-btn-primary" href="{='/order'|link}">{='Find Game Servers'|trans}</a>
+            <a class="gm-btn gm-btn-ghost" href="{='/support/contact-us'|link}">{='Talk To Us'|trans}</a>
+        </div>
+    </section>
+
+    {include 'Index/_games-grid.latte'}
+{/block}
+
+{block content}
+    <section class="gm-packages" id="packages">
+        <h2>{='Choose Your Server Package'|trans}</h2>
+        {include '_order-steps.latte', selected: 1}
+
+        {foreach ($guest->product_category_get_list()['list'] ?? []) as $i => $category}
+            <div class="gm-package-group">
+                <h3>{$category['title']}</h3>
+                <div class="gm-package-grid">
+                    {foreach $category['products'] as $product}
+                        <div class="gm-package-card">
+                            <div class="gm-package-icon"><i class="fa fa-cube"></i></div>
+                            <h4>{$product['title']}</h4>
+                            <span>{='Starting from'|trans} {$product['price_starting_from']|money_convert}</span>
+                            <p>{$product['description']|bbmd}</p>
+                            <a class="gm-btn gm-btn-outline" href="{='/order'|link}/{$product['slug']}">{='Order Now'|trans}</a>
+                        </div>
+                    {else}
+                        <div class="gm-package-empty">{='No products available in this category.'|trans}</div>
+                    {/foreach}
+                </div>
+            </div>
+        {else}
+            <div class="gm-package-empty">{='No package categories available yet.'|trans}</div>
+        {/foreach}
+    </section>
+{/block}
+
+{block sidebar}
+    <div>
+        {include 'partial_currency.latte'}
+    </div>
+{/block}

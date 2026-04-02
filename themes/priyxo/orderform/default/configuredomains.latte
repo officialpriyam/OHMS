@@ -1,0 +1,15 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_public.latte'}
+
+{block meta_title}{='Configure domains'|trans}{/block}
+{block head}{include 'shared/_styles.latte'}{/block}
+
+{block content_before}
+    <div class="wh-page-header">
+        <h1 class="wh-page-title">{='Configure Domains'|trans}</h1>
+        <p class="wh-page-subtitle">{='This WHMCS-style compatibility screen is available for themes that expect a standalone domain configuration step.'|trans}</p>
+    </div>
+{/block}
+
+{block content}
+    {include 'shared/_placeholder.latte', title: ('Domain configuration stays inside the product flow'|trans), description: ('OHMS currently handles register, transfer, and existing-domain choices directly on product configuration pages.'|trans), note: ('This screen exists so the new orderform contract stays compatible with WHMCS-style orderform templates.'|trans)}
+{/block}

@@ -1,0 +1,63 @@
+{
+    "name": "ohms/ohms",
+    "description": "Orbit Hosting Billing Software",
+    "version": "1.0.0",
+    "readme": "owned by priyxstudio & tlssservers",
+    "type": "project",
+    "license": "ARR",
+    "keywords": [
+        "billing",
+        "invoice",
+        "client management"
+    ],
+    "homepage": "https://www.OHMS.org",
+    "authors": [
+        {
+            "name": "priyx",
+            "email": "ohms@priyxstudio.in"
+        }
+    ],
+    "require": {
+        "php": ">=8.0",
+        "ext-curl": "*",
+        "ext-zlib": "*",
+        "ext-PDO": "*",
+        "ext-mbstring": "*",
+        "pimple/pimple": "^3.3",
+        "geoip2/geoip2": "^2.10.0",
+        "phpmailer/phpmailer": "6.9.1",
+        "mustangostang/spyc": "^0.6.3",
+        "michelf/php-markdown": "2.0.0",
+        "stripe/stripe-php": "^13.4.0",
+        "docnet/tfpdf": "^2.2",
+        "guzzlehttp/guzzle": "^7.4.2",
+        "filp/whoops": "^2.14",
+        "psr/log": "^3.0.0",
+        "symfony/translation": "^6.0",
+        "latte/latte": "^3.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0",
+        "friendsofphp/php-cs-fixer": "^3.8",
+        "symfony/deprecation-contracts": "^3.0.0"
+    },
+    "suggest": {
+        "ext-gettext": "*"
+    },
+    "config": {
+        "vendor-dir": "ps-vendor"
+    },
+    "autoload": {
+        "psr-0": {
+            "": "library"
+        },
+        "psr-4": {
+            "Priyx\\Mod\\": "modules"
+        }
+    },
+    "autoload-dev": {
+        "psr-0": {
+            "": "../tests/library"
+        }
+    }
+}

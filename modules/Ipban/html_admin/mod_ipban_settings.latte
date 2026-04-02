@@ -1,0 +1,93 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{import 'macro_functions.latte'}
+
+{block meta_title}{='IP ban'|trans}{/block}
+
+{var $active_menu = system}
+
+{block breadcrumbs}
+<ul>
+    <li class="firstB"><a href="{='/'|alink}">{='Home'|trans}</a></li>
+    <li><a href="{='system'|alink}">{='Settings'|trans}</a></li>
+    <li class="lastB">{='IP ban'|trans}</li>
+</ul>
+{/block}
+
+{block content}
+{var $params = (array) $admin->extension_config_get([ext => 'mod_ipban'])}
+{var $enabled = (bool) ($params['enabled'] ?? false)}
+<div class="widget">
+    <div class="head">
+        <h5 class="iCog">{='IP ban'|trans}</h5>
+    </div>
+
+    <div class="help">
+        <h3>{='Block abusive traffic before it reaches account actions'|trans}</h3>
+        <p>{='Matches are checked before client login, admin login, client signup, public ticket submission, and client checkout.'|trans}</p>
+        <p>{='Accepted formats: exact IPs, wildcard masks like 203.0.113.*, and IPv4 CIDR ranges like 198.51.100.0/24.'|trans}</p>
+    </div>
+
+    <form method="post" action="{='api/admin/extension/config_save'|link}" class="mainForm api-form" data-api-msg="{='IP ban settings updated'|trans}">
+        <fieldset>
+            <div class="rowElem noborder">
+                <label>{='Enable IP ban module'|trans}</label>
+                <div class="formRight">
+                    <input type="radio" name="enabled" value="1"{if $enabled} checked="checked"{/if}><label>{='Enabled'|trans}</label>
+                    <input type="radio" name="enabled" value="0"{if !$enabled} checked="checked"{/if}><label>{='Disabled'|trans}</label>
+                </div>
+                <div class="fix"></div>
+            </div>
+
+            <div class="rowElem">
+                <label class="topLabel">{='Blocked exact IPs'|trans}</label>
+                <div class="formBottom">
+                    <textarea name="blocked_ips" cols="5" rows="7" placeholder="127.0.0.1&#10;203.0.113.15">{$params['blocked_ips'] ?? ''}</textarea>
+                </div>
+                <div class="fix"></div>
+            </div>
+
+            <div class="rowElem">
+                <label class="topLabel">{='Blocked wildcard or CIDR ranges'|trans}</label>
+                <div class="formBottom">
+                    <textarea name="blocked_ranges" cols="5" rows="7" placeholder="203.0.113.*&#10;198.51.100.0/24">{$params['blocked_ranges'] ?? ''}</textarea>
+                </div>
+                <div class="fix"></div>
+            </div>
+
+            <div class="rowElem">
+                <label>{='Blocked message'|trans}</label>
+                <div class="formRight">
+                    <textarea name="message" cols="5" rows="4">{$params['message'] ?? 'Access from {{ip}} has been blocked. Please contact support if you believe this is an error.'}</textarea>
+                    <span class="formNote">{='Use {{ip}} inside the message to print the blocked address.'|trans}</span>
+                </div>
+                <div class="fix"></div>
+            </div>
+
+            <input type="hidden" name="ext" value="mod_ipban">
+            <input type="submit" value="{='Save changes'|trans}" class="greyishBtn submitForm">
+        </fieldset>
+    </form>
+</div>
+{/block}

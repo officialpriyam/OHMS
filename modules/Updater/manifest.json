@@ -1,0 +1,8 @@
+{
+    "id": "updater",
+    "type": "mod",
+    "name": "System Updater",
+    "description": "Automated system updates with built-in backup and version checking",
+    "version": "1.0.0",
+    "author": "Priyx Studio"
+}

@@ -1,0 +1,114 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{block meta_title}{=Themes|trans}{/block}
+
+{var $active_menu = system}
+
+{block breadcrumbs}
+<ul>
+    <li class="firstB"><a href="{='/'|alink}">{=Home|trans}</a></li>
+    <li><a href="{=system|alink}">{=Settings|trans}</a></li>
+    <li class="lastB">{=Themes|trans}</li>
+</ul>
+{/block}
+
+{block content}
+<div class="widget">
+    <div class="head">
+        <h5 class="iPaintBrush">{='Client area themes'|trans}</h5>
+    </div>
+    <table class="tableStatic wide">
+        <thead>
+            <tr>
+                <td>{=Name|trans}</td>
+                <td>{=Actions|trans}</td>
+            </tr>
+        </thead>
+        <tbody>
+            {var $themes = $admin->theme_get_list([per_page => 100])}
+            {foreach $themes->list as $i => $theme_item}
+            <tr>
+                <td>{if ($guest->extension_theme(true)->code == $theme_item->code)}<strong>{$theme_item->code}</strong>{else}{$theme_item->code}{/if}</td>
+                <td class="actions">
+                    <a class="btnIconLeft mr10" href="{=theme|alink}/{$theme_item->code}">
+                        <img src="{$theme->url}images/icons/dark/cog.png" alt="" class="icon"><span>{=Settings|trans}</span>
+                    </a>
+                    {if ($guest->extension_theme(true)->code != $theme_item->code)}
+                    <a class="btnIconLeft mr10 api-link" data-api-redirect="{='extension/settings/theme'|alink}" href="{='api/admin/theme/select'|link:[code => $theme_item->code]}">
+                        <img src="{$theme->url}images/icons/dark/star.png" alt="" class="icon"><span>{='Set as default'|trans}</span>
+                    </a>
+                    {/if}
+                </td>
+            </tr>
+        </tbody>
+        {else}
+        <tbody>
+            <tr>
+                <td colspan="5">
+                    {='The list is empty'|trans}
+                </td>
+            </tr>
+        </tbody>
+        {/foreach}
+    </table>
+</div>
+
+<div class="widget">
+    <div class="head">
+        <h5 class="iPaintBrush">{='Admin area themes'|trans}</h5>
+    </div>
+    <table class="tableStatic wide">
+        <thead>
+            <tr>
+                <td>{=Name|trans}</td>
+                <td>{=Actions|trans}</td>
+            </tr>
+        </thead>
+        <tbody>
+            {var $themes = $admin->theme_get_admin_list([per_page => 100])}
+            {foreach $themes->list as $i => $theme_item}
+            <tr>
+                <td>{if ($guest->extension_theme(false)->code == $theme_item->code)}<strong>{$theme_item->code|replace:[admin_ => '']}</strong>{else}{$theme_item->code|replace:[admin_ => '']}{/if}</td>
+                <td class="actions">
+                    <a class="btnIconLeft mr10" href="{=theme|alink}/{$theme_item->code}"><img src="{$theme->url}images/icons/dark/cog.png" alt="" class="icon"><span>{=Settings|trans}</span></a>
+                    {if ($guest->extension_theme(false)->code != $theme_item->code)}
+                    <a class="btnIconLeft mr10 api-link" data-api-redirect="{='extension/settings/theme'|alink}" href="{='api/admin/theme/select'|link:[code => $theme_item->code]}">
+                        <img src="{$theme->url}images/icons/dark/star.png" alt="" class="icon"><span>{='Set as default'|trans}</span>
+                    </a>
+                    {/if}
+                </td>
+            </tr>
+        </tbody>
+        {else}
+        <tbody>
+            <tr>
+                <td colspan="5">
+                    {='The list is empty'|trans}
+                </td>
+            </tr>
+        </tbody>
+        {/foreach}
+    </table>
+</div>
+{/block}

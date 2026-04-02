@@ -1,0 +1,114 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends 'layout_default.latte'}
+
+{import 'macro_functions.latte'}
+
+{var $active_menu = kb}
+
+{block meta_title}{$post['title']}{/block}
+
+{block breadcrumbs}
+<ul>
+    <li class="firstB"><a href="{='/'|alink}">{=Home|trans}</a></li>
+    <li><a href="{=kb|alink}">{='Knowledge Base'|trans}</a></li>
+    <li class="lastB">{$post['title']}</li>
+</ul>
+{/block}
+
+{block content}
+<div class="widget">
+    <div class="head">
+        <h5>{$post['title']}</h5>
+    </div>
+    
+    <form method="post" action="{='api/admin/kb/article_update'|link}" class="mainForm save api-form" data-api-msg="{='Article updated'|trans}">
+        <fieldset>
+            <textarea name="content" cols="5" rows="40" class="bb-textarea">{$post['content']}</textarea>
+            <input type="submit" value="{=Update|trans}" class="greyishBtn submitForm" />
+            <input type="hidden" name="id" value="{$post['id']}"/>
+        </fieldset>
+    </form>
+</div>
+
+<div class="widget">
+
+    <div class="head">
+        <h5>{='Article details'|trans}</h5>
+    </div>
+
+    <form method="post" action="{='api/admin/kb/article_update'|link}" class="mainForm save api-form" data-api-msg="{='Article updated'|trans}">
+        <fieldset>
+            <div class="rowElem noborder">
+                <label>{=Category|trans}:</label>
+                <div class="formRight">
+                    {include selectbox, kb_article_category_id, $admin->kb_category_get_pairs, $post['kb_article_category_id'], 1}
+                </div>
+                <div class="fix"></div>
+            </div>
+
+            <div class="rowElem">
+                <label>{=Title|trans}:</label>
+                <div class="formRight">
+                    <input type="text" name="title" value="{$post['title']}" required="required"/>
+                </div>
+                <div class="fix"></div>
+            </div>
+
+            <div class="rowElem">
+                <label>{=Slug|trans}:</label>
+                <div class="formRight">
+                    <input type="text" name="slug" value="{$post['slug']}" required="required"/>
+                </div>
+                <div class="fix"></div>
+            </div>
+
+            <div class="rowElem">
+                <label>{=Views|trans}:</label>
+                <div class="formRight">
+                    <input type="text" name="views" value="{$post['views']}" required="required"/>
+                </div>
+                <div class="fix"></div>
+            </div>
+
+            <div class="rowElem">
+                <label>{=Status|trans}:</label>
+                <div class="formRight noborder">
+                    <input type="radio" name="status" value="draft"{if ($post['status'] == draft)} checked="checked"{/if}/><label>Draft</label>
+                    <input type="radio" name="status" value="active"{if ($post['status'] == 'active')} checked="checked"{/if} /><label>Active</label>
+                </div>
+                <div class="fix"></div>
+            </div>
+            
+            <input type="submit" value="{=Update|trans}" class="greyishBtn submitForm" />
+            <input type="hidden" name="id" value="{$post['id']}"/>
+        </fieldset>
+    </form>
+
+    <div class="body">
+        <a href="{=kb|alink}"  title="" class="btnIconLeft mr10"><img src="{$theme->url}images/icons/dark/arrowLeft.png" alt="" class="icon"><span>Go back</span></a>
+    </div>
+</div>
+{/block}
+
+{block head}{include bb_editor, '.bb-textarea'}{/block}
+

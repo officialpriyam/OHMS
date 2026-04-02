@@ -1,0 +1,356 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends 'layout_default.latte'}
+
+{import 'macro_functions.latte'}
+
+{var $active_menu = products}
+
+{block meta_title}{='Product configuration'|trans}{/block}
+
+{block breadcrumbs}
+<ul>
+    <li class="firstB"><a href="{='/'|alink}">{=Home|trans}</a></li>
+    <li><a href="{=product|alink}">{=Products|trans}</a></li>
+    <li class="lastB">{$product['title']}</li>
+</ul>
+{/block}
+
+{block content}
+
+<div class="widget simpleTabs">
+    <ul class="tabs">
+        <li><a href="#tab-settings">{='General settings'|trans}</a></li>
+        <li><a href="#tab-config">{=Configuration|trans}</a></li>
+        <li><a href="#tab-addons">{=Addons|trans}</a></li>
+        <li><a href="#tab-configurable-options">{='Configurable options'|trans}</a></li>
+        <li><a href="#tab-upgrades">{=Upgrades|trans}</a></li>
+        <li><a href="#tab-links">{=Links|trans}</a></li>
+    </ul>
+
+    <div class="tabs_container">
+        <form method="post" action="{='api/admin/product/update'|link}" class="mainForm api-form save" data-api-msg="Product configuration updated" name="form">
+        <div class="fix"></div>
+        <div class="tab_content nopadding" id="tab-settings">
+
+            <div class="help">
+                <h5>{$product['type']|capitalize} {='General settings'|trans}</h5>
+            </div>
+
+            <fieldset>
+                <div class="rowElem noborder">
+                    <label>{=Category|trans}:</label>
+                    <div class="formRight ">
+                        {include selectbox, product_category_id, $guest->product_category_get_pairs, $product['product_category_id'], 0, 'None'}
+                    </div>
+                    <div class="fix"></div>
+                </div>
+
+                {if $guest->extension_is_on(['mod' => 'formbuilder'])}
+                <div class="rowElem">
+                    <label>{='Order Form'|trans}:</label>
+                    <div class="formRight">
+                        {var $tpl = (('mod_service' . $product['type']) . '_order_form.latte')}
+                        {if $guest->system_template_exists(['file' => $tpl])}
+                        <div class="nNote nInformation"><p>Please edit <strong>{$tpl}</strong> file in order to change order form for <strong>{$product['type']}</strong> category products.</p></div>
+                       <a href="{='filemanager/ide'|alink}" class="button blueBtn">{='Open Editor'|trans}</a>
+                        {else}
+                        {include selectbox, form_id, $admin->formbuilder_get_pairs, $product['form_id'], 0, 'None'}
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="{='extension/settings/formbuilder'|alink}{if $product['form_id']}?id={$product['form_id']}{/if}" class="button blueBtn" id="formbuilder_btn" data-base-href="{='extension/settings/formbuilder'|alink}">{$product['form_id'] ? 'Edit Form' : 'Add new form'}</a>
+                        {/if}
+                    </div>
+                    <div class="fix"></div>
+                </div>
+                {/if}
+                <div class="rowElem">
+                    <label>{=Status|trans}:</label>
+                    <div class="formRight">
+                        <input type="radio" name="status" value="enabled"{if ($product['status'] == 'enabled')} checked="checked"{/if} id="status-enabled"/><label for="status-enabled">{=Enabled|trans}</label>
+                        <input type="radio" name="status" value="disabled"{if ($product['status'] == 'disabled')} checked="checked"{/if} id="status-disabled"/><label for="status-disabled">{=Disabled|trans}</label>
+                    </div>
+                    <div class="fix"></div>
+                </div>
+                <div class="rowElem">
+                    <label>{=Hidden|trans}:</label>
+                    <div class="formRight">
+                        <input type="radio" name="hidden" value="1"{if $product['hidden']} checked="checked"{/if} id="hidden-yes"/><label for="hidden-yes">{=Yes|trans}</label>
+                        <input type="radio" name="hidden" value="0"{if !$product['hidden']} checked="checked"{/if} id="hidden-no"/><label for="hidden-no">{=No|trans}</label>
+                    </div>
+                    <div class="fix"></div>
+                </div>
+                <div class="rowElem">
+                    <label>{=Activation|trans}:</label>
+                    <div class="formRight">
+                        <input type="radio" name="setup" value="after_order"{if ($product['setup'] == 'after_order')} checked="checked"{/if} id="activation-after-order"/><label for="activation-after-order">{='After order is placed'|trans}</label>
+                        <input type="radio" name="setup" value="after_payment"{if ($product['setup'] == 'after_payment')} checked="checked"{/if} id="activation-after-payment"/><label for="activation-after-payment">{='After payment is received'|trans}</label>
+                        <input type="radio" name="setup" value="manual"{if ($product['setup'] == 'manual')} checked="checked"{/if} id="activation-manual"/><label for="activation-manual">{='Manual activation'|trans}</label>
+                    </div>
+                    <div class="fix"></div>
+                </div>
+
+                <div class="rowElem">
+                    <label>{='Icon/Image URL'|trans}:</label>
+                    <div class="formRight">
+                        <input type="text" name="icon_url" id="bb-icon" value="{$product['icon_url']}" placeholder="" style="width: 80%"/>
+                        <input type="button" value="{=Browse|trans}" class="bHtml blueBtn button" data-browser-url="{='filemanager/icons'|alink}" data-browser-title="{='Select icon and click OK'|trans}" />
+                    </div>
+                    <div class="fix"></div>
+                </div>
+                <div class="rowElem">
+                    <label>{=Title|trans}:</label>
+                    <div class="formRight">
+                        <input type="text" name="title" value="{$product['title']}" required="required" placeholder=""/>
+                    </div>
+                    <div class="fix"></div>
+                </div>
+                <div class="rowElem">
+                    <label>{=Slug|trans}:</label>
+                    <div class="formRight">
+                        <input type="text" name="slug" value="{$product['slug']}" required="required" placeholder=""/>
+                    </div>
+                    <div class="fix"></div>
+                </div>
+
+                <div class="rowElem">
+                    <label>{='Service Module'|trans}:</label>
+                    <div class="formRight">
+                        {include selectbox, plugin, $admin->product_get_types, $product['plugin'] ?? '', 0, 'None'}
+                    </div>
+                    <div class="fix"></div>
+                </div>
+                
+                {include 'partial_pricing.latte', product: $product}
+
+            </fieldset>
+
+           <fieldset>
+               <legend>{='Product / service description'|trans}</legend>
+                <textarea name="description" cols="5" rows="5" class="bb-textarea">{$product['description']}</textarea>
+                
+                <input type="submit" value="{=Update|trans}" class="greyishBtn submitForm" />
+           </fieldset>
+        <div class="fix"></div>
+        </div>
+
+        <div class="tab_content nopadding" id="tab-addons">
+            <div class="help">
+                <h5>{='Choose which addons you would like to offer with'|trans} {$product['title']}</h5>
+            </div>
+
+            <table class="tableStatic wide">
+                <tbody>
+                    {foreach $admin->product_addon_get_pairs as $addon_id => $addon_title}
+                    <tr {if $iterator->first}class="noborder"{/if}>
+                        <td style="width:5%">
+                            <input type="hidden" name="addons[{$addon_id}]" value="0">
+                            <input type="checkbox" name="addons[{$addon_id}]" value="1" id="addon_{$addon_id}" {if in_array($addon_id, $assigned_addons, true)}checked="checked"{/if}/>
+                        </td>
+                        <td><label for="addon_{$addon_id}">{$addon_title}</label></td>
+                        <td style="width:5%"><a class="bb-button btn14" href="{='/product/addon'|alink}/{$addon_id}"><img src="{$theme->url}images/icons/dark/pencil.png" alt=""></a></td>
+                    </tr>
+                    {else}
+                    <tr>
+                        <td colspan="3">{='The list is empty'|trans}</td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3">
+                            <a href="{='product/addons'|alink}#tab-new" title="" class="btnIconLeft mr10 mt5">
+                                <img src="{$theme->url}images/icons/dark/settings2.png" alt="" class="icon">
+                                <span>{='Create new addon'|trans}</span>
+                            </a>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+            <input type="submit" value="{=Update|trans}" class="greyishBtn submitForm" />
+
+
+            <div class="fix"></div>
+        </div>
+
+        <div class="tab_content nopadding mainForm" id="tab-upgrades">
+            <div class="help">
+                <h5>{='Choose which products can client upgrade to'|trans}</h5>
+            </div>
+            <fieldset>
+                <div class="rowElem noborder">
+                    <label>{='Product Upgrades'|trans}</label>
+                    <div class="formRight">
+                        {var $products = $admin->product_get_pairs}
+                        <input type="hidden" name="upgrades" value="">
+                        <select name="upgrades[]" multiple="multiple" class="multiple" size="{$products|length}">
+                            {foreach $products as $id => $ptitle}
+                            <option value="{$id}" {if array_key_exists($id, ($product['upgrades'] ?? []))}selected="selected"{/if}>{$ptitle}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                    <div class="fix"></div>
+                </div>
+                <input type="submit" value="{=Update|trans}" class="greyishBtn submitForm" />
+                <input type="hidden" name="id" value="{$product['id']}" />
+            </fieldset>
+        </div>
+
+        <div class="tab_content nopadding" id="tab-configurable-options">
+            <div class="help">
+                <h5>{='Choose which configurable option groups are offered with this product'|trans}</h5>
+            </div>
+
+            <table class="tableStatic wide">
+                <tbody>
+                    <tr class="noborder" style="display:none;">
+                        <td>
+                            <input type="hidden" name="configurable_option_groups[]" value="">
+                        </td>
+                    </tr>
+                    {foreach ($configurable_groups ?? []) as $group}
+                    <tr {if $iterator->first}class="noborder"{/if}>
+                        <td style="width:5%">
+                            <input type="checkbox" name="configurable_option_groups[]" value="{$group['id']}" id="configurable_group_{$group['id']}" {if in_array($group['id'], ($assigned_configurable_groups ?? []), true)}checked="checked"{/if}>
+                        </td>
+                        <td>
+                            <label for="configurable_group_{$group['id']}">{$group['title']}</label>
+                            {if $group['description']}
+                            <div class="small" style="margin-top: 4px;">{$group['description']}</div>
+                            {/if}
+                        </td>
+                        <td style="width:5%">
+                            <a class="bb-button btn14" href="{='product/options/group'|alink}/{$group['id']}"><img src="{$theme->url}images/icons/dark/pencil.png" alt=""></a>
+                        </td>
+                    </tr>
+                    {else}
+                    <tr>
+                        <td colspan="3">{='No configurable option groups created yet.'|trans}</td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3">
+                            <a href="{='product/options'|alink}" class="btnIconLeft mr10 mt5">
+                                <img src="{$theme->url}images/icons/dark/settings2.png" alt="" class="icon">
+                                <span>{='Open configurable options workspace'|trans}</span>
+                            </a>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <input type="submit" value="{=Update|trans}" class="greyishBtn submitForm" />
+
+            <div class="fix"></div>
+        </div>
+
+        <input type="hidden" name="id" value="{$product['id']}" />
+        </form>
+
+        <div class="tab_content nopadding" id="tab-config">
+            {var $service_partial = (('mod_service' . $product['type']) . '_config.latte')}
+            {if $admin->system_template_exists(['file' => $service_partial])}
+                {include $service_partial, product: $product}
+            {else}
+                <div class="help">
+                    <h5>{='No additional configuration for this product is required'|trans}</h5>
+                </div>
+            {/if}
+            <div class="fix"></div>
+        </div>
+        
+        <div class="tab_content nopadding mainForm" id="tab-links">
+            <fieldset>
+            <div class="help">
+                <h5>{='Product links'|trans}</h5>
+            </div>
+
+            <div class="rowElem noborder">
+                <label>{='Product ID'|trans}</label>
+                <div class="formRight">
+                    <input type="text" value="{$product['id']}"/>
+                    <div class="fix"></div>
+                </div>
+            </div>
+
+            <div class="rowElem">
+                <label>{='Order page with ID'|trans}</label>
+                <div class="formRight">
+                    <input type="text" value="{=order|link}/{$product['id']}"/>
+                    <div class="fix"></div>
+                </div>
+            </div>
+
+            <div class="rowElem">
+                <label>{='Order page with slug'|trans}</label>
+                <div class="formRight">
+                    <input type="text" value="{=order|link}/{$product['slug']}"/>
+                    <div class="fix"></div>
+                </div>
+            </div>
+
+            </fieldset>
+            
+            <div class="body aligncenter">
+                <a href="{=order|link}/{$product['slug']}" title="" class="btn55 mr10" target="_blank">
+                    <img src="{$theme->url}images/icons/middlenav/preview.png" alt="">
+                    <span>{='View as client'|trans}</span>
+                </a>
+            </div>
+
+            <div class="fix"></div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block head}{include bb_editor, '.bb-textarea'}{/block}
+
+{block js}
+<script>
+    $(function() {
+        $(".bHtml").click(function() {
+            var button = $(this);
+            jAlert(bb.load(button.data('browser-url'), { rel: "bb-icon" }), button.data('browser-title'));
+        });
+        
+        $("[name='form_id']").change(function() {
+            var form_id = $(this).val();
+            var btn = $("#formbuilder_btn");
+            var baseHref = btn.data('base-href');
+                 
+            if (form_id !="") {
+                btn.html("Edit form");
+                var href = baseHref + '?id=' + form_id;
+                btn.attr('href', href);
+            }
+            else {
+                btn.html("Add new form");
+                btn.attr("href", baseHref);
+            }
+        });
+    });
+</script>
+{/block}
+
+

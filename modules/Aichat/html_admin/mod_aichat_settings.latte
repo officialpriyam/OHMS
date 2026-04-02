@@ -1,0 +1,156 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{block meta_title}{='AI Chat Support Settings'|trans}{/block}
+
+{var $active_menu = 'system'}
+
+{block breadcrumbs}
+<ul>
+    <li class="firstB"><a href="{='index'|alink}">{='Home'|trans}</a></li>
+    <li><a href="{='system'|alink}">{='Settings'|trans}</a></li>
+    <li class="lastB">{='AI Chat Support'|trans}</li>
+</ul>
+{/block}
+
+{block content}
+<div class="widget">
+    <div class="head">
+        <h5 class="iChat">{='AI Chat Support Configuration'|trans}</h5>
+    </div>
+
+    <form method="post" action="{='api/admin/aichat/update_settings'|link}" class="mainForm save api-form" data-api-msg="{='Settings updated'|trans}">
+        <fieldset>
+            <div class="rowElem noborder">
+                <label>{='Enabled'|trans}:</label>
+                <div class="formRight">
+                    <input type="radio" name="enabled" value="1" {if $admin->aichat_get_settings(['enabled' => 1])}checked="checked"{/if}/><label>{='Yes'|trans}</label>
+                    <input type="radio" name="enabled" value="0" {if !$admin->aichat_get_settings(['enabled' => 1])}checked="checked"{/if}/><label>{='No'|trans}</label>
+                </div>
+                <div class="fix"></div>
+            </div>
+
+            <div class="rowElem">
+                <label>{='AI Provider'|trans}:</label>
+                <div class="formRight">
+                    {var $config = $admin->aichat_get_settings()}
+                    <select name="provider">
+                        <option value="gemini" {if ($config['provider'] ?? '') == 'gemini'}selected="selected"{/if}>Google Gemini</option>
+                        <option value="openrouter" {if ($config['provider'] ?? '') == 'openrouter'}selected="selected"{/if}>OpenRouter (Multi-model)</option>
+                        <option value="chatgpt" {if ($config['provider'] ?? '') == 'chatgpt'}selected="selected"{/if}>OpenAI ChatGPT</option>
+                        <option value="claude" {if ($config['provider'] ?? '') == 'claude'}selected="selected"{/if}>Anthropic Claude</option>
+                    </select>
+                </div>
+                <div class="fix"></div>
+            </div>
+        </fieldset>
+
+        <fieldset class="provider-config" id="config-gemini" style="display:none">
+            <legend>Gemini Settings</legend>
+            <div class="rowElem">
+                <label>Gemini API Key:</label>
+                <div class="formRight">
+                    <input type="password" name="gemini_api_key" value="{$config['gemini_api_key'] ?? ''}" placeholder="AIza..."/>
+                </div>
+                <div class="fix"></div>
+            </div>
+            <div class="rowElem">
+                <label>Model:</label>
+                <div class="formRight">
+                    <input type="text" name="gemini_model" value="{$config['gemini_model'] ?? 'gemini-pro'}" />
+                </div>
+                <div class="fix"></div>
+            </div>
+        </fieldset>
+
+        <fieldset class="provider-config" id="config-openrouter" style="display:none">
+            <legend>OpenRouter Settings</legend>
+            <div class="rowElem">
+                <label>OpenRouter API Key:</label>
+                <div class="formRight">
+                    <input type="password" name="openrouter_api_key" value="{$config['openrouter_api_key'] ?? ''}" />
+                </div>
+                <div class="fix"></div>
+            </div>
+            <div class="rowElem">
+                <label>Model Slug:</label>
+                <div class="formRight">
+                    <input type="text" name="openrouter_model" value="{$config['openrouter_model'] ?? 'google/gemini-pro-1.5'}" />
+                    <p class="help">e.g. <code>anthropic/claude-3-opus</code> or <code>google/gemini-pro-1.5</code></p>
+                </div>
+                <div class="fix"></div>
+            </div>
+        </fieldset>
+
+        <fieldset class="provider-config" id="config-chatgpt" style="display:none">
+            <legend>ChatGPT Settings</legend>
+            <div class="rowElem">
+                <label>OpenAI API Key:</label>
+                <div class="formRight">
+                    <input type="password" name="chatgpt_api_key" value="{$config['chatgpt_api_key'] ?? ''}" />
+                </div>
+                <div class="fix"></div>
+            </div>
+            <div class="rowElem">
+                <label>Model:</label>
+                <div class="formRight">
+                    <input type="text" name="chatgpt_model" value="{$config['chatgpt_model'] ?? 'gpt-3.5-turbo'}" />
+                </div>
+                <div class="fix"></div>
+            </div>
+        </fieldset>
+
+        <fieldset class="provider-config" id="config-claude" style="display:none">
+            <legend>Claude Settings</legend>
+            <div class="rowElem">
+                <label>Anthropic API Key:</label>
+                <div class="formRight">
+                    <input type="password" name="claude_api_key" value="{$config['claude_api_key'] ?? ''}" />
+                </div>
+                <div class="fix"></div>
+            </div>
+            <div class="rowElem">
+                <label>Model:</label>
+                <div class="formRight">
+                    <input type="text" name="claude_model" value="{$config['claude_model'] ?? 'claude-3-opus-20240229'}" />
+                </div>
+                <div class="fix"></div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <input type="submit" value="{='Update settings'|trans}" class="greyishBtn submitForm" />
+        </fieldset>
+    </form>
+</div>
+
+<script type="text/javascript">
+$(function() {
+    $('select[name="provider"]').on('change', function() {
+        var val = $(this).val();
+        $('.provider-config').hide();
+        $('#config-' + val).show();
+    }).trigger('change');
+});
+</script>
+{/block}

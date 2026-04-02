@@ -1,0 +1,15 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_public.latte'}
+
+{block meta_title}{='Domain renewals'|trans}{/block}
+{block head}{include 'shared/_styles.latte'}{/block}
+
+{block content_before}
+    <div class="wh-page-header">
+        <h1 class="wh-page-title">{='Domain Renewals'|trans}</h1>
+        <p class="wh-page-subtitle">{='Renewal-only WHMCS orderform screens are reserved here for template compatibility.'|trans}</p>
+    </div>
+{/block}
+
+{block content}
+    {include 'shared/_placeholder.latte', title: ('Domain renewals still follow the existing OHMS invoice flow'|trans), description: ('Renewal billing is currently handled through service management, invoice generation, and domain renewal logic already present in OHMS.'|trans), note: ('This page can become a dedicated renewal storefront later if the backend grows into it.'|trans)}
+{/block}

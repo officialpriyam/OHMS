@@ -1,0 +1,135 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{import 'macro_functions.latte'}
+
+{block meta_title}{='Forum settings'|trans}{/block}
+
+{var $active_menu = system}
+
+{block breadcrumbs}
+<ul>
+    <li class="firstB"><a href="{='/'|alink}">{=Home|trans}</a></li>
+    <li><a href="{=system|alink}">{=Settings|trans}</a></li>
+    <li class="lastB">{='Forum settings'|trans}</li>
+</ul>
+{/block}
+
+{block content}
+<div class="widget">
+    <div class="head">
+        <h5 class="iCog">{='Forum settings'|trans}</h5>
+    </div>
+
+    {var $params = (array) $admin->extension_config_get([ext => 'mod_forum'])}
+    {var $forum_points_enabled = (bool) ($params['forum_points_enable'] ?? false)}
+    {var $points_value = $params['points'] ?? 0}
+    {var $post_length = $params['post_length'] ?? 0}
+    {var $points_forums = (array) ($params['points_forums'] ?? [])}
+    
+    <form method="post" action="{='api/admin/extension/config_save'|link}" class="mainForm api-form" data-api-msg="{='Configuration updated'|trans}">
+        <fieldset>
+            <div class="rowElem noborder">
+                <label>{='Forum points'|trans}</label>
+                <div class="formRight">
+                    <input type="radio" name="forum_points_enable" value="1"{if $forum_points_enabled} checked="checked"{/if}/><label>{=Enabled|trans}</label>
+                    <input type="radio" name="forum_points_enable" value="0"{if !$forum_points_enabled} checked="checked"{/if} /><label>{=Disabled|trans}</label>
+                </div>
+                <div class="fix"></div>
+            </div>
+
+            <div id="forum_points_block" {if !$forum_points_enabled}style="display:none;"{/if}>
+            <div class="rowElem">
+                <div class="formBottom moreFields">
+                    <ul>
+                        <li class="sep txt">Give</li>
+                        <li style="width: 50px"><input type="text" name="points" value="{$points_value}" placeholder="0"></li>
+                        <li class="sep txt">points if post length is longer than</li>
+                        <li style="width: 50px">
+                            <input type="text" name="post_length" value="{$post_length}" placeholder="0"/>
+                        </li>
+                        <li class="sep txt">symbols</li>
+                    </ul>
+                </div>
+                <div class="fix"></div>
+            </div>
+            
+            <table class="tableStatic wide with-tbb">
+                <thead>
+                    <tr>
+                        <td style="width: 5%">
+                            <input type="checkbox" id="perm-check" /> 
+                        </td>
+                        <td>{='Give points for posting in selected forums'|trans}</td>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                {foreach $admin->forum_get_categories as $category => $forums}
+                <tr class="group">
+                    <th colspan="2">{$category}</th>
+                </tr>
+                {foreach $forums as $forum}
+                <tr>
+                    <td>
+                        <input type="checkbox" name="points_forums[]" value="{$forum['id']}" class="perm" {if in_array($forum['id'], $points_forums, true)}checked="checked"{/if}/>
+                    </td>
+                    <td>{$forum['title']}</td>
+                </tr>
+                {/foreach}
+                {/foreach}
+                </tbody>
+            </table>
+            <br/>
+            </div>
+            
+            <input type="submit" value="{=Update|trans}" class="greyishBtn submitForm" />
+            <input type="hidden" name="ext" value="mod_forum" />
+        </fieldset>
+    </form>
+</div>
+{/block}
+
+{block js}
+<script type="text/javascript">
+$(function() {
+    $('input[name=forum_points_enable]').click(function(){
+        if($(this).val() == 1) {
+            $('#forum_points_block').slideDown();
+        } else {
+            $('#forum_points_block').slideUp();
+        }
+    });
+
+    $('#perm-check').click(function(){
+        if($('#perm-check').is(':checked')) {
+            $('.perm').prop('checked', true);
+        } else {
+            $('.perm').prop('checked', false);
+        }
+        $.uniform.update(".perm");
+    });
+});
+</script>
+{/block}
+

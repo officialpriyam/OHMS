@@ -1,0 +1,142 @@
+{import 'macro_functions.latte'}
+
+{var $r = $guest->client_required()}
+
+<form class="api-form" method="post" data-api-url="guest/client/create" data-api-reload="1">
+    <div class="modal fade" id="registration" tabindex="-1" role="dialog" aria-labelledby="{='Sign in'|trans}">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">{='Sign in'|trans}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label" for="inputRegistrationEmail">{='Email address'|trans}:</label>
+                        <input class="form-control" id="inputRegistrationEmail" type="email" name="email" value="{$request->email}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="inputRegistrationFirstName">{='First name'|trans}:</label>
+                        <input class="form-control" id="inputRegistrationFirstName" type="text" name="first_name" value="{$request->first_name}" required>
+                    </div>
+                    {if in_array('last_name', $r ?? [], true)}
+                        <div class="mb-3">
+                            <label class="form-label" for="inputRegistrationLastName">{='Last name'|trans}:</label>
+                            <input class="form-control" id="inputRegistrationLastName" type="text" name="last_name" value="{$request->last_name}" required>
+                        </div>
+                    {/if}
+
+                    {if in_array('company', $r ?? [], true)}
+                        <div class="mb-3">
+                            <label class="form-label" for="inputRegistrationCompany">{=Company|trans}:</label>
+                            <input class="form-control" id="inputRegistrationCompany" type="text" name="company" value="{$request->company}" required>
+                        </div>
+                    {/if}
+
+                    {if in_array('birthday', $r ?? [], true)}
+                        <div class="mb-3">
+                            <label class="form-label" for="inputRegistrationBirthday">{=Birthday|trans}:</label>
+                            <input class="form-control" id="inputRegistrationBirthday" type="date" name="birthday">
+                        </div>
+                    {/if}
+
+                    {if in_array('gender', $r ?? [], true)}
+                        <div class="mb-3">
+                            <label class="form-label" for="selectGender">{=Gender|trans}: </label>
+                            <select class="form-select" id="selectGender" name="gender">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    {/if}
+
+                    {var $custom_fields = $guest->client_custom_fields ?? []}
+
+                    {foreach $custom_fields as $field_name => $field}
+                        {if $field->active}
+                            <div class="form-group">
+                                <label class="form-label" for="{$field_name}">{if !empty($field->title)}{$field->title}{else} {$field_name|capitalize} {/if}</label>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="{$field_name}" name="{$field_name}" value="{$request->{$field_name}}"{if $field->required} required{/if}>
+                                </div>
+                            </div>
+                        {/if}
+                    {/foreach}
+
+                    {if in_array('address_1', $r ?? [], true)}
+                    <div class="mb-3">
+                        <label class="form-label" for="inputAddress1">{=Address|trans}:</label>
+                        <input class="form-control" id="inputAddress1" type="text" name="address_1" value="{$request->address_1}">
+                    </div>
+                    {/if}
+
+                    {if in_array('address_2', $r ?? [], true)}
+                    <div class="mb-3">
+                        <label class="form-label" for="inputAddress2">{='Address 2'|trans}:</label>
+                        <input class="form-control" id="inputAddress2" type="text" name="address_2" value="{$request->address_2}">
+                    </div>
+                    {/if}
+
+                    {if in_array('city', $r ?? [], true)}
+                    <div class="mb-3">
+                        <label class="form-label" for="inputCity">{=City|trans}:</label>
+                        <input class="form-control" id="inputCity" type="text" name="city" value="{$request->city}">
+                    </div>
+                    {/if}
+
+                    {if in_array('country', $r ?? [], true)}
+                    <div class="mb-3">
+                        <label class="form-label" for="selectCoutry">{=Country|trans}:</label>
+                        {include selectbox, country, $guest->system_countries, $request->country, 0, 'Select country', selectCoutry}
+                    </div>
+                    {/if}
+
+                    {if in_array('state', $r ?? [], true)}
+                    <div class="mb-3">
+                        <label class="form-label" for="selectState">{=State|trans}:</label>
+                        {* mf.selectbox('state', guest.system_states, request.state, 0, 'Select state') *}
+                        <input class="form-control" id="selectState" type="text" name="state" value="{$request->state}">
+                    </div>
+                    {/if}
+
+                    {if in_array('postcode', $r ?? [], true)}
+                    <div class="mb-3">
+                        <label class="form-label" for="selectZip">{=Zip|trans}:</label>
+                        <input class="form-control" id="selectZip" type="text" name="postcode" value="{$request->postcode}">
+                    </div>
+                    {/if}
+
+                    {if in_array('phone', $r ?? [], true)}
+                    <div class="mb-3 row">
+                        <label class="form-label" for="inputRegistrationPhone">{='Phone number'|trans}:</label>
+                        <div class="input-group">
+                            <span class="input-group-text">+</span>
+                            <input class="form-control" type="text" name="phone_cc" value="{$request->phone_cc}">
+                            <input class="form-control w-75" id="inputRegistrationPhone" name="phone" type="tel" value="{$request->phone}">
+                        </div>
+                    </div>
+                    {/if}
+
+                    <div class="mb-3">
+                        <label class="form-label" for="inputRegistrationPassword">{=Password|trans}:</label>
+                        <div class="input-group">
+                            <input class="form-control" id="inputRegistrationPassword" type="password" name="password" required>
+                            <span class="input-group-text password-toggler">
+                                <i class="fa fa-eye"></i>
+                            </span>
+                            <input class="form-control" id="inputRegistrationPasswordRepeat" type="password" name="password_confirm" placeholder="{='Password confirm'|trans}" required>
+                        </div>
+                    </div>
+                    {include recaptcha}
+                </div>
+                <div class="modal-footer d-block">
+                    <div class="d-grid gap-2">
+                        <input class="btn btn-success" type="submit" value="{=Register|trans}">
+                        <a class="btn btn-link" href="{='/login'|link}">{=Login|trans}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+

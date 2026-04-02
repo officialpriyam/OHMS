@@ -1,0 +1,19 @@
+NOTICE
+======
+Ohms
+Copyright (c) 2024 Ohms. All Rights Reserved.
+
+This product includes software developed from BoxBilling
+(https://github.com/boxbilling/boxbilling), originally developed by
+BoxBilling, Inc., and licensed under the Apache License, Version 2.0.
+
+BoxBilling original copyright:
+  Copyright 2020 BoxBilling, Inc.
+
+Ohms is a significantly modified and enhanced derivative of BoxBilling.
+Changes have been made throughout the codebase including but not limited
+to features, design, functionality, and security improvements.
+
+The original BoxBilling project is no longer actively maintained.
+Ohms is an independent commercial product and is not affiliated with,
+endorsed by, or connected to BoxBilling, Inc. or its former developers.

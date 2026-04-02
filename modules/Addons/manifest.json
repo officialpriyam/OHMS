@@ -1,0 +1,11 @@
+{
+    "id": "addons",
+    "type": "mod",
+    "name": "Addons",
+    "description": "Admin workspace for product add-ons and custom addon module examples.",
+    "homepage_url": "https://OHMS.org",
+    "author": "OHMS",
+    "author_url": "https://OHMS.org/",
+    "license": "Apache-2.0",
+    "version": "1.0.0"
+}

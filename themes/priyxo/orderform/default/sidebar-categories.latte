@@ -1,0 +1,47 @@
+{var $categories = $categories ?? (($guest->product_category_get_list(['per_page' => 100])['list'] ?? []))}
+<div class="wh-catalog-sidebar wh-sidebar-block">
+    <div class="wh-catalog-sidebar-shell">
+        <div class="wh-catalog-sidebar-head">
+            <span class="wh-sidebar-kicker">{='Quick Browse'|trans}</span>
+            <div class="d-flex align-items-center justify-content-between gap-3">
+                <h2 class="wh-section-title mb-0">{='Categories'|trans}</h2>
+                <span class="wh-pill">{$categories|length}</span>
+            </div>
+            <p class="wh-sidebar-copy">{='Jump between sections and open products directly from a cleaner storefront layout.'|trans}</p>
+        </div>
+
+        <div class="wh-sidebar-summary">
+            <div class="wh-sidebar-stat">
+                <strong>{$categories|length}</strong>
+                <span>{='Sections'|trans}</span>
+            </div>
+            <div class="wh-sidebar-stat">
+                <strong>{='Live'|trans}</strong>
+                <span>{='Catalog'|trans}</span>
+            </div>
+        </div>
+
+        <div class="wh-catalog-sidebar-links">
+            {foreach $categories as $category}
+                {if count($category['products'] ?? []) > 0}
+                    {var $isDefaultCategory = strtolower($category['title'] ?? '') === 'default'}
+                    <a class="wh-sidebar-anchor" href="{=json_encode('#category-' . $category['id'])|noescape}" onclick="window.location.hash='category-{$category['id']}'; return false;">
+                        <span class="wh-sidebar-anchor-copy">
+                            <strong>{if $isDefaultCategory}{='Products'|trans}{else}{$category['title']}{/if}</strong>
+                            <small>
+                                {if $category['description']}
+                                    {$category['description']|stripHtml|truncate:52}
+                                {else}
+                                    {='Browse this category'|trans}
+                                {/if}
+                            </small>
+                        </span>
+                        <span class="wh-sidebar-anchor-count">{count($category['products'] ?? [])}</span>
+                    </a>
+                {/if}
+            {else}
+                <div class="text-secondary small">{='No categories available.'|trans}</div>
+            {/foreach}
+        </div>
+    </div>
+</div>

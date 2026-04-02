@@ -1,0 +1,95 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+<div class="rowElem preview">
+    <label for="{$field->name}">{if ($field->hide_label != 1)}{$field->label}{/if}</label>
+
+    <div class="formRight">
+        {if ($field->type == text)}
+        <div class="moreFields allUpper">
+            <ul>
+                <li class="sep">{$field->prefix}</li>
+                <li style="width: 50%">
+                    <input type="text" name="{$field->name}" value="{$field->default_value}"  id="{$field->name}"
+                        {=($field->readonly == 1) ? 'readonly="readonly"' : ''}
+                    />
+                </li>
+                <li class="sep">{$field->suffix}</li>
+            </ul>
+        </div>
+        {elseif ($field->type == select)}
+            {if empty($field->options)}
+            <ul>
+                <li style="width: 80%"><blockquote>{='Please click on "Edit" in order to add new select Priyx'|trans}</blockquote></li>
+            </ul>
+            {else}
+                <select name="{$field->name}" required="required"   id="{$field->name}"
+                    {=($field->readonly == 1) ? 'disabled="disabled"' : ''}
+                    />
+                    {foreach $field->options as $k => $v}
+                    <option value="{$v}"
+                    {=($field->default_value == $v) ? selected : ''}>{$k}</option>
+                    {/foreach}
+
+                </select>
+            {/if}
+        {elseif ($field->type == checkbox)}
+            {if empty($field->options)}
+            <ul>
+                <li style="width: 80%"><blockquote>{='Please click on "Edit" in order to add new checkbox'|trans}</blockquote></li>
+            </ul>
+            {else}
+                {foreach $field->options as $k => $v}
+                <input type="checkbox" name="{$field->name}" value="{$v}" id="{$k}_{$v}" {if in_array($v, $field->default_value, true)}checked="checked"{/if}
+                    {=($field->readonly == 1) ? 'disabled="disabled"' : ''}
+            />
+                <label for="{$k}_{$v}">{$k}</label>
+                {/foreach}
+            {/if}
+        {elseif ($field->type == radio)}
+            {if empty($field->options)}
+                <ul>
+                    <li style="width: 80%"><blockquote>{='Please click on "Edit" in order to add new radio Priyx'|trans}</blockquote></li>
+                </ul>
+            {else}
+                {foreach $field->options as $k => $v}
+                <input type="radio" name="{$field->name}" value="{$v}" id="{$k}_{$v}" {=($field->default_value == $v) ? checked : ''}
+                    {=($field->readonly == 1) ? 'disabled="disabled"' : ''}
+            />
+                <label for="{$k}_{$v}">{$k}</label>
+                {/foreach}
+            {/if}
+        {elseif ($field->type == textarea)}
+            <div style="width: auto; max-width:50%;">
+                <textarea name="{$field->name}" style="width: {$field->options->width}px; height: {$field->options->height}px; overflow: scroll;">{$field->default_value}</textarea>
+            </div>
+        {/if}
+        </div>
+        <div class="fix"></div>
+
+    <div class="actions" style="right: 0; bottom: 0; padding: 5px; position: absolute;">
+<!--        <a class="btn14 pr btnIconLeft" href="#" style="display: none;"><img src="{$theme->url}images/icons/dark/preview.png" alt="Preview" class="icon">Preview</a>-->
+        <a class="btn14 ed" href="#"><img src="{$theme->url}images/icons/dark/pencil.png" alt="Edit" class="icon"></a>
+        <a class="btn14 rm" href="#" data-field-id="{$field->id}"><img src="{$theme->url}images/icons/dark/trash.png" alt="" class="icon"></a>
+    </div>
+    <div class="fix"></div>
+</div>
+

@@ -1,0 +1,205 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{import 'macro_functions.latte'}
+
+{block meta_title}{='Fraud detector'|trans}{/block}
+
+{var $active_menu = system}
+
+{block breadcrumbs}
+<ul>
+    <li class="firstB"><a href="{='/'|alink}">{='Home'|trans}</a></li>
+    <li><a href="{='system'|alink}">{='Settings'|trans}</a></li>
+    <li class="lastB">{='Fraud detector'|trans}</li>
+</ul>
+{/block}
+
+{block content}
+{var $params = (array) $admin->extension_config_get([ext => 'mod_frauddetector'])}
+{var $enabled = (bool) ($params['enabled'] ?? false)}
+{var $frauddetector_active = (bool) $guest->extension_is_on(['mod' => 'frauddetector'])}
+<div class="widget">
+    <div class="head">
+        <h5 class="iCog">{='Fraud detector'|trans}</h5>
+    </div>
+
+    <div class="help">
+        <h3>{='Score risky signups, tickets, and checkouts before they land'|trans}</h3>
+        <p>{='This module applies domain rules and per-IP rate limits, then writes every allow or block decision to a review log.'|trans}</p>
+    </div>
+
+    <form method="post" action="{='api/admin/extension/config_save'|link}" class="mainForm api-form" data-api-msg="{='Fraud detector settings updated'|trans}">
+        <fieldset>
+            <div class="rowElem noborder">
+                <label>{='Enable fraud detector'|trans}</label>
+                <div class="formRight">
+                    <input type="radio" name="enabled" value="1"{if $enabled} checked="checked"{/if}><label>{='Enabled'|trans}</label>
+                    <input type="radio" name="enabled" value="0"{if !$enabled} checked="checked"{/if}><label>{='Disabled'|trans}</label>
+                </div>
+                <div class="fix"></div>
+            </div>
+
+            <div class="rowElem">
+                <label>{='Risk threshold'|trans}</label>
+                <div class="formRight">
+                    <input type="number" name="risk_threshold" value="{$params['risk_threshold'] ?? 80}" min="1" max="999">
+                    <span class="formNote">{='Requests meeting or exceeding this score are blocked.'|trans}</span>
+                </div>
+                <div class="fix"></div>
+            </div>
+
+            <div class="rowElem">
+                <label class="topLabel">{='Blocked email domains'|trans}</label>
+                <div class="formBottom">
+                    <textarea name="blocked_email_domains" cols="5" rows="5" placeholder="mailinator.com&#10;*.temporary.example">{$params['blocked_email_domains'] ?? ''}</textarea>
+                </div>
+                <div class="fix"></div>
+            </div>
+
+            <div class="rowElem">
+                <label class="topLabel">{='Disposable email domains'|trans}</label>
+                <div class="formBottom">
+                    <textarea name="disposable_domains" cols="5" rows="5" placeholder="maildrop.cc&#10;tempmail.*">{$params['disposable_domains'] ?? ''}</textarea>
+                </div>
+                <div class="fix"></div>
+            </div>
+
+            <div class="rowElem">
+                <label>{='Max signups per IP'|trans}</label>
+                <div class="formRight">
+                    <input type="number" name="max_signups_per_ip" value="{$params['max_signups_per_ip'] ?? 3}" min="0">
+                </div>
+                <label>{='Signup window (minutes)'|trans}</label>
+                <div class="formRight">
+                    <input type="number" name="signup_window_minutes" value="{$params['signup_window_minutes'] ?? 60}" min="0">
+                </div>
+                <div class="fix"></div>
+            </div>
+
+            <div class="rowElem">
+                <label>{='Max checkouts per IP'|trans}</label>
+                <div class="formRight">
+                    <input type="number" name="max_orders_per_ip" value="{$params['max_orders_per_ip'] ?? 4}" min="0">
+                </div>
+                <label>{='Checkout window (minutes)'|trans}</label>
+                <div class="formRight">
+                    <input type="number" name="order_window_minutes" value="{$params['order_window_minutes'] ?? 120}" min="0">
+                </div>
+                <div class="fix"></div>
+            </div>
+
+            <div class="rowElem">
+                <label>{='Max public tickets per IP'|trans}</label>
+                <div class="formRight">
+                    <input type="number" name="max_public_tickets_per_ip" value="{$params['max_public_tickets_per_ip'] ?? 5}" min="0">
+                </div>
+                <label>{='Ticket window (minutes)'|trans}</label>
+                <div class="formRight">
+                    <input type="number" name="public_ticket_window_minutes" value="{$params['public_ticket_window_minutes'] ?? 120}" min="0">
+                </div>
+                <div class="fix"></div>
+            </div>
+
+            <div class="rowElem">
+                <label>{='Max orders for new client'|trans}</label>
+                <div class="formRight">
+                    <input type="number" name="max_total_new_client" value="{$params['max_total_new_client'] ?? 2}" min="0">
+                </div>
+                <label>{='New client age (hours)'|trans}</label>
+                <div class="formRight">
+                    <input type="number" name="new_client_age_hours" value="{$params['new_client_age_hours'] ?? 24}" min="0">
+                </div>
+                <div class="fix"></div>
+            </div>
+
+            <div class="rowElem">
+                <label>{='Blocked message'|trans}</label>
+                <div class="formRight">
+                    <textarea name="message" cols="5" rows="4">{$params['message'] ?? 'This request was blocked by fraud screening. Please contact support if you need help.'}</textarea>
+                    <span class="formNote">{='Available placeholders: {{event}}, {{ip}}, and {{score}}.'|trans}</span>
+                </div>
+                <div class="fix"></div>
+            </div>
+
+            <input type="hidden" name="ext" value="mod_frauddetector">
+            <input type="submit" value="{='Save changes'|trans}" class="greyishBtn submitForm">
+        </fieldset>
+    </form>
+</div>
+
+{if !$frauddetector_active}
+<div class="nNote">
+    <p>{='Install and activate the Fraud Detector module from Extensions to start collecting logs and enforcing checks.'|trans}</p>
+</div>
+{else}
+    {var $log_result = $admin->frauddetector_log_get_list(['per_page' => 20])}
+<div class="widget">
+    <div class="head">
+        <h5>{='Recent fraud decisions'|trans}</h5>
+        <div class="alignright">
+            <a class="btn14 api-link" href="{='api/admin/frauddetector/clear_logs'|link}" data-api-confirm="{='Clear every fraud log entry?'|trans}" data-api-reload="1">{='Clear logs'|trans}</a>
+        </div>
+    </div>
+    <table class="tableStatic wide">
+        <thead>
+            <tr>
+                <th>{='When'|trans}</th>
+                <th>{='Event'|trans}</th>
+                <th>{='Decision'|trans}</th>
+                <th>{='Score'|trans}</th>
+                <th>{='IP'|trans}</th>
+                <th>{='Email'|trans}</th>
+                <th>{='Reasons'|trans}</th>
+                <th style="width: 8%">&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach ($log_result['list'] ?? []) as $entry}
+            <tr>
+                <td>{$entry['created_at']}</td>
+                <td>{$entry['event_type']|replace:['_' => ' ']}</td>
+                <td>{if $entry['decision'] == 'blocked'}<span class="badge bg-danger">{='Blocked'|trans}</span>{else}<span class="badge bg-success">{='Allowed'|trans}</span>{/if}</td>
+                <td>{$entry['score']}</td>
+                <td>{$entry['ip'] ?: '-'}</td>
+                <td>{$entry['email'] ?: '-'}</td>
+                <td>
+                    {var $reasons = (array) ($entry['details']['reasons'] ?? [])}
+                    {if $reasons}{implode(', ', $reasons)}{else}-{/if}
+                </td>
+                <td class="actions">
+                    <a class="bb-button btn14 api-link" href="{='api/admin/frauddetector/log_delete'|link:['id' => $entry['id']]}" data-api-confirm="{='Delete this log entry?'|trans}" data-api-reload="1">
+                        <img src="{$theme->url}images/icons/dark/trash.png" alt="{='Delete'|trans}">
+                    </a>
+                </td>
+            </tr>
+            {else}
+            <tr>
+                <td colspan="8">{='No fraud decisions have been logged yet.'|trans}</td>
+            </tr>
+            {/foreach}
+        </tbody>
+    </table>
+</div>
+{/if}
+{/block}

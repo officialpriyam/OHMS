@@ -1,0 +1,8 @@
+{
+    "id":           "filemanager",
+    "type":         "mod",
+    "name":         "File Manager (Shim)",
+    "description":  "A placeholder module to handle missing filemanager routes.",
+    "icon_url":     "icon.png",
+    "version":      "1.0"
+}

@@ -1,0 +1,270 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends 'layout_default.latte'}
+
+{import 'macro_functions.latte'}
+
+{var $active_menu = products}
+{var $is_new = !($option['id'] ?? null)}
+{var $option_action_link = $is_new ? ('api/admin/product/configurable_option_create'|link) : ('api/admin/product/configurable_option_update'|link)}
+
+{block meta_title}{if $is_new}{='New configurable option'|trans}{else}{$option['title']}{/if}{/block}
+
+{block breadcrumbs}
+<ul>
+    <li class="firstB"><a href="{='/'|alink}">{=Home|trans}</a></li>
+    <li><a href="{=product|alink}">{=Products|trans}</a></li>
+    <li><a href="{='product/options'|alink}">{='Configurable options'|trans}</a></li>
+    <li><a href="{='product/options/group'|alink}/{$group['id']}">{$group['title']}</a></li>
+    <li class="lastB">{if $is_new}{='New option'|trans}{else}{$option['title']}{/if}</li>
+</ul>
+{/block}
+
+{block content}
+<div class="widget">
+    <div class="head">
+        <h5 class="iFrames">{if $is_new}{='Create configurable option'|trans}{else}{='Edit configurable option'|trans}{/if}</h5>
+    </div>
+
+    <div class="body">
+        <form method="post" action="{$option_action_link}" class="mainForm api-form" {if $is_new}data-api-jsonp="onAfterConfigurableOptionCreate"{else}data-api-reload="1"{/if}>
+            <fieldset>
+                <div class="rowElem noborder">
+                    <label>{='Option name'|trans}</label>
+                    <div class="formRight">
+                        <input type="text" name="title" value="{$option['title']}" required="required" placeholder="{='Location'|trans}">
+                    </div>
+                    <div class="fix"></div>
+                </div>
+
+                <div class="rowElem">
+                    <label>{='Description'|trans}</label>
+                    <div class="formRight">
+                        <textarea name="description" cols="5" rows="4">{$option['description']}</textarea>
+                    </div>
+                    <div class="fix"></div>
+                </div>
+
+                <div class="rowElem">
+                    <label>{='Option type'|trans}</label>
+                    <div class="formRight">
+                        <select name="type" id="configurable-option-type">
+                            {foreach $option_types as $type_key => $type_label}
+                            <option value="{$type_key}" {if (($option['type'] ?? '') === $type_key)}selected="selected"{/if}>{$type_label}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                    <div class="fix"></div>
+                </div>
+
+                <div class="rowElem">
+                    <label>{='Required'|trans}</label>
+                    <div class="formRight">
+                        <input type="hidden" name="required" value="0">
+                        <input type="checkbox" name="required" value="1" id="option-required" {if $option['required']}checked="checked"{/if}>
+                        <label for="option-required">{='Client must choose this option'|trans}</label>
+                    </div>
+                    <div class="fix"></div>
+                </div>
+
+                <div class="rowElem">
+                    <label>{='Hidden'|trans}</label>
+                    <div class="formRight">
+                        <input type="hidden" name="hidden" value="0">
+                        <input type="checkbox" name="hidden" value="1" id="option-hidden" {if $option['hidden']}checked="checked"{/if}>
+                        <label for="option-hidden">{='Hide from client order forms'|trans}</label>
+                    </div>
+                    <div class="fix"></div>
+                </div>
+
+                <div class="rowElem">
+                    <label>{='Sort order'|trans}</label>
+                    <div class="formRight">
+                        <input type="number" name="sort_order" value="{$option['sort_order'] ?? 0}" min="0">
+                    </div>
+                    <div class="fix"></div>
+                </div>
+            </fieldset>
+
+            <fieldset class="configurable-option-pricing" data-option-pricing>
+                <legend>{='Option pricing'|trans}</legend>
+                <div class="help">
+                    <h5>{='Used for Yes/No and Quantity option types'|trans}</h5>
+                </div>
+                <table class="tableStatic wide">
+                    <thead>
+                        <tr>
+                            {foreach $pricing_periods as $period_code => $period_label}
+                            <td>{$period_label}</td>
+                            {/foreach}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            {foreach $pricing_periods as $period_code => $period_label}
+                            <td><input type="text" name="pricing[{$period_code}]" value="{$option['pricing'][$period_code] ?? 0}" placeholder="0.00"></td>
+                            {/foreach}
+                        </tr>
+                    </tbody>
+                </table>
+            </fieldset>
+
+            <fieldset class="configurable-option-values" data-option-values>
+                <legend>{='Selectable values'|trans}</legend>
+                <div class="help">
+                    <h5>{='Used for Dropdown and Radio option types'|trans}</h5>
+                </div>
+                <table class="tableStatic wide" id="configurable-option-values-table" data-next-index="{max(1, (($option['values'] ?? [])|length))}">
+                    <thead>
+                        <tr>
+                            <td>{='Label'|trans}</td>
+                            {foreach $pricing_periods as $period_code => $period_label}
+                            <td>{$period_label}</td>
+                            {/foreach}
+                            <td style="width: 10%">{='Sort order'|trans}</td>
+                            <td style="width: 8%">{='Hidden'|trans}</td>
+                            <td style="width: 6%">&nbsp;</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {if (($option['values'] ?? [])|length)}
+                            {foreach $option['values'] as $index => $value}
+                            <tr>
+                                <td>
+                                    <input type="hidden" name="values[{$index}][id]" value="{$value['id']}">
+                                    <input type="text" name="values[{$index}][label]" value="{$value['label']}" placeholder="{='Singapore'|trans}">
+                                </td>
+                                {foreach $pricing_periods as $period_code => $period_label}
+                                <td><input type="text" name="values[{$index}][pricing][{$period_code}]" value="{$value['pricing'][$period_code] ?? 0}" placeholder="0.00"></td>
+                                {/foreach}
+                                <td><input type="number" name="values[{$index}][sort_order]" value="{$value['sort_order'] ?? 0}" min="0"></td>
+                                <td>
+                                    <input type="hidden" name="values[{$index}][hidden]" value="0">
+                                    <input type="checkbox" name="values[{$index}][hidden]" value="1" {if $value['hidden']}checked="checked"{/if}>
+                                </td>
+                                <td><a href="#" class="bb-button btn14 configurable-option-remove-row"><img src="{$theme->url}images/icons/dark/trash.png" alt=""></a></td>
+                            </tr>
+                            {/foreach}
+                        {else}
+                            <tr>
+                                <td>
+                                    <input type="text" name="values[0][label]" value="" placeholder="{='Singapore'|trans}">
+                                </td>
+                                {foreach $pricing_periods as $period_code => $period_label}
+                                <td><input type="text" name="values[0][pricing][{$period_code}]" value="0" placeholder="0.00"></td>
+                                {/foreach}
+                                <td><input type="number" name="values[0][sort_order]" value="0" min="0"></td>
+                                <td>
+                                    <input type="hidden" name="values[0][hidden]" value="0">
+                                    <input type="checkbox" name="values[0][hidden]" value="1">
+                                </td>
+                                <td><a href="#" class="bb-button btn14 configurable-option-remove-row"><img src="{$theme->url}images/icons/dark/trash.png" alt=""></a></td>
+                            </tr>
+                        {/if}
+                    </tbody>
+                </table>
+
+                <div class="body">
+                    <a href="#" class="btnIconLeft mr10 mt5" id="add-configurable-option-row">
+                        <img src="{$theme->url}images/icons/dark/settings2.png" alt="" class="icon">
+                        <span>{='Add value'|trans}</span>
+                    </a>
+                </div>
+            </fieldset>
+
+            <input type="hidden" name="group_id" value="{$group['id']}">
+            {if !$is_new}
+            <input type="hidden" name="id" value="{$option['id']}">
+            {/if}
+
+            <fieldset>
+                <input type="submit" value="{if $is_new}{='Create option'|trans}{else}{='Save changes'|trans}{/if}" class="greyishBtn submitForm">
+                <a href="{='product/options/group'|alink}/{$group['id']}" class="button basicBtn">{='Back to group'|trans}</a>
+            </fieldset>
+        </form>
+    </div>
+</div>
+{/block}
+
+{block js}
+<script>
+    var configurableOptionBaseUrl = {=json_encode((('product/options/group'|alink) . '/' . $group['id'] . '/option/'))|noescape};
+
+    function onAfterConfigurableOptionCreate(result) {
+        bb.redirect(configurableOptionBaseUrl + result);
+    }
+
+    $(function () {
+        var typeSelect = $('#configurable-option-type');
+        var pricingWrap = $('[data-option-pricing]');
+        var valuesWrap = $('[data-option-values]');
+        var valuesTable = $('#configurable-option-values-table');
+        var pricingPeriods = {=json_encode($pricing_period_codes)};
+
+        function syncSections() {
+            var type = typeSelect.val();
+            var usesValues = type === 'dropdown' || type === 'radio';
+            var usesPricing = type === 'yes_no' || type === 'quantity';
+
+            valuesWrap.toggle(usesValues);
+            pricingWrap.toggle(usesPricing);
+        }
+
+        function buildValueRow(index) {
+            var columns = [];
+            columns.push('<tr>');
+            columns.push('<td><input type="text" name="values[' + index + '][label]" value="" placeholder="Value"></td>');
+            pricingPeriods.forEach(function (period) {
+                columns.push('<td><input type="text" name="values[' + index + '][pricing][' + period + ']" value="0" placeholder="0.00"></td>');
+            });
+            columns.push('<td><input type="number" name="values[' + index + '][sort_order]" value="' + index + '" min="0"></td>');
+            columns.push('<td><input type="hidden" name="values[' + index + '][hidden]" value="0"><input type="checkbox" name="values[' + index + '][hidden]" value="1"></td>');
+            columns.push('<td><a href="#" class="bb-button btn14 configurable-option-remove-row"><img src="{$theme->url}images/icons/dark/trash.png" alt=""></a></td>');
+            columns.push('</tr>');
+
+            return columns.join('');
+        }
+
+        typeSelect.on('change', syncSections);
+        syncSections();
+
+        $('#add-configurable-option-row').on('click', function (event) {
+            event.preventDefault();
+            var index = parseInt(valuesTable.attr('data-next-index'), 10) || 0;
+            valuesTable.find('tbody').append(buildValueRow(index));
+            valuesTable.attr('data-next-index', index + 1);
+        });
+
+        valuesTable.on('click', '.configurable-option-remove-row', function (event) {
+            event.preventDefault();
+            if (valuesTable.find('tbody tr').length === 1) {
+                valuesTable.find('tbody tr').find('input[type=text], input[type=number]').val('');
+                valuesTable.find('tbody tr').find('input[type=checkbox]').prop('checked', false);
+                return;
+            }
+
+            $(this).closest('tr').remove();
+        });
+    });
+</script>
+{/block}
+

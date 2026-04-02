@@ -1,0 +1,11 @@
+{var $categories = $categories ?? (($guest->product_category_get_list(['per_page' => 100])['list'] ?? []))}
+<div class="wh-catalog-mobile-nav d-lg-none">
+    {foreach $categories as $category}
+        {if count($category['products'] ?? []) > 0}
+            {var $isDefaultCategory = strtolower($category['title'] ?? '') === 'default'}
+            <a class="wh-mobile-chip" href="{=json_encode('#category-' . $category['id'])|noescape}" onclick="window.location.hash='category-{$category['id']}'; return false;">
+                {if $isDefaultCategory}{='Products'|trans}{else}{$category['title']}{/if}
+            </a>
+        {/if}
+    {/foreach}
+</div>

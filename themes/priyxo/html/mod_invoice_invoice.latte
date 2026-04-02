@@ -1,0 +1,284 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{import 'macro_functions.latte'}
+
+{block meta_title}{='Proforma invoice'|trans}{/block}
+
+{var $nr = ($invoice['serie'] . ('%05s'|format:$invoice['nr']))}
+{var $seller = (object)$invoice['seller']}
+{var $buyer = (object)$invoice['buyer']}
+{var $company = $guest->system_company()}
+
+{block content_before}
+    {if ($invoice['status'] == 'unpaid')}
+        <h1>{='Proforma Invoice'|trans}</h1>
+        <p class="text-secondary">{='Please choose payment type and pay for your chosen products.'|trans}</p>
+        {include '_order-steps.latte', selected: 4}
+    {else}
+        <h1>{='Invoice'|trans} {$nr}</h1>
+        <small>{='Invoice is paid'|trans}</small>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{='/invoice'|link}">{='Invoices'|trans}</a>
+            </li>
+            <li class="breadcrumb-item active">{='Invoice #%05s'|format:$invoice['id']}</li>
+        </ol>
+    {/if}
+{/block}
+
+{block content}
+    <div class="row mb-4">
+        <div class="col-sm-6">
+            <div class="invoice-status-container">
+                <h1 class="invoice-id mb-0">{if $invoice['status'] == 'unpaid'}{='Proforma Invoice'|trans}{else}{='Invoice'|trans} #{$nr}{/if}</h1>
+                <span class="badge {if $invoice['status'] == 'unpaid'}bg-danger{else}bg-success{/if} fs-6 px-3 py-2 mt-2">
+                    {if $invoice['status'] == 'unpaid'}{='Unpaid'|trans}{else}{='Paid'|trans}{/if}
+                </span>
+            </div>
+        </div>
+        <div class="col-sm-6 text-sm-end mt-3 mt-sm-0">
+            <div class="btn-group">
+                <a class="btn btn-outline-light" href="{='invoice/pdf'|link}/{$invoice['hash']}">
+                    <i class="fa fa-file-pdf-o me-2"></i>{='Download PDF'|trans}</a>
+                <a class="btn btn-outline-light" href="{='invoice/print'|link}/{$invoice['hash']}">
+                    <i class="fa fa-print me-2"></i> {='Print'|trans}</a>
+            </div>
+            <div class="mt-2 text-secondary">
+                <strong>{='Date'|trans}:</strong> {($invoice['paid_at'] ?? $invoice['created_at'])|date:'Y-m-d'}
+            </div>
+        </div>
+    </div>
+
+    {if ($invoice['status'] == 'unpaid')}
+        <div class="glass-card mb-4 p-4 text-center border-danger">
+            <h4 class="text-danger mb-3"><i class="fa fa-exclamation-triangle me-2"></i>{='Payment Required'|trans}</h4>
+            
+            {if ($invoice['gateway_id'] && !$request->change_payment_method)}
+                {var $payment = $guest->invoice_payment(['gateway_id' => $invoice['gateway_id'], 'hash' => $invoice['hash'], 'auto_redirect' => $request->auto_redirect])}
+
+                <div class="payment-gateway-wrapper my-4">
+                {if ($payment->type == 'html')}
+                    {$payment->result|replace:['bb-button' => 'btn btn-warning btn-lg px-5']}
+                {elseif ($payment->type == 'form')}
+                    <div class="alert alert-info py-3">
+                        <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                        {='Redirecting to payment gateway...'|trans}
+                    </div>
+                    <form name="payment_form" action="{$payment->service_url}" method="post">
+                        {foreach $payment->result as $key => $value}
+                        <input type="hidden" name="{$key}" value="{$value}">
+                        {/foreach}
+                        <input class="btn btn-warning w-100" type="submit" value="{='Click here if not redirected in 5 seconds'|trans}" id="payment_button">
+                    </form>
+
+                    <script>
+                        $(document).ready(function() {
+                            document.forms["payment_form"].submit();
+                        });
+                    </script>
+                {/if}
+                </div>
+            {/if}
+
+            <div class="d-flex justify-content-center gap-3">
+                <a class="btn btn-outline-warning" href="{='invoice/' . $invoice['hash']|link:['change_payment_method' => 1]}">
+                    <i class="fa fa-exchange me-2"></i>{='Change Payment Method'|trans}
+                </a>
+            </div>
+
+            {if $request->change_payment_method}
+                <form method="post" action="{='api/guest/invoice/update'|link}" class="api-form mt-4 text-start" data-api-redirect="{='invoice/' . $invoice['hash']|link:['auto_redirect' => 1]}">
+                    <div class="row g-3">
+                        {foreach $guest->invoice_gateways as $gtw}
+                            {if in_array($invoice['currency'], $gtw->accepted_currencies, true)}
+                            <div class="col-md-6">
+                                <label class="payment-method-card glass-card p-3 d-flex align-items-center w-100 cursor-pointer">
+                                    <input type="radio" name="gateway_id" value="{$gtw->id}" {$iterator->first ? 'checked' : ''} class="me-3">
+                                    <span class="flex-grow-1">{$gtw->title}</span>
+                                    {if str_contains(strtolower($gtw->title), 'paypal')}<i class="fa fa-paypal fa-2x text-primary"></i>
+                                    {elseif str_contains(strtolower($gtw->title), 'stripe')}<i class="fa fa-cc-stripe fa-2x text-info"></i>
+                                    {else}<i class="fa fa-university fa-2x opacity-50"></i>{/if}
+                                </label>
+                            </div>
+                            {/if}
+                        {/foreach}
+                    </div>
+                    <input type="hidden" name="hash" value="{$invoice['hash']}">
+                    <div class="mt-4">
+                        <button class="btn btn-warning btn-lg w-100 py-3 fw-bold" type="submit">
+                            {='Pay'|trans} {$invoice['total']|money:$invoice['currency']}
+                        </button>
+                    </div>
+                </form>
+            {/if}
+        </div>
+    {/if}
+    
+    <div class="glass-card p-0 mb-4 overflow-hidden">
+        <div class="card-header bg-white bg-opacity-10 border-bottom border-white border-opacity-10 p-4">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    {if $company['logo_url']}
+                        <img src="{$company['logo_url']}" alt="{$company['name']}" class="mb-3" style="max-height: 50px;">
+                    {else}
+                        <h3 class="mb-3 text-white">{$company['name']}</h3>
+                    {/if}
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <h5 class="mb-1 text-white">{='Invoice Details'|trans}</h5>
+                    <div class="text-secondary small">
+                        {='Series'|trans}: {$invoice['serie']}<br>
+                        {='Number'|trans}: {$invoice['nr']}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body p-4">
+            <div class="row mb-5">
+                <div class="col-sm-6 mb-4 mb-sm-0">
+                    <h6 class="text-white text-uppercase small fw-bold mb-3">{='Invoiced From'|trans}:</h6>
+                    <address class="text-secondary mb-0">
+                        {if $seller->company}<strong class="text-white">{$seller->company}</strong><br>{/if}
+                        {if $seller->address}{$seller->address|nl2br|noescape}<br>{/if}
+                        {if $seller->phone}<i class="fa fa-phone me-2 opacity-50"></i>{$seller->phone}<br>{/if}
+                        {if $seller->email}<i class="fa fa-envelope me-2 opacity-50"></i>{$seller->email}<br>{/if}					
+                        {if (object)$company->account_number ?? null}<br><span class="badge bg-dark">{='Account'|trans}: {(object)$company->account_number}</span>{/if}
+                    </address>
+                </div>
+                <div class="col-sm-6 text-sm-end">
+                    <h6 class="text-white text-uppercase small fw-bold mb-3">{='Invoiced To'|trans}:</h6>
+                    <address class="text-secondary mb-0">
+                        {if $buyer->company}<strong class="text-white">{$buyer->company}</strong><br>{/if}
+                        {if ($buyer->first_name || $buyer->last_name)}<strong class="text-white">{$buyer->first_name} {$buyer->last_name}</strong><br>{/if}
+                        {if $buyer->address}{$buyer->address}<br>{/if}
+                        {if $buyer->city}{$buyer->city}, {$buyer->state} {$buyer->zip}<br>{/if}
+                        {if $buyer->country}{$buyer->country}<br>{/if}
+                        {if $buyer->email}<i class="fa fa-envelope me-2 opacity-50 px-2"></i>{$buyer->email}<br>{/if}
+                        {if $buyer->phone}<i class="fa fa-phone me-2 opacity-50 px-2"></i>{$buyer->phone}<br>{/if}
+                    </address>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-glass-modern align-middle">
+                    <thead class="bg-white bg-opacity-5">
+                        <tr>
+                            <th class="ps-4 py-3">{='Description'|trans}</th>
+                            <th class="text-center py-3">{='Price'|trans}</th>
+                            <th class="text-center py-3">{='Quantity'|trans}</th>
+                            <th class="text-end pe-4 py-3">{='Total'|trans}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="border-top-0">
+                        {foreach $invoice['lines'] as $i => $item}
+                        <tr>
+                            <td class="ps-4">
+                                <div class="fw-bold text-white">
+                                    {if $item->order_id}
+                                        <a href="{='/order/service/manage'|link}/{$item->order_id}" class="text-white text-decoration-none">{$item->title}</a>
+                                    {else}
+                                        {$item->title}
+                                    {/if}
+                                </div>
+                                {if $item->notes}<div class="small text-secondary mt-1">{$item->notes}</div>{/if}
+                            </td>
+                            <td class="text-center text-white">{$item->price|money:$invoice['currency']}</td>
+                            <td class="text-center text-white">{$item->quantity}</td>
+                            <td class="text-end pe-4 text-white fw-bold">{$item->total|money:$invoice['currency']}</td>
+                        </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row pt-4">
+                <div class="col-lg-7">
+                    {if $invoice['text_1']}
+                        <div class="p-3 bg-white bg-opacity-5 rounded small text-secondary">
+                            {$invoice['text_1']|markdown}
+                        </div>
+                    {/if}
+                </div>
+                <div class="col-lg-5">
+                    <div class="invoice-summary">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-secondary">{='Subtotal'|trans}:</span>
+                            <span class="text-white">{$invoice['subtotal']|money:$invoice['currency']}</span>
+                        </div>
+                        {if ($invoice['tax'] > 0)}
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-secondary">{$invoice['taxname']} ({$invoice['taxrate']}%):</span>
+                            <span class="text-white">{$invoice['tax']|money:$invoice['currency']}</span>
+                        </div>
+                        {/if}
+                        {if (($invoice['discount'] ?? 0) > 0)}
+                        <div class="d-flex justify-content-between mb-2 text-success">
+                            <span>{='Discount'|trans}:</span>
+                            <span>-{$invoice['discount']|money:$invoice['currency']}</span>
+                        </div>
+                        {/if}
+                        <div class="d-flex justify-content-between pt-3 border-top border-white border-opacity-10 mt-3 h4 mb-0">
+                            <span class="text-white fw-bold">{='Total'|trans}:</span>
+                            <span class="text-warning fw-bold">{$invoice['total']|money:$invoice['currency']}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {if $invoice['text_2']}
+            <div class="card-footer bg-white bg-opacity-5 border-top border-white border-opacity-10 p-4 small text-secondary">
+                {$invoice['text_2']|markdown}
+            </div>
+        {/if}
+    </div>
+
+    {var $transactions = $client->invoice_transaction_get_list(['invoice_id' => $invoice['id'], 'type' => 'payment', 'per_page' => 100])->list}
+    {if (($transactions|length) > 0)}
+        <div class="glass-card p-4">
+            <h5 class="mb-4 text-white"><i class="fa fa-history me-2"></i>{='Transaction History'|trans}</h5>
+            <div class="table-responsive">
+                <table class="table table-borderless table-glass-modern small m-0">
+                    <thead>
+                        <tr class="text-secondary text-uppercase small">
+                            <th>{='Date'|trans}</th>
+                            <th>{='Description'|trans}</th>
+                            <th>{='Method'|trans}</th>
+                            <th class="text-end">{='Amount'|trans}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach $transactions as $tx}
+                        <tr>
+                            <td class="text-secondary">{$tx->created_at|date:'Y-m-d H:i'}</td>
+                            <td class="text-white">{$tx->txn_id}</td>
+                            <td><span class="badge bg-dark">{$tx->gateway ?? '-'}</span></td>
+                            <td class="text-end text-white fw-bold">{$tx->amount|money:$tx->currency}</td>
+                        </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {/if}
+
+    <div class="mt-4 text-center">
+        <a class="btn btn-outline-light btn-sm px-4" href="{='/invoice'|link}">
+            <i class="fa fa-arrow-left me-2"></i>{='Back to Invoices'|trans}
+        </a>
+    </div>
+
+    <style>
+        .invoice-status-container { border-left: 4px solid var(--accent-color, #ffaa00); padding-left: 1rem; }
+        .payment-method-card { transition: all 0.2s; border: 1px solid rgba(255,255,255,0.05); }
+        .payment-method-card:hover { background: rgba(255,255,255,0.1) !important; border-color: rgba(255,170,0,0.3); }
+        .payment-method-card input:checked + span { color: #ffaa00; font-weight: bold; }
+        .table-glass-modern { border-collapse: separate; border-spacing: 0 4px; }
+        .table-glass-modern tr { background: rgba(255,255,255,0.02); border-radius: 8px; }
+        .table-glass-modern td, .table-glass-modern th { border: none !important; }
+        .table-glass-modern tr:hover { background: rgba(255,255,255,0.05); }
+        .invoice-summary div { padding-bottom: 0.5rem; }
+        .cursor-pointer { cursor: pointer; }
+    </style>
+{/block}

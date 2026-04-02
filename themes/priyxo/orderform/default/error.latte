@@ -1,0 +1,15 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_public.latte'}
+
+{block meta_title}{='Order error'|trans}{/block}
+{block head}{include 'shared/_styles.latte'}{/block}
+
+{block content_before}
+    <div class="wh-page-header">
+        <h1 class="wh-page-title">{='Order Error'|trans}</h1>
+        <p class="wh-page-subtitle">{='Themes that expect a standalone orderform error page can render it here.'|trans}</p>
+    </div>
+{/block}
+
+{block content}
+    {include 'shared/_placeholder.latte', title: ('Checkout errors still come from the current OHMS backend'|trans), description: ('Gateway, validation, or fraud exceptions continue to surface through the existing cart and order APIs.'|trans), note: ('This placeholder gives the orderform system a dedicated error endpoint for future theme work.'|trans)}
+{/block}

@@ -1,0 +1,30 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{import 'macro_functions.latte'}
+
+{block meta_title}{='Processing payment...'|trans}{/block}
+
+{block content}
+
+{if ($payment->type == html)}
+    {$payment->result|replace:[bb-button => 'btn btn-warning']}
+{/if}
+
+{if ($payment->type == form)}
+<h2>{='Redirecting to payment gateway...'|trans}</h2>
+<form name="payment_form" action="{$payment->service_url}" method="post">
+    {foreach $payment->result as $key => $value}
+        <input type="hidden" name="{$key}" value="{$value}">
+    {/foreach}
+    <input class="btn btn-warning" id="payment_button" type="submit" value="{='Please click here to continue if this page does not redirect automatically in 5 seconds'|trans}">
+</form>
+
+<script>
+    $(document).ready(function() {
+        document.getElementById('payment_button').style.display = 'none';
+        document.forms["payment_form"].submit();
+    });
+</script>
+{/if}
+
+{/block}

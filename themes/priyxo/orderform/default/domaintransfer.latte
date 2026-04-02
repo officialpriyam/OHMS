@@ -1,0 +1,15 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_public.latte'}
+
+{block meta_title}{='Transfer a domain'|trans}{/block}
+{block head}{include 'shared/_styles.latte'}{/block}
+
+{block content_before}
+    <div class="wh-page-header">
+        <h1 class="wh-page-title">{='Transfer a Domain'|trans}</h1>
+        <p class="wh-page-subtitle">{='This template keeps WHMCS-style orderform screen coverage while OHMS uses a simpler native domain transfer flow.'|trans}</p>
+    </div>
+{/block}
+
+{block content}
+    {include 'shared/_placeholder.latte', title: ('Transfer setup is handled in the domain configuration step'|trans), description: ('Choose the transfer option from the current domain or hosting order page to continue with transfer pricing and EPP code entry.'|trans), note: ('The backend remains the existing OHMS servicedomain flow.'|trans)}
+{/block}

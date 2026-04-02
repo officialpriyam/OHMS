@@ -1,0 +1,7 @@
+{
+    "id":           "api",
+	"type":         "mod",
+    "name":         "API",
+    "description":  "OHMS core module",
+    "version":      "1.0.0"
+}

@@ -1,0 +1,104 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{import 'macro_functions.latte'}
+
+{block meta_title}Import SolusVM clients{/block}
+
+{var $active_menu = system}
+
+{block content}
+<div class="widget">
+    <div class="head"><h5 class="iFrames">{='Import SolusVM clients'|trans}</h5></div>
+
+<form action="{='api/admin/servicesolusvm/import_clients'|link}" method="post" class="mainForm api-form" data-api-jsonp="onAfterImport">
+<table class="tableStatic wide">
+    <thead>
+        <tr>
+            <td style="width:15px;"><input type="checkbox" id="smctoggler" checked="checked"></td>
+            <td>{=ID|trans}</td>
+            <td>{=Name|trans}</td>
+            <td>{=Company|trans}</td>
+            <td>{=Email|trans}</td>
+            <td>{=Username|trans}</td>
+            <td>{=Created|trans}</td>
+        </tr>
+    </thead>
+
+    <tbody>
+    {foreach $admin->servicesolusvm_client_list([skip => 1]) as $i => $client}
+    <tr>
+        <td><input type="checkbox" name="clients[]" checked="checked" class="smc" value="{$client->id}"></td>
+        <td>{$client->id}</td>
+        <td>{$client->firstname} {$client->lastname}</td>
+        <td>{$client->company}</td>
+        <td>{$client->email}</td>
+        <td>{$client->username}</td>
+        <td>{$client->created}</td>
+    </tr>
+    {else}
+    <tr>
+        <td colspan="7">{='The list is empty'|trans}</td>
+    </tr>
+    {/foreach}
+    </tbody>
+    
+    <tfoot>
+        <tr>
+            <td colspan="7">
+                <input type="submit" value="{='Import selected SolusVM clients to OHMS'|trans}" class="greyishBtn" />
+            </td>
+        </tr>
+    </tfoot>
+</table>
+</form>
+    
+    <div class="body" style="display:none;"><pre id="rsp"></pre></div>
+</div>
+{/block}
+
+{block js}
+
+<script type="text/javascript">
+    function onAfterImport(result)
+    {
+        $('#rsp').parent().show();
+        $('#rsp').text(result);
+    }
+    
+$(function() {
+    $('#smctoggler').change(function() {
+        if($(this).is(':checked')) {
+            $('.jqTransformcheckboxWrapper a.jqTransformcheckbox').addClass('jqTransformChecked');
+            $('.smc').attr('checked', 'checked');
+        } else {
+            $('.jqTransformcheckboxWrapper a.jqTransformcheckbox').removeClass('jqTransformChecked');
+            $('.smc').removeAttr('checked');
+        }
+
+        return false;
+    });
+});
+</script>
+
+{/block}

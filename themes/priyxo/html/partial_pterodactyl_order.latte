@@ -1,0 +1,190 @@
+{if $product['type'] === 'pterodactyl' || $product['type'] === 'servicepterodactyl'}
+    {var $config = $product['config']}
+    {if ($config['selectable_nest'] ?? false) || ($config['selectable_egg'] ?? false) || ($config['selectable_location'] ?? false)}
+        
+        <hr style="border-color: rgba(255,255,255,0.1); margin: 2rem 0;">
+        <div class="mb-4">
+            <label class="form-label text-white fw-bold mb-3">{='Server Details'|trans}</label>
+            
+            <div class="mb-3">
+                <input type="text" name="config_options[hostname]" class="form-control" style="background: rgba(15,18,35,0.85); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 0.8rem 1rem; border-radius: 12px;" placeholder="My Awesome Server" required="required">
+            </div>
+
+            <div class="row gx-3">
+                {if ($config['selectable_location'] ?? false)}
+                <div class="col-md-12 mb-3">
+                    <label class="form-label text-muted small mb-1">{='Server Location'|trans}</label>
+                    <div class="dropdown">
+                        <div class="d-flex align-items-center justify-content-between" id="location-display-block" data-bs-toggle="dropdown" aria-expanded="false" style="background: rgba(15,18,35,0.85); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 0.8rem 1rem; border-radius: 12px; cursor: pointer;">
+                            <div>
+                                <span id="selected-loc-name">{='Loading locations...'|trans}</span>
+                                <span class="ms-2 text-success small" id="selected-loc-ping"></span>
+                            </div>
+                            <i class="fa fa-chevron-down text-muted"></i>
+                        </div>
+                        <ul class="dropdown-menu w-100" id="location-dropdown-menu" style="background: rgba(18,18,28,0.95); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;">
+                            <!-- Populated via JS -->
+                        </ul>
+                    </div>
+                    <input type="hidden" name="config_options[location_id]" id="order_location_id" required="required">
+                </div>
+                {else}
+                    <input type="hidden" name="config_options[location_id]" id="order_location_id" value="{$config['location_id'] ?? ''}">
+                {/if}
+
+                {if ($config['selectable_nest'] ?? false)}
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted small mb-1">{='Game / Service Name'|trans}</label>
+                        <select name="config_options[nest_id]" id="order_nest_id" class="form-select" style="background: rgba(15,18,35,0.85); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 0.8rem 1rem; border-radius: 12px;" required="required">
+                            <option value="">{='Loading game types...'|trans}</option>
+                        </select>
+                    </div>
+                {else}
+                    <input type="hidden" name="config_options[nest_id]" id="order_nest_id" value="{$config['nest_id'] ?? ''}">
+                {/if}
+
+                {if ($config['selectable_egg'] ?? false)}
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted small mb-1">{='Type / Version'|trans}</label>
+                        <select name="config_options[egg_id]" id="order_egg_id" class="form-select" style="background: rgba(15,18,35,0.85); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 0.8rem 1rem; border-radius: 12px;" required="required">
+                            <option value="">{='Select game type first'|trans}</option>
+                        </select>
+                    </div>
+                {else}
+                    <input type="hidden" name="config_options[egg_id]" id="order_egg_id" value="{$config['egg_id'] ?? ''}">
+                {/if}
+            </div>
+        </div>
+
+        <script type="text/javascript">
+        $(function() {
+            var selectable_nest = {=json_encode((bool) ($config['selectable_nest'] ?? false))};
+            var selectable_egg = {=json_encode((bool) ($config['selectable_egg'] ?? false))};
+            var selectable_location = {=json_encode((bool) ($config['selectable_location'] ?? false))};
+
+            var initial_nest = {=json_encode((string) ($config['nest_id'] ?? ''))};
+            var initial_egg = {=json_encode((string) ($config['egg_id'] ?? ''))};
+            var initial_location = {=json_encode((string) ($config['location_id'] ?? ''))};
+
+            function normalizeCollection(result) {
+                if (Array.isArray(result)) {
+                    return result;
+                }
+                if (result && Array.isArray(result.data)) {
+                    return result.data;
+                }
+                return [];
+            }
+
+            function fetchNests() {
+                if(!selectable_nest) {
+                    if(initial_nest) fetchEggs(initial_nest);
+                    return;
+                }
+                bb.post('guest/servicepterodactyl/get_nests', {}, function(result) {
+                    var nests = normalizeCollection(result);
+                    var nestSelect = $('#order_nest_id');
+                    nestSelect.empty().append('<option value="" style="background:#12121c;">Select Game Type</option>');
+
+                    if (!nests.length) {
+                        nestSelect.empty().append('<option value="" style="background:#12121c;">No game types available</option>');
+                        return;
+                    }
+
+                    $.each(nests, function(i, nest) {
+                        $('#order_nest_id').append($('<option>', {
+                            value: nest.attributes.id,
+                            text: nest.attributes.name,
+                            selected: (nest.attributes.id == initial_nest),
+                            style: 'background:#12121c;'
+                        }));
+                    });
+                });
+            }
+
+            function fetchEggs(nestId) {
+                if(!nestId || !selectable_egg) return;
+                bb.post('guest/servicepterodactyl/get_eggs', { nest_id: nestId }, function(result) {
+                    var eggs = normalizeCollection(result);
+                    var eggSelect = $('#order_egg_id');
+                    eggSelect.empty().append('<option value="" style="background:#12121c;">Select Version</option>');
+
+                    if (!eggs.length) {
+                        eggSelect.empty().append('<option value="" style="background:#12121c;">No versions available</option>');
+                        return;
+                    }
+
+                    $.each(eggs, function(i, egg) {
+                        $('#order_egg_id').append($('<option>', {
+                            value: egg.attributes.id,
+                            text: egg.attributes.name,
+                            selected: (egg.attributes.id == initial_egg),
+                            style: 'background:#12121c;'
+                        }));
+                    });
+                });
+            }
+
+            function fetchLocations() {
+                if(!selectable_location) return;
+                bb.post('guest/servicepterodactyl/get_locations', {}, function(result) {
+                    var locations = normalizeCollection(result);
+                    var menu = $('#location-dropdown-menu');
+                    menu.empty();
+                    
+                    if(locations.length === 0) {
+                         $('#order_location_id').val('');
+                         $('#selected-loc-name').text('No locations available.');
+                         $('#selected-loc-ping').text('');
+                         return;
+                    }
+
+                    var firstLoc = null;
+
+                    $.each(locations, function(i, loc) {
+                        var isSelected = (loc.attributes.id == initial_location);
+                        if(isSelected) firstLoc = loc;
+
+                        var li = $('<li><a class="dropdown-item d-flex justify-content-between py-2 px-3" href="#" data-id="'+loc.attributes.id+'" style="color: #fff;">' + 
+                            '<span>' + loc.attributes.short + ' (' + loc.attributes.long + ')</span>' +
+                            '<span class="text-success small">Lat: 15ms</span></a></li>');
+                            
+                        menu.append(li);
+                    });
+
+                    // Hover effects for custom dropdown
+                    menu.find('.dropdown-item').hover(function() {
+                        $(this).css('background', 'rgba(255,255,255,0.05)');
+                    }, function() {
+                        $(this).css('background', 'transparent');
+                    });
+
+                    if(!firstLoc && locations.length > 0) firstLoc = locations[0];
+                    if(firstLoc) setLocationState(firstLoc.attributes.id, firstLoc.attributes.short, firstLoc.attributes.long);
+
+                    // Handle selection
+                    menu.find('a').on('click', function(e) {
+                        e.preventDefault();
+                        var id = $(this).data('id');
+                        var text = $(this).find('span:first').text();
+                        setLocationState(id, text, '');
+                    });
+                });
+            }
+
+            function setLocationState(id, shortName, longName) {
+                $('#order_location_id').val(id);
+                $('#selected-loc-name').text(shortName + (longName ? ' (' + longName + ')' : ''));
+                $('#selected-loc-ping').text('~ 15 ms');
+            }
+
+            $('#order_nest_id').on('change', function() {
+                fetchEggs($(this).val());
+            });
+
+            fetchNests();
+            fetchLocations();
+        });
+        </script>
+    {/if}
+{/if}

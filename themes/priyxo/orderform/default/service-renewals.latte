@@ -1,0 +1,15 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_public.latte'}
+
+{block meta_title}{='Service renewals'|trans}{/block}
+{block head}{include 'shared/_styles.latte'}{/block}
+
+{block content_before}
+    <div class="wh-page-header">
+        <h1 class="wh-page-title">{='Service Renewals'|trans}</h1>
+        <p class="wh-page-subtitle">{='This placeholder covers WHMCS-style standalone renewal storefront pages.'|trans}</p>
+    </div>
+{/block}
+
+{block content}
+    {include 'shared/_placeholder.latte', title: ('Service renewals continue through client-area invoices and order management'|trans), description: ('OHMS currently manages renewals through the existing billing and service lifecycle instead of a separate renewal storefront.'|trans), note: ('The orderform contract still includes this screen so themes can target it safely.'|trans)}
+{/block}

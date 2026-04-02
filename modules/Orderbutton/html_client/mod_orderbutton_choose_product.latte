@@ -1,0 +1,40 @@
+﻿{*
+ * OHMS.
+ *
+ * @copyright OHMS, Inc (https://www.OHMS.org)
+ * @license   Apache-2.0
+ *
+ * Copyright OHMS, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *
+ * ---
+ *
+ * BoxBilling.
+ *
+ * @copyright BoxBilling, Inc (https://www.boxbilling.org)
+ * @license   Apache-2.0
+ *
+ * Copyright BoxBilling, Inc
+ * This source file is subject to the Apache-2.0 License that is bundled
+ * with this source code in the file LICENSE
+ *}
+<div class="accordion-group" id="choose-product">
+    {var $products = $guest->product_get_list}
+    <div class="accordion-heading">
+        <a class="accordion-toggle" href="#products" data-parent="#accordion1" data-toggle="collapse">
+            <span class="awe-list"></span> {='Select Product'|trans}  <span class="label label-info pull-right">{$products->list|length} {=Items|trans}</span>
+        </a>
+    </div>
+    <div id="products" class="accordion-body collapse {if ((!$request->order && !$request->cart) && !$request->checkout)}in{/if}" >
+        <div class="accordion-inner">
+            <ul class="nav nav-list">
+                {foreach $products->list as $i => $product}
+                <li>
+                    <a href="{=orderbutton|link:[order => $product['id'], show_custom_form_values => $request->show_custom_form_values}">{$product['title']} <span class="awe-arrow-right pull-right"><span></a>
+                </li>
+                {/foreach}
+            </ul>
+        </div>
+    </div>
+</div>

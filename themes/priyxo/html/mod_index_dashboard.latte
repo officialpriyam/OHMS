@@ -1,0 +1,113 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_default.latte'}
+
+{block meta_title}{='Client Area'|trans}{/block}
+{block page_header}{=Dashboard|trans}{/block}
+
+{import 'macro_functions.latte'}
+
+{block content}
+{if $settings['showcase_enabled']}
+    {include 'Index/_showcase.latte'}
+{/if}
+
+{if $settings['stats_enabled']}
+    {include 'Index/_statistics.latte'}
+{/if}
+
+<div class="widget-grid">
+    <!-- Servers Widget -->
+    {if ($settings['dash_services'] ?? true)}
+    {var $servicesTotal = $client->order_get_list(['hide_addons' => 1, 'status' => 'active'])['total'] ?? 0}
+    <div class="widget-box">
+        <div class="widget-title">
+            <span>{=Servers|trans}</span>
+            <i class="fa fa-server"></i>
+        </div>
+        <div class="widget-value">{$servicesTotal}</div>
+        <a href="{='order/service/manage'|link}" class="widget-btn">{='Order a New Server'|trans}</a>
+    </div>
+    {/if}
+
+    <!-- Tickets Widget -->
+    {if ($settings['dash_support'] ?? true)}
+    {var $ticketsTotal = $client->support_ticket_get_list(['status' => 'open'])['total'] ?? 0}
+    <div class="widget-box">
+        <div class="widget-title">
+            <span>{='Active Tickets'|trans}</span>
+            <i class="fa fa-ticket"></i>
+        </div>
+        <div class="widget-value">{$ticketsTotal}</div>
+    </div>
+    {/if}
+
+    <!-- Invoices Widget -->
+    {if ($settings['dash_invoices'] ?? true)}
+    {var $invoicesTotal = $client->invoice_get_list(['status' => 'unpaid'])['total'] ?? 0}
+    <div class="widget-box">
+        <div class="widget-title">
+            <span>{='Unpaid Invoices'|trans}</span>
+            <i class="fa fa-file-invoice-dollar"></i>
+        </div>
+        <div class="widget-value">{$invoicesTotal}</div>
+    </div>
+    {/if}
+</div>
+
+<!-- Extra Glass Cards for Lists -->
+<div class="row g-4 mt-2">
+    <!-- Recent Orders -->
+    {if ($settings['dash_orders'] ?? true)}
+    <div class="col-md-6">
+        <div class="glass-card h-100">
+            <h5 class="mb-4 d-flex justify-content-between align-items-center" style="font-size: 1rem; color: var(--text-secondary);">
+                <span><i class="fa fa-shopping-cart me-2"></i> {='Recent orders'|trans}</span>
+            </h5>
+            <div class="table-responsive">
+                <table class="table table-borderless table-glass m-0">
+                    <tbody>
+                        {foreach ($client->order_get_list(['per_page' => 5, 'page' => $request->page, 'hide_addons' => 1])['list'] ?? []) as $i => $order}
+                        <tr>
+                            <td>
+                                <a href="{='order/service/manage'|link}/{$order->id}" class="text-decoration-none text-white fw-bold">{$order->title|truncate:30}</a>
+                            </td>
+                            <td class="text-end">
+                                <span class="status-badge {if ($order->status == 'active')}status-active{elseif ($order->status == 'pending_setup')}status-pending{else}status-unpaid{/if}">{((string)$order->status)|replace:[_ => ' ']|capitalize|trans}</span>
+                            </td>
+                        </tr>
+                        {/foreach}
+                        {if count($client->order_get_list(['per_page' => 5, 'page' => $request->page, 'hide_addons' => 1])['list'] ?? []) == 0}
+                        <tr><td colspan="2" class="text-center text-secondary py-4">{='No recent orders'|trans}</td></tr>
+                        {/if}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {/if}
+
+    <!-- Recent Emails -->
+    {if ($settings['dash_messages'] ?? true)}
+    <div class="col-md-6">
+        <div class="glass-card h-100">
+            <h5 class="mb-4 d-flex justify-content-between align-items-center" style="font-size: 1rem; color: var(--text-secondary);">
+                <span><i class="fa fa-envelope me-2"></i> {='Recent emails'|trans}</span>
+            </h5>
+            <div class="list-group list-group-flush bg-transparent">
+                {foreach ($client->email_get_list(['per_page' => 5])['list'] ?? []) as $i => $email}
+                <a href="{=email|link}/{$email->id}" class="list-group-item bg-transparent text-white border-bottom" style="border-color: rgba(255,255,255,0.05) !important;">
+                    <div class="d-flex w-100 justify-content-between">
+                        <span class="mb-1 text-truncate" style="max-width: 70%;">{$email->subject}</span>
+                        <small class="text-secondary" style="font-size: 0.75rem;">{$email->created_at|timeago} {=ago|trans}</small>
+                    </div>
+                </a>
+                {/foreach}
+                {if count($client->email_get_list(['per_page' => 5])['list'] ?? []) == 0}
+                <div class="text-center text-secondary py-4">{='No recent emails'|trans}</div>
+                {/if}
+            </div>
+        </div>
+    </div>
+    {/if}
+</div>
+
+{/block}

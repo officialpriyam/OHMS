@@ -1,0 +1,57 @@
+<footer class="footer mt-auto py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <h5 class="mb-3 text-primary">{$settings->company_name}</h5>
+                <p class="text-secondary mb-3">{$settings->company_note ?? 'Premium Web Hosting & Domain Services'}</p>
+                <div class="social-links">
+                    <a href="#" class="btn btn-outline-primary btn-sm rounded-circle me-2"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="btn btn-outline-primary btn-sm rounded-circle me-2"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="btn btn-outline-primary btn-sm rounded-circle me-2"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+            
+            <div class="col-md-2 mb-4">
+                <h6 class="text-uppercase fw-bold mb-3">{='Company'|trans}</h6>
+                <ul class="list-unstyled footer-links">
+                    <li class="mb-2"><a href="{='/about-us'|link}" class="text-secondary text-decoration-none">{='About Us'|trans}</a></li>
+                    <li class="mb-2"><a href="{='/news'|link}" class="text-secondary text-decoration-none">{='Blog'|trans}</a></li>
+                    <li class="mb-2"><a href="{='/support/contact-us'|link}" class="text-secondary text-decoration-none">{='Contact Us'|trans}</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-2 mb-4">
+                <h6 class="text-uppercase fw-bold mb-3">{='Support'|trans}</h6>
+                <ul class="list-unstyled footer-links">
+                    <li class="mb-2"><a href="{=kb|link}" class="text-secondary text-decoration-none">{='Knowledge Base'|trans}</a></li>
+                    <li class="mb-2"><a href="{=support|link}" class="text-secondary text-decoration-none">{='Support Tickets'|trans}</a></li>
+                    <li class="mb-2"><a href="{='/tos'|link}" class="text-secondary text-decoration-none">{='Terms of Service'|trans}</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <h6 class="text-uppercase fw-bold mb-3">{='Newsletter'|trans}</h6>
+                <p class="small text-secondary mb-3">{='Subscribe to get latest updates and offers.'|trans}</p>
+                <form class="api-form mb-3" data-api-url="guest/newsletter/subscribe" data-api-msg="{='Successfully subscribed'|trans}">
+                    <div class="input-group">
+                        <input type="email" class="form-control" name="email" placeholder="{='Email address'|trans}" required>
+                        <button class="btn btn-primary" type="submit">{='Join'|trans}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <hr class="my-4 text-secondary opacity-25">
+
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                <p class="small text-secondary mb-0">&copy; {$now|date:Y} {$settings->company_name}. {='All rights reserved.'|trans}</p>
+            </div>
+            <div class="col-md-6 text-center text-md-end">
+                {if ($guest->extension_is_on(['mod' => 'branding']) || ($settings->footer_branding_enabled ?? false))}
+                    <p class="small text-secondary mb-0">{='Powered by'|trans} <a href="https://priyxstudio.in/getohms" title="Billing and Support Automation" target="_blank" class="text-decoration-none">OHMS</a></p>
+                {/if}
+            </div>
+        </div>
+    </div>
+</footer>

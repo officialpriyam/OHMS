@@ -1,0 +1,15 @@
+{extends $request->ajax ? 'layout_blank.latte' : 'layout_public.latte'}
+
+{block meta_title}{='Marketplace promotion'|trans}{/block}
+{block head}{include 'shared/_styles.latte'}{/block}
+
+{block content_before}
+    <div class="wh-page-header">
+        <h1 class="wh-page-title">{='Marketplace Promotion'|trans}</h1>
+        <p class="wh-page-subtitle">{='The default orderform exposes this screen so WHMCS-style theme references remain valid.'|trans}</p>
+    </div>
+{/block}
+
+{block content}
+    {include 'shared/_placeholder.latte', title: ('MarketConnect-style promo flows are not implemented in OHMS'|trans), description: ('Use normal products, addons, and configurable options for storefront upsells in the current OHMS stack.'|trans), note: ('This placeholder prevents broken orderform references while keeping room for future marketplace integrations.'|trans)}
+{/block}
